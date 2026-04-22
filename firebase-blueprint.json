@@ -1,0 +1,112 @@
+{
+  "entities": {
+    "UserSystem": {
+      "title": "User System",
+      "description": "The complete structured system built by the user across 10 phases.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "currentPhase": { "type": "integer" },
+        "completed": { "type": "boolean" },
+        "initialized": { "type": "boolean" },
+        "intentReviewed": { "type": "boolean" },
+        "introStart": { "type": "boolean" },
+        "introBelief": { "type": "boolean" },
+        "phase1": {
+          "type": "object",
+          "properties": {
+            "represent": { "type": "string" },
+            "notRepresent": { "type": "string" },
+            "refuse": { "type": "string" }
+          },
+          "required": ["represent", "notRepresent", "refuse"]
+        },
+        "phase2": {
+          "type": "object",
+          "properties": {
+            "environment": { "type": "string" },
+            "exists": { "type": "string" },
+            "repeats": { "type": "string" },
+            "notBelong": { "type": "string" }
+          },
+          "required": ["environment", "exists", "repeats", "notBelong"]
+        },
+        "phase3": {
+          "type": "object",
+          "properties": {
+            "lighting": { "type": "string" },
+            "color": { "type": "string" },
+            "composition": { "type": "string" },
+            "styling": { "type": "string" },
+            "repeatablePattern": { "type": "string" }
+          },
+          "required": ["lighting", "color", "composition", "styling", "repeatablePattern"]
+        },
+        "phase4": {
+          "type": "object",
+          "properties": {
+            "evolves": { "type": "string" },
+            "revealed": { "type": "string" },
+            "continues": { "type": "string" }
+          },
+          "required": ["evolves", "revealed", "continues"]
+        },
+        "phase5": {
+          "type": "object",
+          "properties": {
+            "repeatsAcross": { "type": "string" },
+            "staysConsistent": { "type": "string" }
+          },
+          "required": ["repeatsAcross", "staysConsistent"]
+        },
+        "phase6": {
+          "type": "object",
+          "properties": {
+            "mirror": { "type": "string" },
+            "reveal": { "type": "string" },
+            "close": { "type": "string" }
+          },
+          "required": ["mirror", "reveal", "close"]
+        },
+        "phase7": {
+          "type": "object",
+          "properties": {
+            "contentFlow": { "type": "string" },
+            "postFormat": { "type": "string" }
+          },
+          "required": ["contentFlow", "postFormat"]
+        },
+        "phase8": {
+          "type": "object",
+          "properties": {
+            "idea": { "type": "string" }
+          }
+        },
+        "phase9": {
+          "type": "object",
+          "properties": {
+            "hook": { "type": "string" },
+            "curiosity": { "type": "string" },
+            "close": { "type": "string" },
+            "decisionQuestion": { "type": "string" }
+          },
+          "required": ["hook", "curiosity", "close", "decisionQuestion"]
+        },
+        "phase10": {
+          "type": "object",
+          "properties": {
+            "corrections": { "type": "string" }
+          }
+        },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "currentPhase"]
+    }
+  },
+  "firestore": {
+    "systems/{systemId}": {
+      "schema": "UserSystem",
+      "description": "The system document for a specific user."
+    }
+  }
+}

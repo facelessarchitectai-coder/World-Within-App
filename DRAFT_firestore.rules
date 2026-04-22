@@ -1,0 +1,77 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helpers ---
+    function isSignedIn() {
+      // Mandating verified email for standard write operations as per security best practices
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    function isValidUserSystem(data) {
+      return data.userId is string 
+        && data.userId.size() <= 128
+        && data.userId == request.auth.uid
+        && data.currentPhase is int
+        && data.currentPhase >= 0
+        && data.currentPhase <= 10
+        && (data.completed == null || data.completed is bool)
+        // updatedAt must be a timestamp and specifically request.time
+        && data.updatedAt is timestamp;
+    }
+
+    // --- Collections ---
+    match /systems/{systemId} {
+      // Path Variable Hardening (ID Poisoning Guard)
+      // Only apply to single-doc target operations (get)
+      allow get: if isOwner(systemId) && isValidId(systemId);
+      
+      // Secure List Queries
+      // Evaluate resource.data to prevent unauthorized scraping
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+
+      allow create: if isOwner(systemId) && isValidId(systemId)
+        && isValidUserSystem(incoming())
+        && incoming().keys().hasAll(['userId', 'currentPhase', 'completed', 'updatedAt'])
+        && incoming().keys().size() == 4
+        && incoming().currentPhase == 0
+        && incoming().updatedAt == request.time;
+
+      allow update: if isOwner(systemId) && isValidId(systemId)
+        && isValidUserSystem(incoming())
+        && incoming().userId == existing().userId
+        && incoming().updatedAt == request.time
+        && (
+          // System action branching
+          // 1. Progress Phase
+          (incoming().diff(existing()).affectedKeys().hasOnly(['currentPhase', 'updatedAt']) && 
+           incoming().currentPhase == existing().currentPhase + 1) ||
+          
+          // 2. Add Phase Data
+          (incoming().diff(existing()).affectedKeys().hasAny(['phase1', 'phase2', 'phase3', 'phase4', 'phase5', 'phase6', 'phase7', 'phase8', 'phase9', 'phase10']) &&
+           incoming().diff(existing()).affectedKeys().hasOnly(['phase1', 'phase2', 'phase3', 'phase4', 'phase5', 'phase6', 'phase7', 'phase8', 'phase9', 'phase10', 'currentPhase', 'updatedAt'])) ||
+           
+          // 3. Finalize
+          (incoming().diff(existing()).affectedKeys().hasOnly(['completed', 'updatedAt']) &&
+           incoming().completed == true)
+        );
+
+      allow delete: if false; // System deletion protected
+    }
+  }
+}

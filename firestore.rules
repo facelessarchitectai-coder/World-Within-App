@@ -1,0 +1,46 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helpers ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    function isValidUserSystem(data) {
+      return data.userId is string 
+        && data.userId.size() <= 128
+        && data.userId == request.auth.uid
+        && data.currentPhase is int
+        && data.currentPhase >= 0
+        && data.currentPhase <= 13
+        && (data.completed == null || data.completed is bool)
+        && (data.introStart == null || data.introStart is bool)
+        && (data.introBelief == null || data.introBelief is bool)
+        && (data.intentLocked == null || data.intentLocked is bool)
+        && (data.intentType == null || data.intentType in ['expression', 'offer'])
+        // updatedAt must be a timestamp and specifically request.time
+        && data.updatedAt is timestamp;
+    }
+
+    // --- Collections ---
+    match /systems/{systemId} {
+      allow read, write: if isOwner(systemId);
+    }
+  }
+}

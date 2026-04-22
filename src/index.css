@@ -1,0 +1,87 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+@theme {
+  --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Strict WW_ENGINE Color System */
+  --color-ww-pink-soft: #ffcad8; /* Accent Soft Pink */
+  --color-ww-pink-rose: #f06292; /* Primary Rose Accent */
+  --color-ww-pink-deep: #d81b60; /* Deeper Emphasis */
+  --color-ww-cyan: #35f0e8; /* System Labels & Inactive Signal */
+  --color-ww-gray-bg: #2a2a2a; /* Strict Background */
+  --color-ww-sidebar-bg: #1f1f1f; /* Darker Sidebar */
+  --color-ww-text-charcoal: #e0e0e0; /* Light text for dark bg, originally charcoal but adjusted for contrast */
+  --color-ww-charcoal: #121212; /* True charcoal for shadow/contrast */
+}
+
+@layer base {
+  body {
+    background-color: var(--color-ww-gray-bg);
+    color: var(--color-ww-text-charcoal);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 {
+    color: white;
+    letter-spacing: -0.04em;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #1f1f1f;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-ww-cyan);
+    opacity: 0.2;
+  }
+}
+
+.phase-sidebar-item {
+  @apply flex items-center gap-3 px-8 py-4 cursor-pointer transition-all border-l-2 border-transparent select-none;
+}
+
+.phase-sidebar-item.active {
+  @apply bg-ww-pink-rose/10 border-ww-pink-rose text-ww-pink-rose font-bold;
+}
+
+.phase-sidebar-item.inactive {
+  @apply text-ww-cyan/40 hover:text-ww-cyan/60;
+}
+
+.indicator {
+  @apply w-2 h-2 rounded-full shrink-0 transition-all;
+}
+
+.active .indicator {
+  @apply bg-ww-pink-rose shadow-[0_0_8px_rgba(240,98,146,0.4)];
+}
+
+.inactive .indicator {
+  @apply bg-ww-cyan opacity-40;
+}
+
+.top-label {
+  @apply font-mono text-[10px] tracking-[4px] text-ww-cyan uppercase font-bold mb-4 block opacity-80;
+}
+
+.initialize-btn {
+  @apply bg-ww-pink-rose text-white px-8 py-4 font-black tracking-widest uppercase transition-all shadow-[0_4px_0_var(--color-ww-pink-deep)] active:translate-y-1 active:shadow-none hover:brightness-105 inline-block;
+}
+
+.enforcement-text {
+  @apply font-mono text-[9px] tracking-[2px] text-ww-cyan uppercase opacity-50 mt-10 block;
+}
+
+.method-section {
+  @apply border border-ww-cyan/20 p-6 space-y-4 hover:border-ww-cyan/40 transition-colors bg-white/5;
+}
+
+

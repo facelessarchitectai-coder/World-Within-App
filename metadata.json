@@ -1,0 +1,6 @@
+{
+  "name": "World Within Engine",
+  "description": "A structured system builder for defining internal world logic, visual systems, and narrative engines without automated generation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
