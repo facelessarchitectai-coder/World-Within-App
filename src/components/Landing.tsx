@@ -8,50 +8,45 @@ import { Loader2 } from 'lucide-react';
 export default function Landing({ onInitialize, initialUser }: { onInitialize: () => void, initialUser: User | null }) {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-  const handleInitialize = async () => {
-    if (isAuthenticating) return;
-    setIsAuthenticating(true);
+  const handleInitialize = () => {
+    // Immediate transition as requested (flip state first)
+    onInitialize();
 
-    try {
-      // Use existing user if already logged in, otherwise sign in anonymously
-      // This STAY INSIDE the app (no popups/redirects)
-      let user = initialUser;
-      if (!user) {
-        user = await loginAnonymously();
-      }
-      
-      if (user) {
-        // Ensure initialized state in Firestore
-        const { doc, getDoc, setDoc, updateDoc, serverTimestamp } = await import('firebase/firestore');
-        const { db } = await import('../services/firebase');
-        const docRef = doc(db, 'systems', user.uid);
-        
-        // We set initialized to true so the Engine can show the content
-        const docSnap = await getDoc(docRef);
-
-        if (!docSnap.exists()) {
-          await setDoc(docRef, {
-            userId: user.uid,
-            currentPhase: 0,
-            completed: false,
-            initialized: true,
-            updatedAt: serverTimestamp()
-          });
-        } else if (!docSnap.data().initialized) {
-          await updateDoc(docRef, {
-            initialized: true,
-            updatedAt: serverTimestamp()
-          });
+    // Trigger background synchronization without blocking the UI transition
+    (async () => {
+      try {
+        let user = initialUser;
+        if (!user) {
+          user = await loginAnonymously();
         }
         
-        // Notify parent to switch view (STATE CHANGE ONLY)
-        onInitialize();
+        if (user) {
+          // Sync state in background
+          const { doc, getDoc, setDoc, updateDoc, serverTimestamp } = await import('firebase/firestore');
+          const { db } = await import('../services/firebase');
+          const docRef = doc(db, 'systems', user.uid);
+          
+          const docSnap = await getDoc(docRef);
+
+          if (!docSnap.exists()) {
+            await setDoc(docRef, {
+              userId: user.uid,
+              currentPhase: 0,
+              completed: false,
+              initialized: true,
+              updatedAt: serverTimestamp()
+            });
+          } else if (!docSnap.data().initialized) {
+            await updateDoc(docRef, {
+              initialized: true,
+              updatedAt: serverTimestamp()
+            });
+          }
+        }
+      } catch (error: any) {
+        console.error("Background initialization failed", error);
       }
-    } catch (error: any) {
-      console.error("Initialization failed", error);
-    } finally {
-      setIsAuthenticating(false);
-    }
+    })();
   };
 
   return (
@@ -101,30 +96,19 @@ export default function Landing({ onInitialize, initialUser }: { onInitialize: (
           <div className="relative inline-block group">
             <motion.button
               type="button"
-              disabled={isAuthenticating}
-              whileHover={isAuthenticating ? {} : { scale: 1.02 }}
-              whileTap={isAuthenticating ? {} : { scale: 0.98 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 handleInitialize();
               }}
-              className={cn(
-                "initialize-btn flex items-center justify-center gap-3 min-w-[240px]",
-                isAuthenticating && "opacity-80 brightness-90 cursor-wait"
-              )}
+              className="initialize-btn flex items-center justify-center gap-3 min-w-[240px]"
             >
-              {isAuthenticating ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>SYNCHRONIZING...</span>
-                </>
-              ) : (
-                "INITIALIZE SYSTEM"
-              )}
+              INITIALIZE SYSTEM
             </motion.button>
             <span className="enforcement-text transition-opacity group-hover:opacity-80">
-              {isAuthenticating ? "AUTH_SESSION_PENDING // ESTABLISHING_HANDSHAKE" : "ENFORCEMENT_PROTOCOL_ACTIVE // READ_READY"}
+              ENFORCEMENT_PROTOCOL_ACTIVE // READ_READY
             </span>
           </div>
         </motion.div>

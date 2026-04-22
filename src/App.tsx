@@ -18,7 +18,9 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
-  if (loading) {
+  // We DO NOT block entire app on loading if initialized is true
+  // to ensure immediate re-entry if needed, but usually loading is fast.
+  if (loading && !initialized) {
     return (
       <div className="h-screen w-screen flex items-center justify-center bg-ww-charcoal-dark">
         <Loader2 className="w-8 h-8 text-ww-pink-rose animate-spin" />
@@ -35,7 +37,10 @@ export default function App() {
           initialUser={user} 
         />
       ) : (
-        <Engine onBackToLanding={() => setInitialized(false)} />
+        <Engine 
+          onBackToLanding={() => setInitialized(false)} 
+          user={user}
+        />
       )}
     </>
   );

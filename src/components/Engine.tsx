@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { db, auth } from '../services/firebase';
 import { doc, onSnapshot, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { User } from 'firebase/auth';
 import { motion, AnimatePresence } from 'motion/react';
 import { PHASES, SystemState } from '../types';
 import Sidebar from './Sidebar';
@@ -8,14 +9,20 @@ import PhaseContent from './PhaseContent';
 import { Loader2, Menu, X, ChevronDown } from 'lucide-react';
 import { cn } from '../lib/utils';
 
-export default function Engine({ onBackToLanding }: { onBackToLanding: () => void }) {
-  const [system, setSystem] = useState<SystemState | null>(null);
-  const [loading, setLoading] = useState(true);
+export default function Engine({ onBackToLanding, user }: { onBackToLanding: () => void, user: User | null }) {
+  const [system, setSystem] = useState<SystemState>(() => ({
+    userId: user?.uid || 'anonymous',
+    currentPhase: 0,
+    completed: false,
+    initialized: true,
+    updatedAt: new Date().toISOString()
+  } as SystemState));
+  const [loading, setLoading] = useState(false);
   const [localViewPhase, setLocalViewPhase] = useState(0);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDevMode, setIsDevMode] = useState(false);
   const [navMode, setNavMode] = useState<'REVIEW' | 'BUILD'>('REVIEW');
-  const user = auth.currentUser;
+  
   const isBuilder = user?.email === 'thefacelessprodigy4@gmail.com';
 
   useEffect(() => {
@@ -118,13 +125,10 @@ export default function Engine({ onBackToLanding }: { onBackToLanding: () => voi
     }
   }, [system?.currentPhase, isDevMode]);
 
-  if (loading || !system) {
+  if (loading) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center bg-ww-gray-bg text-ww-pink-rose">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="w-12 h-12 animate-spin" />
-          <span className="font-mono text-[10px] tracking-[4px] uppercase opacity-50">Synchronizing...</span>
-        </div>
+      <div className="h-screen w-screen flex items-center justify-center bg-ww-gray-bg text-ww-pink-rose font-black italic tracking-tighter text-4xl">
+        INITIALIZING...
       </div>
     );
   }
