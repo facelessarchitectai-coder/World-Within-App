@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { signInWithGoogle } from '../services/firebase';
+import { loginAnonymously } from '../services/firebase';
 import { cn } from '../lib/utils';
 import { User } from 'firebase/auth';
 import { Loader2 } from 'lucide-react';
@@ -13,10 +13,11 @@ export default function Landing({ onInitialize, initialUser }: { onInitialize: (
     setIsAuthenticating(true);
 
     try {
-      // Use existing user if already logged in, otherwise sign in
+      // Use existing user if already logged in, otherwise sign in anonymously
+      // This STAY INSIDE the app (no popups/redirects)
       let user = initialUser;
       if (!user) {
-        user = await signInWithGoogle();
+        user = await loginAnonymously();
       }
       
       if (user) {
@@ -24,6 +25,8 @@ export default function Landing({ onInitialize, initialUser }: { onInitialize: (
         const { doc, getDoc, setDoc, updateDoc, serverTimestamp } = await import('firebase/firestore');
         const { db } = await import('../services/firebase');
         const docRef = doc(db, 'systems', user.uid);
+        
+        // We set initialized to true so the Engine can show the content
         const docSnap = await getDoc(docRef);
 
         if (!docSnap.exists()) {
@@ -45,10 +48,7 @@ export default function Landing({ onInitialize, initialUser }: { onInitialize: (
         onInitialize();
       }
     } catch (error: any) {
-      // Only log if it's not a common user cancellation
-      if (error?.code !== 'auth/popup-closed-by-user' && error?.code !== 'auth/cancelled-popup-request') {
-        console.error("Login failed", error);
-      }
+      console.error("Initialization failed", error);
     } finally {
       setIsAuthenticating(false);
     }
