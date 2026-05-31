@@ -77,7 +77,7 @@ export default function PhaseContent({ phaseIndex, data, onSave, onNavigate, isL
     return <SystemAudit data={data} onSave={onSave} onNavigate={onNavigate} />;
   }
 
-  return <PhaseInputs phaseIndex={actualPhaseIndex} data={data} onSave={onSave} isLocked={isLocked} />;
+  return <PhaseInputs phaseIndex={actualPhaseIndex} data={data} onSave={onSave} isLocked={isLocked} navMode={navMode} />;
 }
 
 // --- SUB-COMPONENTS ---
@@ -423,12 +423,15 @@ function AccordionItem({ title, content, isOpen, onToggle }: { title: string, co
   );
 }
 
-function PhaseInputs({ phaseIndex, data, onSave, isLocked }: { phaseIndex: number, data: any, onSave: (data: any) => void, isLocked: boolean }) {
+function PhaseInputs({ phaseIndex, data, onSave, isLocked, navMode }: { phaseIndex: number, data: any, onSave: (data: any) => void, isLocked: boolean, navMode: 'REVIEW' | 'BUILD' }) {
   const [form, setForm] = useState<any>(data[`phase${phaseIndex + 1}`] || {});
   const [analyzing, setAnalyzing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const isDisabled = isLocked || navMode === 'REVIEW';
+
   const handleInputChange = (field: string, value: string) => {
+    if (isDisabled) return;
     setForm((prev: any) => ({ ...prev, [field]: value }));
     setError(null);
   };
@@ -478,7 +481,7 @@ function PhaseInputs({ phaseIndex, data, onSave, isLocked }: { phaseIndex: numbe
             {field.type === 'textarea' ? (
               <textarea
                 value={form[field.id] || ''}
-                disabled={isLocked}
+                disabled={isDisabled}
                 onChange={(e) => handleInputChange(field.id, e.target.value)}
                 placeholder={field.placeholder}
                 rows={4}
@@ -488,7 +491,7 @@ function PhaseInputs({ phaseIndex, data, onSave, isLocked }: { phaseIndex: numbe
               <input
                 type="text"
                 value={form[field.id] || ''}
-                disabled={isLocked}
+                disabled={isDisabled}
                 onChange={(e) => handleInputChange(field.id, e.target.value)}
                 placeholder={field.placeholder}
                 className="w-full bg-white/5 border border-white/10 p-6 text-white/90 font-medium leading-relaxed placeholder:opacity-20 focus:outline-none focus:border-ww-pink-rose transition-colors"
@@ -510,10 +513,10 @@ function PhaseInputs({ phaseIndex, data, onSave, isLocked }: { phaseIndex: numbe
         <button
           type="button"
           onClick={validate}
-          disabled={analyzing || isLocked}
+          disabled={analyzing || isDisabled}
           className={cn(
             "initialize-btn w-full flex items-center justify-center gap-3",
-            (analyzing || isLocked) && "opacity-30 cursor-not-allowed shadow-none translate-y-1"
+            (analyzing || isDisabled) && "opacity-30 cursor-not-allowed shadow-none translate-y-1"
           )}
         >
           {analyzing ? (
@@ -1287,7 +1290,7 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
             <button
               key={type.id}
               type="button"
-              disabled={isLocked && isBuildMode}
+              disabled={isLocked || !isBuildMode}
               onClick={() => {
                 setForm((prev: any) => ({ ...prev, identityType: type.id }));
                 setSectionStatus(prev => ({ ...prev, identity: null }));
@@ -1329,12 +1332,12 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
                 value={form.identityTypeDefinition}
                 onChange={(e) => setForm((prev: any) => ({ ...prev, identityTypeDefinition: e.target.value }))}
                 onBlur={() => validateSection('identity', ['identityType', 'identityTypeDefinition'])}
-                disabled={!isBuildMode}
+                disabled={isLocked || !isBuildMode}
                 className={cn(
                   "w-full bg-white/5 border border-white/10 p-6 text-white/90 font-medium focus:outline-none focus:border-ww-pink-rose transition-colors min-h-[120px]",
-                  !isBuildMode && "opacity-50 border-white/5 cursor-default bg-white/1"
+                  (isLocked || !isBuildMode) && "opacity-50 border-white/5 cursor-default bg-white/1"
                 )}
-                placeholder={!isBuildMode ? "" : "Write at least 2 sentences. Focus on behavior or structure. Avoid: vibe, aesthetic, unique..."}
+                placeholder={(isLocked || !isBuildMode) ? "" : "Write at least 2 sentences. Focus on behavior or structure. Avoid: vibe, aesthetic, unique..."}
               />
             </div>
           </div>
@@ -1482,6 +1485,7 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
               <div className="space-y-3 pt-2">
                 <button
                   type="button"
+                  disabled={isLocked || !isBuildMode}
                   onClick={() => {
                     setForm((prev: any) => ({ ...prev, dominantRole: role.title }));
                     setSectionStatus(prev => ({ ...prev, roles: null }));
@@ -1495,6 +1499,7 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
                 </button>
                 <button
                   type="button"
+                  disabled={isLocked || !isBuildMode}
                   onClick={() => {
                     const current = form.supportingRoles;
                     const next = current.includes(role.title) 
@@ -1839,7 +1844,7 @@ function Phase2World({ data, onSave, onNavigate, isLocked, isDevMode, navMode }:
             <button
               key={dir.id}
               type="button"
-              disabled={isLocked && isBuildMode}
+              disabled={isLocked || !isBuildMode}
               onClick={() => {
                 setForm((prev: any) => ({ ...prev, worldDirection: dir.id }));
                 setSectionStatus(prev => ({ ...prev, direction: null }));
@@ -2042,7 +2047,7 @@ function Phase2World({ data, onSave, onNavigate, isLocked, isDevMode, navMode }:
                    <button
                      key={type}
                      type="button"
-                     disabled={isLocked && isBuildMode}
+                     disabled={isLocked || !isBuildMode}
                      onClick={() => {
                         const current = form.spaceTypes;
                         const next = current.includes(type)
@@ -2518,6 +2523,7 @@ function Phase3Visual({ data, onSave, onNavigate, isLocked, isDevMode, navMode }
                <div className="flex items-center gap-4 pt-4">
                   <button
                     type="button"
+                    disabled={isLocked || !isBuildMode}
                     onClick={() => setForm((prev: any) => ({ ...prev, ownershipRule: !prev.ownershipRule }))}
                     className={cn(
                       "px-6 py-3 text-[10px] font-black tracking-widest border transition-all",
@@ -2780,7 +2786,7 @@ function Phase4VisualBehavior({ data, onSave, onNavigate, isLocked, isDevMode, n
              <button
                 key={type}
                 type="button"
-                disabled={isLocked && isBuildMode}
+                disabled={isLocked || !isBuildMode}
                 onClick={() => {
                   setForm((prev: any) => ({ ...prev, pov: { ...prev.pov, type } }));
                   setSectionStatus(prev => ({ ...prev, pov: null }));
@@ -2881,7 +2887,7 @@ function Phase4VisualBehavior({ data, onSave, onNavigate, isLocked, isDevMode, n
                     <button
                       key={l}
                       type="button"
-                      disabled={isLocked && isBuildMode}
+                      disabled={isLocked || !isBuildMode}
                       onClick={() => {
                         setForm((prev: any) => ({ ...prev, lens: { ...prev.lens, primary: l } }));
                         setSectionStatus(prev => ({ ...prev, lens: null }));
@@ -2956,7 +2962,7 @@ function Phase4VisualBehavior({ data, onSave, onNavigate, isLocked, isDevMode, n
                 <button
                   key={m}
                   type="button"
-                  disabled={isLocked && isBuildMode}
+                  disabled={isLocked || !isBuildMode}
                   onClick={() => {
                     setForm((prev: any) => ({ ...prev, movement: { ...prev.movement, type: m } }));
                     setSectionStatus(prev => ({ ...prev, movement: null }));
