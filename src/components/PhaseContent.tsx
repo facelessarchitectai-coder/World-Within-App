@@ -17,47 +17,58 @@ interface PhaseProps {
 }
 
 export default function PhaseContent({ phaseIndex, data, onSave, onNavigate, isLocked, canAdvance, isDevMode, navMode }: PhaseProps) {
-  if (phaseIndex === 0) return <SystemStart onSave={onSave} />;
-  if (phaseIndex === 1) return <CoreBelief onSave={onSave} />;
-  if (phaseIndex === 2) return <IntentSelection data={data} onSave={onSave} />;
+  if (phaseIndex === 0) return <SystemStart onSave={onSave} onNavigate={onNavigate} />;
+  if (phaseIndex === 1) return <CoreBelief onSave={onSave} onNavigate={onNavigate} />;
+  if (phaseIndex === 2) return <IntentSelection data={data} onSave={onSave} onNavigate={onNavigate} />;
   
   // Real Phases 1-10 (Indices 3-12)
   const actualPhaseIndex = phaseIndex - 3;
   
-  const wrapPhase = (component: React.ReactNode) => (
-    <div className="space-y-12">
-      {actualPhaseIndex >= 0 && actualPhaseIndex <= 9 && <SystemProgressBlock />}
-      {component}
-      {actualPhaseIndex < data.currentPhase && actualPhaseIndex >= 0 && <PhaseCompleteBlock />}
-    </div>
-  );
+  const wrapPhase = (component: React.ReactNode) => {
+    const isCompleted = checkPhaseCompletion(actualPhaseIndex, data);
+    return (
+      <div className="space-y-12">
+        {navMode === 'BUILD' && actualPhaseIndex >= 0 && actualPhaseIndex <= 9 && <SystemProgressBlock />}
+        {component}
+        {navMode === 'BUILD' && (
+          isCompleted ? (
+            <PhaseCompleteBlock />
+          ) : (
+            actualPhaseIndex >= 0 && (
+              <PhasePendingRequirementsBlock phaseIndex={actualPhaseIndex} data={data} />
+            )
+          )
+        )}
+      </div>
+    );
+  };
 
   if (actualPhaseIndex === 0) {
-    return wrapPhase(<Phase1Identity data={data} onSave={onSave} isLocked={isLocked && !isDevMode} isDevMode={isDevMode} navMode={navMode} />);
+    return wrapPhase(<Phase1Identity data={data} onSave={onSave} onNavigate={onNavigate} isLocked={isLocked && !isDevMode} isDevMode={isDevMode} navMode={navMode} />);
   }
   if (actualPhaseIndex === 1) {
-    return wrapPhase(<Phase2World data={data} onSave={onSave} isLocked={isLocked && !isDevMode} isDevMode={isDevMode} navMode={navMode} />);
+    return wrapPhase(<Phase2World data={data} onSave={onSave} onNavigate={onNavigate} isLocked={isLocked && !isDevMode} isDevMode={isDevMode} navMode={navMode} />);
   }
   if (actualPhaseIndex === 2) {
-    return wrapPhase(<Phase3Visual data={data} onSave={onSave} isLocked={isLocked && !isDevMode} isDevMode={isDevMode} navMode={navMode} />);
+    return wrapPhase(<Phase3Visual data={data} onSave={onSave} onNavigate={onNavigate} isLocked={isLocked && !isDevMode} isDevMode={isDevMode} navMode={navMode} />);
   }
   if (actualPhaseIndex === 3) {
-    return wrapPhase(<Phase4VisualBehavior data={data} onSave={onSave} isLocked={isLocked && !isDevMode} isDevMode={isDevMode} navMode={navMode} />);
+    return wrapPhase(<Phase4VisualBehavior data={data} onSave={onSave} onNavigate={onNavigate} isLocked={isLocked && !isDevMode} isDevMode={isDevMode} navMode={navMode} />);
   }
   if (actualPhaseIndex === 4) {
-    return wrapPhase(<Phase5PatternSystem data={data} onSave={onSave} isLocked={isLocked && !isDevMode} isDevMode={isDevMode} navMode={navMode} />);
+    return wrapPhase(<Phase5PatternSystem data={data} onSave={onSave} onNavigate={onNavigate} isLocked={isLocked && !isDevMode} isDevMode={isDevMode} navMode={navMode} />);
   }
   if (actualPhaseIndex === 5) {
-    return wrapPhase(<Phase6NarrativeEngine data={data} onSave={onSave} isLocked={isLocked && !isDevMode} isDevMode={isDevMode} navMode={navMode} />);
+    return wrapPhase(<Phase6NarrativeEngine data={data} onSave={onSave} onNavigate={onNavigate} isLocked={isLocked && !isDevMode} isDevMode={isDevMode} navMode={navMode} />);
   }
   if (actualPhaseIndex === 6) {
-    return wrapPhase(<Phase7SystemStructure data={data} onSave={onSave} isLocked={isLocked && !isDevMode} isDevMode={isDevMode} navMode={navMode} />);
+    return wrapPhase(<Phase7SystemStructure data={data} onSave={onSave} onNavigate={onNavigate} isLocked={isLocked && !isDevMode} isDevMode={isDevMode} navMode={navMode} />);
   }
   if (actualPhaseIndex === 7) {
-    return wrapPhase(<Phase8CreationLoop data={data} onSave={onSave} isLocked={isLocked && !isDevMode} isDevMode={isDevMode} navMode={navMode} />);
+    return wrapPhase(<Phase8CreationLoop data={data} onSave={onSave} onNavigate={onNavigate} isLocked={isLocked && !isDevMode} isDevMode={isDevMode} navMode={navMode} />);
   }
   if (actualPhaseIndex === 8) {
-    return wrapPhase(<Phase9ConversionSystem data={data} onSave={onSave} isLocked={isLocked && !isDevMode} isDevMode={isDevMode} navMode={navMode} />);
+    return wrapPhase(<Phase9ConversionSystem data={data} onSave={onSave} onNavigate={onNavigate} isLocked={isLocked && !isDevMode} isDevMode={isDevMode} navMode={navMode} />);
   }
   if (actualPhaseIndex === 9) {
     return wrapPhase(<Phase10ControlSystem data={data} onSave={onSave} onNavigate={onNavigate} isLocked={isLocked && !isDevMode} isDevMode={isDevMode} navMode={navMode} />);
@@ -71,7 +82,7 @@ export default function PhaseContent({ phaseIndex, data, onSave, onNavigate, isL
 
 // --- SUB-COMPONENTS ---
 
-function SystemStart({ onSave }: { onSave: (data: any) => void }) {
+function SystemStart({ onSave, onNavigate }: { onSave: (data: any) => void; onNavigate?: (idx: number) => void }) {
   return (
     <div className="space-y-16 animate-in fade-in slide-in-from-bottom-6 duration-700 pb-32 max-w-3xl">
       <div className="space-y-6">
@@ -164,7 +175,8 @@ function SystemStart({ onSave }: { onSave: (data: any) => void }) {
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              onSave({ introStart: true });
+              onSave({ introStart: true, currentPhase: 1 });
+              onNavigate?.(1);
             }} 
             className="initialize-btn w-full md:w-[450px] mx-auto animate-pulse hover:animate-none"
           >
@@ -180,7 +192,7 @@ function SystemStart({ onSave }: { onSave: (data: any) => void }) {
   );
 }
 
-function CoreBelief({ onSave }: { onSave: (data: any) => void }) {
+function CoreBelief({ onSave, onNavigate }: { onSave: (data: any) => void; onNavigate?: (idx: number) => void }) {
   return (
     <div className="space-y-12 animate-in fade-in slide-in-from-bottom-6 duration-700 pb-24">
       <div className="space-y-4">
@@ -221,7 +233,8 @@ function CoreBelief({ onSave }: { onSave: (data: any) => void }) {
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              onSave({ introBelief: true });
+              onSave({ introBelief: true, currentPhase: 2 });
+              onNavigate?.(2);
             }} 
             className="initialize-btn"
           >
@@ -234,7 +247,7 @@ function CoreBelief({ onSave }: { onSave: (data: any) => void }) {
   );
 }
 
-function IntentSelection({ data, onSave }: { data: any, onSave: (data: any) => void }) {
+function IntentSelection({ data, onSave, onNavigate }: { data: any, onSave: (data: any) => void, onNavigate?: (idx: number) => void }) {
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [interacted, setInteracted] = useState(false);
 
@@ -258,7 +271,8 @@ function IntentSelection({ data, onSave }: { data: any, onSave: (data: any) => v
     e.preventDefault();
     e.stopPropagation();
     if (interacted) {
-      onSave({ intentReviewed: true });
+      onSave({ intentReviewed: true, currentPhase: 3 });
+      onNavigate?.(3);
     }
   };
 
@@ -1066,7 +1080,7 @@ function getPhaseFields(index: number) {
 
 const REQUIRED_SECTIONS = ['identity', 'definition', 'emotional', 'roles'];
 
-function Phase1Identity({ data, onSave, isLocked, isDevMode, navMode }: { data: any, onSave: (data: any) => void, isLocked: boolean, isDevMode?: boolean, navMode: 'REVIEW' | 'BUILD' }) {
+function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode }: { data: any, onSave: (data: any) => void, onNavigate?: (idx: number) => void, isLocked: boolean, isDevMode?: boolean, navMode: 'REVIEW' | 'BUILD' }) {
   const [form, setForm] = useState<any>({
     identityType: data.phase1?.identityType || '',
     identityTypeDefinition: data.phase1?.identityTypeDefinition || '',
@@ -1135,7 +1149,8 @@ function Phase1Identity({ data, onSave, isLocked, isDevMode, navMode }: { data: 
     e.stopPropagation();
     const allPassed = REQUIRED_SECTIONS.every(s => sectionStatus[s] === 'PASS');
     if (isDevMode || (isBuildMode && allPassed)) {
-      await onSave({ phase1: form });
+      await onSave({ phase1: form, currentPhase: 4 });
+      onNavigate?.(4);
     }
   };
 
@@ -1306,7 +1321,7 @@ function Phase1Identity({ data, onSave, isLocked, isDevMode, navMode }: { data: 
           ))}
         </div>
 
-        {isBuildMode && form.identityType && (
+        {form.identityType && (
           <div className="space-y-6 pt-6 animate-in fade-in slide-in-from-top-4">
             <div className="space-y-4">
               <label className="text-[10px] uppercase font-black tracking-widest text-ww-cyan/60">Define your identity based on this type</label>
@@ -1314,8 +1329,12 @@ function Phase1Identity({ data, onSave, isLocked, isDevMode, navMode }: { data: 
                 value={form.identityTypeDefinition}
                 onChange={(e) => setForm((prev: any) => ({ ...prev, identityTypeDefinition: e.target.value }))}
                 onBlur={() => validateSection('identity', ['identityType', 'identityTypeDefinition'])}
-                className="w-full bg-white/5 border border-white/10 p-6 text-white/90 font-medium focus:outline-none focus:border-ww-pink-rose transition-colors min-h-[120px]"
-                placeholder="Write at least 2 sentences. Focus on behavior or structure. Avoid: vibe, aesthetic, unique..."
+                disabled={!isBuildMode}
+                className={cn(
+                  "w-full bg-white/5 border border-white/10 p-6 text-white/90 font-medium focus:outline-none focus:border-ww-pink-rose transition-colors min-h-[120px]",
+                  !isBuildMode && "opacity-50 border-white/5 cursor-default bg-white/1"
+                )}
+                placeholder={!isBuildMode ? "" : "Write at least 2 sentences. Focus on behavior or structure. Avoid: vibe, aesthetic, unique..."}
               />
             </div>
           </div>
@@ -1436,8 +1455,8 @@ function Phase1Identity({ data, onSave, isLocked, isDevMode, navMode }: { data: 
           )}
         </div>
 
-        <div className="p-8 bg-ww-pink-deep/5 border border-ww-pink-deep/10 max-w-3xl">
-          <h5 className="text-[10px] uppercase font-black tracking-widest text-ww-pink-deep mb-2 italic">Global Failure Point</h5>
+        <div className="p-8 bg-amber-500/5 border border-amber-500/20 max-w-3xl">
+          <h5 className="text-[10px] uppercase font-black tracking-[3px] text-amber-500 mb-2 italic">Potential Pitfall</h5>
           <p className="text-sm font-bold text-white/70 italic leading-relaxed">If multiple roles compete without hierarchy, behavior becomes scattered.</p>
         </div>
 
@@ -1496,45 +1515,44 @@ function Phase1Identity({ data, onSave, isLocked, isDevMode, navMode }: { data: 
           ))}
         </div>
 
-        {isBuildMode && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 animate-in fade-in slide-in-from-top-4">
-            <BuildInput
-              label={`Dominant: ${form.dominantRole || '[CHOOSE]'}`}
-              description="Define how this role operates in your system"
-              value={form.roleDefinition}
-              mode="BUILD"
-              onChange={(val) => setForm((prev: any) => ({ ...prev, roleDefinition: val }))}
-              onBlur={() => validateSection('roles', ['dominantRole', 'roleDefinition'])}
-            />
-            <BuildInput
-              label={`Supporting: ${form.supportingRoles.join(" & ") || '[CHOOSE UP TO 2]'}`}
-              description="Define supporting behavior"
-              value={form.supportingBehavior}
-              mode="BUILD"
-              onChange={(val) => setForm((prev: any) => ({ ...prev, supportingBehavior: val }))}
-            />
-          </div>
-        )}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 animate-in fade-in slide-in-from-top-4">
+          <BuildInput
+            label={`Dominant: ${form.dominantRole || '[CHOOSE]'}`}
+            description="Define how this role operates in your system"
+            value={form.roleDefinition}
+            mode={navMode}
+            onChange={(val) => setForm((prev: any) => ({ ...prev, roleDefinition: val }))}
+            onBlur={() => validateSection('roles', ['dominantRole', 'roleDefinition'])}
+          />
+          <BuildInput
+            label={`Supporting: ${form.supportingRoles.join(" & ") || '[CHOOSE UP TO 2]'}`}
+            description="Define supporting behavior"
+            value={form.supportingBehavior}
+            mode={navMode}
+            onChange={(val) => setForm((prev: any) => ({ ...prev, supportingBehavior: val }))}
+          />
+        </div>
       </section>
 
       {/* FINAL LOCK */}
-      <div className="pt-20 border-t border-white/10 text-center">
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={!isReadyToLock || validating}
-          className={cn(
-            "initialize-btn w-full md:w-[400px] mx-auto flex items-center justify-center gap-3",
-            (!isReadyToLock || validating) && "opacity-20 cursor-not-allowed shadow-none translate-y-1"
-          )}
-        >
-          {validating ? <Loader2 className="w-5 h-5 animate-spin" /> : "[ LOCK IDENTITY ]"}
-        </button>
-        <p className="enforcement-text mt-6">
-          {!isBuildMode ? "SYSTEM_LOCKED in REVIEW_MODE — Switch to BUILD_MODE to proceed." : 
-          !isReadyToLock ? "ENFORCEMENT_PROTOCOL_ACTIVE // PENDING_PASS_REQS" : "IDENTITY_FOUNDATION_VERIFIED // READY_FOR_SYNC"}
-        </p>
-      </div>
+      {isBuildMode && (
+        <div className="pt-20 border-t border-white/10 text-center">
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={!isReadyToLock || validating}
+            className={cn(
+              "initialize-btn w-full md:w-[400px] mx-auto flex items-center justify-center gap-3",
+              (!isReadyToLock || validating) && "opacity-20 cursor-not-allowed shadow-none translate-y-1"
+            )}
+          >
+            {validating ? <Loader2 className="w-5 h-5 animate-spin" /> : "[ LOCK IDENTITY ]"}
+          </button>
+          <p className="enforcement-text mt-6">
+            {!isReadyToLock ? "ENFORCEMENT_PROTOCOL_ACTIVE // PENDING_PASS_REQS" : "IDENTITY_FOUNDATION_VERIFIED // READY_FOR_SYNC"}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
@@ -1543,7 +1561,7 @@ function Phase1Identity({ data, onSave, isLocked, isDevMode, navMode }: { data: 
 
 const P2_REQUIRED_SECTIONS = ['direction', 'rules', 'environment'];
 
-function Phase2World({ data, onSave, isLocked, isDevMode, navMode }: { data: any, onSave: (data: any) => void, isLocked: boolean, isDevMode?: boolean, navMode: 'REVIEW' | 'BUILD' }) {
+function Phase2World({ data, onSave, onNavigate, isLocked, isDevMode, navMode }: { data: any, onSave: (data: any) => void, onNavigate?: (idx: number) => void, isLocked: boolean, isDevMode?: boolean, navMode: 'REVIEW' | 'BUILD' }) {
   const [form, setForm] = useState<any>({
     worldDirection: data.phase2?.worldDirection || '',
     worldDirectionDefinition: data.phase2?.worldDirectionDefinition || '',
@@ -1645,7 +1663,8 @@ function Phase2World({ data, onSave, isLocked, isDevMode, navMode }: { data: any
     e.stopPropagation();
     const allPassed = P2_REQUIRED_SECTIONS.every(s => sectionStatus[s] === 'PASS');
     if (isDevMode || (isBuildMode && allPassed)) {
-      await onSave({ phase2: form });
+      await onSave({ phase2: form, currentPhase: 5 });
+      onNavigate?.(5);
     }
   };
 
@@ -1854,22 +1873,24 @@ function Phase2World({ data, onSave, isLocked, isDevMode, navMode }: { data: any
           ))}
         </div>
 
-        {isBuildMode && form.worldDirection && (
+        {form.worldDirection && (
           <div className="space-y-12 pt-6 animate-in fade-in slide-in-from-top-4">
-            <div className="p-8 bg-ww-cyan/5 border-l-2 border-ww-cyan space-y-6">
-               <h4 className="text-xl font-black italic tracking-tighter uppercase">Lock Enforcement: You Must Choose One Main</h4>
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <MethodItem title="What this controls" content="System unity." />
-                  <MethodItem title="How to apply it" content="Use one primary direction as the base." />
-                  <MethodItem title="Failure point" content="If you refuse to choose, the world stays undefined." />
-                  <MethodItem title="What to do" content="Commit to one direction." />
-                  <MethodItem title="Definition — What to do" content="What to do is enforcing alignment through commitment." />
-                  <MethodItem title="Bot application" content="Use the bot to detect indecision." />
-                  <MethodItem title="Definition — Bot application" content="Bot application is identifying lack of commitment." />
-                  <MethodItem title="Action step" content="State your world direction clearly in one sentence." />
-                  <MethodItem title="Definition — Action step" content="An action step is one enforced definition that locks direction." />
-               </div>
-            </div>
+            {isBuildMode && (
+              <div className="p-8 bg-ww-cyan/5 border-l-2 border-ww-cyan space-y-6">
+                 <h4 className="text-xl font-black italic tracking-tighter uppercase">Lock Enforcement: You Must Choose One Main</h4>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <MethodItem title="What this controls" content="System unity." />
+                    <MethodItem title="How to apply it" content="Use one primary direction as the base." />
+                    <MethodItem title="Failure point" content="If you refuse to choose, the world stays undefined." />
+                    <MethodItem title="What to do" content="Commit to one direction." />
+                    <MethodItem title="Definition — What to do" content="What to do is enforcing alignment through commitment." />
+                    <MethodItem title="Bot application" content="Use the bot to detect indecision." />
+                    <MethodItem title="Definition — Bot application" content="Bot application is identifying lack of commitment." />
+                    <MethodItem title="Action step" content="State your world direction clearly in one sentence." />
+                    <MethodItem title="Definition — Action step" content="An action step is one enforced definition that locks direction." />
+                 </div>
+              </div>
+            )}
 
             <BuildInput
               label="Define your world direction in one sentence"
@@ -1983,7 +2004,7 @@ function Phase2World({ data, onSave, isLocked, isDevMode, navMode }: { data: any
              </div>
            </div>
            
-           {isBuildMode && (
+           {true && (
              <BuildInput
                 label="Check one piece of content against your rules before posting"
                 value={form.ruleCheck}
@@ -2091,23 +2112,24 @@ function Phase2World({ data, onSave, isLocked, isDevMode, navMode }: { data: any
       </section>
 
       {/* FINAL LOCK */}
-      <div className="pt-20 border-t border-white/10 text-center">
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={!isReadyToLock || validating}
-          className={cn(
-            "initialize-btn w-full md:w-[400px] mx-auto flex items-center justify-center gap-3",
-            (!isReadyToLock || validating) && "opacity-20 cursor-not-allowed shadow-none translate-y-1"
-          )}
-        >
-          {validating ? <Loader2 className="w-5 h-5 animate-spin" /> : "[ LOCK WORLD ]"}
-        </button>
-        <p className="enforcement-text mt-6">
-          {!isBuildMode ? "SYSTEM_LOCKED in REVIEW_MODE — Switch to BUILD_MODE to proceed." : 
-          !isReadyToLock ? "ENFORCEMENT_PROTOCOL_ACTIVE // PENDING_PASS_REQS" : "WORLD_SYNC_COMPLETE // READY_FOR_VISUALS"}
-        </p>
-      </div>
+      {isBuildMode && (
+        <div className="pt-20 border-t border-white/10 text-center">
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={!isReadyToLock || validating}
+            className={cn(
+              "initialize-btn w-full md:w-[400px] mx-auto flex items-center justify-center gap-3",
+              (!isReadyToLock || validating) && "opacity-20 cursor-not-allowed shadow-none translate-y-1"
+            )}
+          >
+            {validating ? <Loader2 className="w-5 h-5 animate-spin" /> : "[ LOCK WORLD ]"}
+          </button>
+          <p className="enforcement-text mt-6">
+            {!isReadyToLock ? "ENFORCEMENT_PROTOCOL_ACTIVE // PENDING_PASS_REQS" : "WORLD_SYNC_COMPLETE // READY_FOR_VISUALS"}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
@@ -2116,7 +2138,7 @@ function Phase2World({ data, onSave, isLocked, isDevMode, navMode }: { data: any
 
 const P3_REQUIRED_SECTIONS = ['direction', 'properties', 'references', 'extraction', 'ownership', 'styling'];
 
-function Phase3Visual({ data, onSave, isLocked, isDevMode, navMode }: { data: any, onSave: (data: any) => void, isLocked: boolean, isDevMode?: boolean, navMode: 'REVIEW' | 'BUILD' }) {
+function Phase3Visual({ data, onSave, onNavigate, isLocked, isDevMode, navMode }: { data: any, onSave: (data: any) => void, onNavigate?: (idx: number) => void, isLocked: boolean, isDevMode?: boolean, navMode: 'REVIEW' | 'BUILD' }) {
   const [form, setForm] = useState<any>({
     baseDirection: data.phase3?.baseDirection || '',
     visualProperties: {
@@ -2202,7 +2224,8 @@ function Phase3Visual({ data, onSave, isLocked, isDevMode, navMode }: { data: an
     e.stopPropagation();
     const allPassed = P3_REQUIRED_SECTIONS.every(s => sectionStatus[s] === 'PASS');
     if (isDevMode || (isBuildMode && allPassed)) {
-      await onSave({ phase3: form });
+      await onSave({ phase3: form, currentPhase: 6 });
+      onNavigate?.(6);
     }
   };
 
@@ -2609,23 +2632,24 @@ function Phase3Visual({ data, onSave, isLocked, isDevMode, navMode }: { data: an
       </section>
 
       {/* FINAL LOCK */}
-      <div className="pt-20 border-t border-white/10 text-center">
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={!isReadyToLock || validating}
-          className={cn(
-            "initialize-btn w-full md:w-[400px] mx-auto flex items-center justify-center gap-3",
-            (!isReadyToLock || validating) && "opacity-20 cursor-not-allowed shadow-none translate-y-1"
-          )}
-        >
-          {validating ? <Loader2 className="w-5 h-5 animate-spin" /> : "[ LOCK VISUAL SYSTEM ]"}
-        </button>
-        <p className="enforcement-text mt-6 normal-case">
-          {!isBuildMode ? "SYSTEM_LOCKED in REVIEW_MODE — Switch to BUILD_MODE to proceed." : 
-          !isReadyToLock ? "ENFORCEMENT_PROTOCOL_ACTIVE // PENDING_PASS_REQS" : "VISUAL_LANGUAGE_SYNC_COMPLETE // READY_FOR_NARRATIVE"}
-        </p>
-      </div>
+      {isBuildMode && (
+        <div className="pt-20 border-t border-white/10 text-center">
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={!isReadyToLock || validating}
+            className={cn(
+              "initialize-btn w-full md:w-[400px] mx-auto flex items-center justify-center gap-3",
+              (!isReadyToLock || validating) && "opacity-20 cursor-not-allowed shadow-none translate-y-1"
+            )}
+          >
+            {validating ? <Loader2 className="w-5 h-5 animate-spin" /> : "[ LOCK VISUAL SYSTEM ]"}
+          </button>
+          <p className="enforcement-text mt-6 normal-case">
+            {!isReadyToLock ? "ENFORCEMENT_PROTOCOL_ACTIVE // PENDING_PASS_REQS" : "VISUAL_LANGUAGE_SYNC_COMPLETE // READY_FOR_NARRATIVE"}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
@@ -2634,7 +2658,7 @@ function Phase3Visual({ data, onSave, isLocked, isDevMode, navMode }: { data: an
 
 const P4_REQUIRED_SECTIONS = ['pov', 'framing', 'lens', 'movement'];
 
-function Phase4VisualBehavior({ data, onSave, isLocked, isDevMode, navMode }: { data: any, onSave: (data: any) => void, isLocked: boolean, isDevMode?: boolean, navMode: 'REVIEW' | 'BUILD' }) {
+function Phase4VisualBehavior({ data, onSave, onNavigate, isLocked, isDevMode, navMode }: { data: any, onSave: (data: any) => void, onNavigate?: (idx: number) => void, isLocked: boolean, isDevMode?: boolean, navMode: 'REVIEW' | 'BUILD' }) {
   const [form, setForm] = useState<any>({
     pov: {
       type: data.phase4?.pov?.type || '',
@@ -2723,7 +2747,8 @@ function Phase4VisualBehavior({ data, onSave, isLocked, isDevMode, navMode }: { 
     e.stopPropagation();
     const allPassed = P4_REQUIRED_SECTIONS.every(s => sectionStatus[s] === 'PASS');
     if (isDevMode || (isBuildMode && allPassed)) {
-      await onSave({ phase4: form });
+      await onSave({ phase4: form, currentPhase: 7 });
+      onNavigate?.(7);
     }
   };
 
@@ -2974,23 +2999,24 @@ function Phase4VisualBehavior({ data, onSave, isLocked, isDevMode, navMode }: { 
       </section>
 
       {/* FINAL LOCK */}
-      <div className="pt-20 border-t border-white/10 text-center">
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={!isReadyToLock || validating}
-          className={cn(
-            "initialize-btn w-full md:w-[400px] mx-auto flex items-center justify-center gap-3",
-            (!isReadyToLock || validating) && "opacity-20 cursor-not-allowed shadow-none translate-y-1"
-          )}
-        >
-          {validating ? <Loader2 className="w-5 h-5 animate-spin" /> : "[ LOCK VISUAL RULES ]"}
-        </button>
-        <p className="enforcement-text mt-6 normal-case">
-          {!isBuildMode ? "SYSTEM_LOCKED in REVIEW_MODE — Switch to BUILD_MODE to proceed." : 
-          !isReadyToLock ? "ENFORCEMENT_PROTOCOL_ACTIVE // PENDING_PASS_REQS" : "VISUAL_BEHAVIOR_SYNC_COMPLETE // READY_FOR_NARRATIVE"}
-        </p>
-      </div>
+      {isBuildMode && (
+        <div className="pt-20 border-t border-white/10 text-center">
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={!isReadyToLock || validating}
+            className={cn(
+              "initialize-btn w-full md:w-[400px] mx-auto flex items-center justify-center gap-3",
+              (!isReadyToLock || validating) && "opacity-20 cursor-not-allowed shadow-none translate-y-1"
+            )}
+          >
+            {validating ? <Loader2 className="w-5 h-5 animate-spin" /> : "[ LOCK VISUAL RULES ]"}
+          </button>
+          <p className="enforcement-text mt-6 normal-case">
+            {!isReadyToLock ? "ENFORCEMENT_PROTOCOL_ACTIVE // PENDING_PASS_REQS" : "VISUAL_BEHAVIOR_SYNC_COMPLETE // READY_FOR_NARRATIVE"}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
@@ -2999,7 +3025,7 @@ function Phase4VisualBehavior({ data, onSave, isLocked, isDevMode, navMode }: { 
 
 const P5_REQUIRED_SECTIONS = ['repetition', 'connection'];
 
-function Phase5PatternSystem({ data, onSave, isLocked, isDevMode, navMode }: { data: any, onSave: (data: any) => void, isLocked: boolean, isDevMode?: boolean, navMode: 'REVIEW' | 'BUILD' }) {
+function Phase5PatternSystem({ data, onSave, onNavigate, isLocked, isDevMode, navMode }: { data: any, onSave: (data: any) => void, onNavigate?: (idx: number) => void, isLocked: boolean, isDevMode?: boolean, navMode: 'REVIEW' | 'BUILD' }) {
   const [form, setForm] = useState<any>({
     selectedPatterns: data.phase5?.selectedPatterns || [],
     mainDefinition: data.phase5?.mainDefinition || '',
@@ -3072,7 +3098,8 @@ function Phase5PatternSystem({ data, onSave, isLocked, isDevMode, navMode }: { d
     e.stopPropagation();
     const allPassed = P5_REQUIRED_SECTIONS.every(s => sectionStatus[s] === 'PASS');
     if (isDevMode || (isBuildMode && allPassed)) {
-      await onSave({ phase5: form });
+      await onSave({ phase5: form, currentPhase: 8 });
+      onNavigate?.(8);
     }
   };
 
@@ -3253,23 +3280,24 @@ function Phase5PatternSystem({ data, onSave, isLocked, isDevMode, navMode }: { d
       </section>
 
       {/* FINAL LOCK */}
-      <div className="pt-20 border-t border-white/10 text-center">
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={!isReadyToLock || validating}
-          className={cn(
-            "initialize-btn w-full md:w-[400px] mx-auto flex items-center justify-center gap-3",
-            (!isReadyToLock || validating) && "opacity-20 cursor-not-allowed shadow-none translate-y-1"
-          )}
-        >
-          {validating ? <Loader2 className="w-5 h-5 animate-spin" /> : "[ LOCK PATTERN SYSTEM ]"}
-        </button>
-        <p className="enforcement-text mt-6 normal-case">
-          {!isBuildMode ? "SYSTEM_LOCKED in REVIEW_MODE — Switch to BUILD_MODE to proceed." : 
-          !isReadyToLock ? "ENFORCEMENT_PROTOCOL_ACTIVE // PENDING_PASS_REQS" : "PATTERN_SYNC_COMPLETE // READY_FOR_NARRATIVE_ENGINE"}
-        </p>
-      </div>
+      {isBuildMode && (
+        <div className="pt-20 border-t border-white/10 text-center">
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={!isReadyToLock || validating}
+            className={cn(
+              "initialize-btn w-full md:w-[400px] mx-auto flex items-center justify-center gap-3",
+              (!isReadyToLock || validating) && "opacity-20 cursor-not-allowed shadow-none translate-y-1"
+            )}
+          >
+            {validating ? <Loader2 className="w-5 h-5 animate-spin" /> : "[ LOCK PATTERN SYSTEM ]"}
+          </button>
+          <p className="enforcement-text mt-6 normal-case">
+            {!isReadyToLock ? "ENFORCEMENT_PROTOCOL_ACTIVE // PENDING_PASS_REQS" : "PATTERN_SYNC_COMPLETE // READY_FOR_NARRATIVE_ENGINE"}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
@@ -3278,7 +3306,7 @@ function Phase5PatternSystem({ data, onSave, isLocked, isDevMode, navMode }: { d
 
 const P6_REQUIRED_SECTIONS = ['evolution', 'discovery', 'connection'];
 
-function Phase6NarrativeEngine({ data, onSave, isLocked, isDevMode, navMode }: { data: any, onSave: (data: any) => void, isLocked: boolean, isDevMode?: boolean, navMode: 'REVIEW' | 'BUILD' }) {
+function Phase6NarrativeEngine({ data, onSave, onNavigate, isLocked, isDevMode, navMode }: { data: any, onSave: (data: any) => void, onNavigate?: (idx: number) => void, isLocked: boolean, isDevMode?: boolean, navMode: 'REVIEW' | 'BUILD' }) {
   const [form, setForm] = useState<any>({
     evolutionType: data.phase6?.evolutionType || '',
     evolutionDefinition: data.phase6?.evolutionDefinition || '',
@@ -3350,7 +3378,8 @@ function Phase6NarrativeEngine({ data, onSave, isLocked, isDevMode, navMode }: {
     e.stopPropagation();
     const allPassed = P6_REQUIRED_SECTIONS.every(s => sectionStatus[s] === 'PASS');
     if (isDevMode || (isBuildMode && allPassed)) {
-      await onSave({ phase6: form });
+      await onSave({ phase6: form, currentPhase: 9 });
+      onNavigate?.(9);
     }
   };
 
@@ -3586,23 +3615,24 @@ function Phase6NarrativeEngine({ data, onSave, isLocked, isDevMode, navMode }: {
       </section>
 
       {/* FINAL LOCK */}
-      <div className="pt-20 border-t border-white/10 text-center">
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={!isReadyToLock || validating}
-          className={cn(
-            "initialize-btn w-full md:w-[400px] mx-auto flex items-center justify-center gap-3",
-            (!isReadyToLock || validating) && "opacity-20 cursor-not-allowed shadow-none translate-y-1"
-          )}
-        >
-          {validating ? <Loader2 className="w-5 h-5 animate-spin" /> : "[ LOCK NARRATIVE ]"}
-        </button>
-        <p className="enforcement-text mt-6 normal-case">
-          {!isBuildMode ? "SYSTEM_LOCKED in REVIEW_MODE — Switch to BUILD_MODE to proceed." : 
-          !isReadyToLock ? "ENFORCEMENT_PROTOCOL_ACTIVE // PENDING_PASS_REQS" : "NARRATIVE_SYNC_COMPLETE // READY_FOR_STRUCTURE"}
-        </p>
-      </div>
+      {isBuildMode && (
+        <div className="pt-20 border-t border-white/10 text-center">
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={!isReadyToLock || validating}
+            className={cn(
+              "initialize-btn w-full md:w-[400px] mx-auto flex items-center justify-center gap-3",
+              (!isReadyToLock || validating) && "opacity-20 cursor-not-allowed shadow-none translate-y-1"
+            )}
+          >
+            {validating ? <Loader2 className="w-5 h-5 animate-spin" /> : "[ LOCK NARRATIVE ]"}
+          </button>
+          <p className="enforcement-text mt-6 normal-case">
+            {!isReadyToLock ? "ENFORCEMENT_PROTOCOL_ACTIVE // PENDING_PASS_REQS" : "NARRATIVE_SYNC_COMPLETE // READY_FOR_STRUCTURE"}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
@@ -3611,7 +3641,7 @@ function Phase6NarrativeEngine({ data, onSave, isLocked, isDevMode, navMode }: {
 
 const P7_REQUIRED_SECTIONS = ['mirror', 'reveal', 'system'];
 
-function Phase7SystemStructure({ data, onSave, isLocked, isDevMode, navMode }: { data: any, onSave: (data: any) => void, isLocked: boolean, isDevMode?: boolean, navMode: 'REVIEW' | 'BUILD' }) {
+function Phase7SystemStructure({ data, onSave, onNavigate, isLocked, isDevMode, navMode }: { data: any, onSave: (data: any) => void, onNavigate?: (idx: number) => void, isLocked: boolean, isDevMode?: boolean, navMode: 'REVIEW' | 'BUILD' }) {
   const [form, setForm] = useState<any>({
     mirror: data.phase7?.mirror || '',
     reveal: data.phase7?.reveal || '',
@@ -3740,7 +3770,8 @@ function Phase7SystemStructure({ data, onSave, isLocked, isDevMode, navMode }: {
     const allPassed = P7_REQUIRED_SECTIONS.every(s => sectionStatus[s] === 'PASS');
     if (isDevMode || (isBuildMode && allPassed)) {
       setValidating(true);
-      await onSave({ phase7: form });
+      await onSave({ phase7: form, currentPhase: 10 });
+      onNavigate?.(10);
       setValidating(false);
     }
   };
@@ -4022,30 +4053,31 @@ function Phase7SystemStructure({ data, onSave, isLocked, isDevMode, navMode }: {
       )}
 
       {/* FINAL LOCK */}
-      <div className="pt-20 border-t border-white/10 text-center">
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={!isReadyToLock || validating}
-          className={cn(
-            "initialize-btn w-full md:w-[400px] mx-auto flex items-center justify-center gap-3",
-            (!isReadyToLock || validating) && "opacity-20 cursor-not-allowed shadow-none translate-y-1"
-          )}
-        >
-          {validating ? <Loader2 className="w-5 h-5 animate-spin" /> : "[ LOCK SYSTEM STRUCTURE ]"}
-        </button>
-        <p className="enforcement-text mt-6 normal-case">
-          {!isBuildMode ? "SYSTEM_LOCKED in REVIEW_MODE — Switch to BUILD_MODE to proceed." : 
-          !isReadyToLock ? "ENFORCEMENT_PROTOCOL_ACTIVE // PENDING_PASS_REQS" : "STRUCTURE_SYNC_COMPLETE // READY_FOR_CREATION_LOOP"}
-        </p>
-      </div>
+      {isBuildMode && (
+        <div className="pt-20 border-t border-white/10 text-center">
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={!isReadyToLock || validating}
+            className={cn(
+              "initialize-btn w-full md:w-[400px] mx-auto flex items-center justify-center gap-3",
+              (!isReadyToLock || validating) && "opacity-20 cursor-not-allowed shadow-none translate-y-1"
+            )}
+          >
+            {validating ? <Loader2 className="w-5 h-5 animate-spin" /> : "[ LOCK SYSTEM STRUCTURE ]"}
+          </button>
+          <p className="enforcement-text mt-6 normal-case">
+            {!isReadyToLock ? "ENFORCEMENT_PROTOCOL_ACTIVE // PENDING_PASS_REQS" : "STRUCTURE_SYNC_COMPLETE // READY_FOR_CREATION_LOOP"}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
 
 // --- PHASE 8: CREATION LOOP COMPONENT ---
 
-function Phase8CreationLoop({ data, onSave, isLocked, isDevMode, navMode }: { data: any, onSave: (data: any) => void, isLocked: boolean, isDevMode?: boolean, navMode: 'REVIEW' | 'BUILD' }) {
+function Phase8CreationLoop({ data, onSave, onNavigate, isLocked, isDevMode, navMode }: { data: any, onSave: (data: any) => void, onNavigate?: (idx: number) => void, isLocked: boolean, isDevMode?: boolean, navMode: 'REVIEW' | 'BUILD' }) {
   const [form, setForm] = useState<any>({
     loopCount: data.phase8?.loopCount || 0,
     define: data.phase8?.define || '',
@@ -4200,7 +4232,8 @@ function Phase8CreationLoop({ data, onSave, isLocked, isDevMode, navMode }: { da
      // If first loop completed, we can advance currentPhase in DB but Phase 8 stays active as it's a loop
      // The requirement says "After 1 full loop PASS -> Unlock Phase 9"
      // We trigger onSave which will advance currentPhase if it matches
-     await onSave({ phase8: resetForm });
+     await onSave({ phase8: resetForm, currentPhase: 11 });
+     onNavigate?.(11);
   };
 
   const toggleSection = (id: string, isInternalLocked: boolean) => {
@@ -4541,21 +4574,24 @@ function Phase8CreationLoop({ data, onSave, isLocked, isDevMode, navMode }: { da
                   <span className="text-[10px] font-black tracking-[4px] text-ww-cyan uppercase">LOOP_SYNC_COMPLETE</span>
                   <p className="enforcement-text mt-4">One full creation loop has been completed and verified.</p>
                </div>
-               <button
-                  type="button"
-                  onClick={resetLoop}
-                  className="initialize-btn w-full md:w-[400px] mx-auto flex items-center justify-center gap-3"
-               >
-                  [ RUN LOOP AGAIN ]
-               </button>
+               {isBuildMode && (
+                  <button
+                     type="button"
+                     onClick={resetLoop}
+                     className="initialize-btn w-full md:w-[400px] mx-auto flex items-center justify-center gap-3"
+                  >
+                     [ RUN LOOP AGAIN ]
+                  </button>
+               )}
             </div>
          ) : (
-            <div className="p-12 border border-white/5 bg-white/2">
-               <p className="enforcement-text normal-case">
-                  {!isBuildMode ? "LOOP_LOCKED in REVIEW_MODE — Switch to BUILD_MODE to proceed." : 
-                  "ENFORCEMENT_PROTOCOL_ACTIVE // COMPLETE_ALL_LOOP_STEPS"}
-               </p>
-            </div>
+            isBuildMode && (
+               <div className="p-12 border border-white/5 bg-white/2">
+                  <p className="enforcement-text normal-case">
+                     "ENFORCEMENT_PROTOCOL_ACTIVE // COMPLETE_ALL_LOOP_STEPS"
+                  </p>
+               </div>
+            )
          )}
       </div>
     </div>
@@ -4564,7 +4600,7 @@ function Phase8CreationLoop({ data, onSave, isLocked, isDevMode, navMode }: { da
 
 // --- PHASE 9: CONVERSION SYSTEM COMPONENT ---
 
-function Phase9ConversionSystem({ data, onSave, isLocked, isDevMode, navMode }: { data: any, onSave: (data: any) => void, isLocked: boolean, isDevMode?: boolean, navMode: 'REVIEW' | 'BUILD' }) {
+function Phase9ConversionSystem({ data, onSave, onNavigate, isLocked, isDevMode, navMode }: { data: any, onSave: (data: any) => void, onNavigate?: (idx: number) => void, isLocked: boolean, isDevMode?: boolean, navMode: 'REVIEW' | 'BUILD' }) {
   const [form, setForm] = useState<Phase9Data>({
     messaging: data.phase9?.messaging || '',
     conversion: data.phase9?.conversion || '',
@@ -4662,6 +4698,7 @@ function Phase9ConversionSystem({ data, onSave, isLocked, isDevMode, navMode }: 
   const handleLock = () => {
     if (isAllPassed) {
        onSave({ phase9: form, currentPhase: 12 });
+       onNavigate?.(12);
     }
   };
 
@@ -4993,19 +5030,23 @@ function Phase9ConversionSystem({ data, onSave, isLocked, isDevMode, navMode }: 
                <span className="text-[10px] font-black tracking-[4px] text-ww-cyan uppercase">PROTOCOL_SYNC_COMPLETE</span>
                <p className="enforcement-text mt-4">Conversion System stabilized and ready for execution.</p>
              </div>
-             <button
-                onClick={handleLock}
-                className="initialize-btn w-full md:w-[400px] mx-auto flex items-center justify-center gap-3"
-             >
-                <Lock className="w-4 h-4" /> [ LOCK CONVERSION SYSTEM ]
-             </button>
+             {isBuildMode && (
+               <button
+                  onClick={handleLock}
+                  className="initialize-btn w-full md:w-[400px] mx-auto flex items-center justify-center gap-3"
+               >
+                  <Lock className="w-4 h-4" /> [ LOCK CONVERSION SYSTEM ]
+               </button>
+             )}
            </div>
          ) : (
-           <div className="p-12 border border-white/5 bg-white/2">
-             <p className="enforcement-text normal-case opacity-40">
-               ENFORCEMENT_PROTOCOL_ACTIVE // STABILIZE_ALL_CONVERSION_LAYERS_TO_LOCK
-             </p>
-           </div>
+           isBuildMode && (
+             <div className="p-12 border border-white/5 bg-white/2">
+               <p className="enforcement-text normal-case opacity-40">
+                 ENFORCEMENT_PROTOCOL_ACTIVE // STABILIZE_ALL_CONVERSION_LAYERS_TO_LOCK
+               </p>
+             </div>
+           )
          )}
       </div>
     </div>
@@ -5071,7 +5112,8 @@ function Phase10ControlSystem({ data, onSave, onNavigate, isLocked, isDevMode, n
   };
 
   const handleLock = () => {
-    onSave({ ...data, phase10: form, completed: true });
+    onSave({ ...data, phase10: form, completed: true, currentPhase: 13 });
+    onNavigate?.(13);
   };
 
   const isAllPassed = sectionStatus.role === 'PASS' && sectionStatus.access === 'PASS' && arePreviousPhasesComplete;
@@ -5258,23 +5300,23 @@ function Phase10ControlSystem({ data, onSave, onNavigate, isLocked, isDevMode, n
                        document.getElementById('phase-1')?.scrollIntoView({ behavior: 'smooth' });
                      }, 100);
                    }}
-                   className="text-ww-cyan font-black text-[10px] tracking-widest uppercase border border-ww-cyan/30 px-8 py-3 hover:bg-ww-cyan/10 transition-all"
+                   className={cn("text-ww-cyan font-black text-[10px] tracking-widest uppercase border border-ww-cyan/30 px-8 py-3 hover:bg-ww-cyan/10 transition-all", !isBuildMode && "hidden")}
                  >
                    [ REFINE YOUR SYSTEM ]
                  </button>
                  <div className="space-y-2 w-full max-w-[400px]">
                    <button
                       onClick={handleLock}
-                      className="w-full px-8 py-3 bg-white/5 border border-white/10 text-[10px] font-black tracking-[4px] text-white/40 hover:bg-white/10 transition-all animate-in fade-in"
+                      className={cn("w-full px-8 py-3 bg-white/5 border border-white/10 text-[10px] font-black tracking-[4px] text-white/40 hover:bg-white/10 transition-all animate-in fade-in", !isBuildMode && "hidden")}
                    >
                       [ LOCK SYSTEM & FINALIZE ]
                    </button>
                  </div>
                </div>
              ) : (
-                <div className="p-10 border border-white/5 bg-white/2 max-w-xl mx-auto">
+                <div className={cn("p-10 border border-white/5 bg-white/2 max-w-xl mx-auto", !isBuildMode && "hidden")}>
                    <p className="enforcement-text normal-case opacity-40 italic">
-                     ENFORCEMENT_PROTOCOL_ACTIVE // STABILIZE_CONTROL_LAYERS_TO_FINALIZE_SYSTEM
+                     {isBuildMode && "ENFORCEMENT_PROTOCOL_ACTIVE // STABILIZE_CONTROL_LAYERS_TO_FINALIZE_SYSTEM"}
                    </p>
                 </div>
              )}
@@ -5287,10 +5329,11 @@ function Phase10ControlSystem({ data, onSave, onNavigate, isLocked, isDevMode, n
 function BuildInput({ label, description, value, mode, onChange, onBlur }: { 
   label: string, description?: string, value: string, mode: 'REVIEW' | 'BUILD', onChange: (val: string) => void, onBlur?: () => void 
 }) {
+  const showDesc = mode === 'BUILD' && description;
   return (
     <div className="space-y-4 group">
       <label className="text-[10px] uppercase font-black tracking-widest text-ww-cyan group-hover:text-ww-pink-rose transition-colors">{label}</label>
-      {description && <p className="text-[9px] text-white/40 italic font-medium">{description}</p>}
+      {showDesc && <p className="text-[9px] text-white/40 italic font-medium">{description}</p>}
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -5298,9 +5341,9 @@ function BuildInput({ label, description, value, mode, onChange, onBlur }: {
         disabled={mode === 'REVIEW'}
         className={cn(
           "w-full bg-white/2 border border-white/10 p-6 text-white/80 font-medium focus:outline-none focus:border-ww-pink-rose transition-all resize-none min-h-[100px]",
-          mode === 'REVIEW' && "opacity-50 border-white/5 cursor-default"
+          mode === 'REVIEW' && "opacity-50 border-white/5 cursor-default bg-white/1"
         )}
-        placeholder={mode === 'REVIEW' ? "NOT REQUIRED IN REVIEW MODE" : "Provide specific definition..."}
+        placeholder={mode === 'REVIEW' ? "" : "Provide specific definition..."}
       />
     </div>
   );
@@ -5341,6 +5384,300 @@ function PhaseCompleteBlock() {
       <div className="space-y-2 border-t border-ww-cyan/10 pt-4">
         <p className="text-[10px] font-black tracking-widest uppercase text-white/80">This layer is now defined.</p>
         <p className="text-[9px] font-medium italic text-white/40">Move forward only when this feels clear.</p>
+      </div>
+    </div>
+  );
+}
+
+export function checkPhaseCompletion(phaseIdx: number, data: any): boolean {
+  if (!data) return false;
+  
+  if (phaseIdx === 0) {
+    const p = data.phase1;
+    if (!p) return false;
+    return !!(
+      p.identityType && p.identityType.trim() !== '' &&
+      p.identityTypeDefinition && p.identityTypeDefinition.trim() !== '' &&
+      p.neverBe && p.neverBe.trim() !== '' &&
+      p.notSay && p.notSay.trim() !== '' &&
+      p.notRepresent && p.notRepresent.trim() !== '' &&
+      p.refuse && p.refuse.trim() !== '' &&
+      p.emotionalSignature && p.emotionalSignature.trim() !== '' &&
+      p.dominantRole && p.dominantRole.trim() !== '' &&
+      p.roleDefinition && p.roleDefinition.trim() !== ''
+    );
+  }
+  
+  if (phaseIdx === 1) {
+    const p = data.phase2;
+    if (!p) return false;
+    return !!(
+      p.worldDirection && p.worldDirection.trim() !== '' &&
+      p.worldDirectionDefinition && p.worldDirectionDefinition.trim() !== '' &&
+      p.whatExists && p.whatExists.trim() !== '' &&
+      p.whatNotBelong && p.whatNotBelong.trim() !== '' &&
+      p.whatRepeats && p.whatRepeats.trim() !== '' &&
+      p.whatBreaks && p.whatBreaks.trim() !== '' &&
+      p.ruleCheck && p.ruleCheck.trim() !== '' &&
+      p.spaceTypes && Array.isArray(p.spaceTypes) && p.spaceTypes.length > 0 &&
+      p.emotionalTone && p.emotionalTone.trim() !== ''
+    );
+  }
+  
+  if (phaseIdx === 2) {
+    const p = data.phase3;
+    if (!p) return false;
+    const vp = p.visualProperties || {};
+    const ref = p.referenceCollection || {};
+    const ext = p.patternExtraction || {};
+    const trans = p.transformation || {};
+    const sty = p.styling || {};
+    
+    return !!(
+      p.baseDirection && p.baseDirection.trim().split(/\s+/).length >= 3 &&
+      vp.colorBehavior && vp.colorBehavior.trim() !== '' &&
+      vp.tone && vp.tone.trim() !== '' &&
+      vp.stylingDirection && vp.stylingDirection.trim() !== '' &&
+      vp.energy && vp.energy.trim() !== '' &&
+      p.pinterestSearch && p.pinterestSearch.trim() !== '' &&
+      ref.savedImages && ref.savedImages.trim() !== '' &&
+      ref.groupedImages && ref.groupedImages.trim() !== '' &&
+      ref.outliersRemoved && ref.outliersRemoved.trim() !== '' &&
+      ext.lightingBehavior && ext.lightingBehavior.trim() !== '' &&
+      ext.colorBehavior && ext.colorBehavior.trim() !== '' &&
+      ext.environmentType && ext.environmentType.trim() !== '' &&
+      ext.composition && ext.composition.trim() !== '' &&
+      ext.emotionalFeel && ext.emotionalFeel.trim() !== '' &&
+      trans.lighting && trans.lighting.trim() !== '' &&
+      trans.color && trans.color.trim() !== '' &&
+      trans.environment && trans.environment.trim() !== '' &&
+      trans.composition && trans.composition.trim() !== '' &&
+      trans.meaning && trans.meaning.trim() !== '' &&
+      sty.wears && sty.wears.trim() !== '' &&
+      sty.notWears && sty.notWears.trim() !== '' &&
+      sty.signatureElements && sty.signatureElements.trim() !== ''
+    );
+  }
+  
+  if (phaseIdx === 3) {
+    const p = data.phase4;
+    if (!p) return false;
+    return !!(
+      p.pov?.type && p.pov?.definition && p.pov.type.trim() !== '' && p.pov.definition.trim() !== '' &&
+      p.framing && p.framing.trim() !== '' &&
+      p.lens?.primary && p.lens?.definition && p.lens.primary.trim() !== '' && p.lens.definition.trim() !== '' &&
+      p.movement?.type && p.movement?.definition && p.movement.type.trim() !== '' && p.movement.definition.trim() !== ''
+    );
+  }
+  
+  if (phaseIdx === 4) {
+    const p = data.phase5;
+    if (!p) return false;
+    return !!(
+      p.selectedPatterns && Array.isArray(p.selectedPatterns) && p.selectedPatterns.length > 0 &&
+      p.mainDefinition && p.mainDefinition.trim() !== '' &&
+      p.fivePostRule && p.fivePostRule.trim() !== ''
+    );
+  }
+  
+  if (phaseIdx === 5) {
+    const p = data.phase6;
+    if (!p) return false;
+    return !!(
+      p.evolutionType && p.evolutionType.trim() !== '' &&
+      p.evolutionDefinition && p.evolutionDefinition.trim() !== '' &&
+      p.discoveryDefinition && p.discoveryDefinition.trim() !== '' &&
+      p.connectionDefinition && p.connectionDefinition.trim() !== ''
+    );
+  }
+  
+  if (phaseIdx === 6) {
+    const p = data.phase7;
+    if (!p) return false;
+    return !!(
+      p.mirror && p.mirror.trim() !== '' &&
+      p.reveal && p.reveal.trim() !== '' &&
+      p.system && p.system.trim() !== ''
+    );
+  }
+  
+  if (phaseIdx === 7) {
+    const p = data.phase8;
+    if (!p) return false;
+    return !!(
+      p.define && p.define.trim() !== '' &&
+      p.create && p.create.trim() !== '' &&
+      p.test && Object.values(p.test).every(v => v) &&
+      p.refine && p.refine.trim() !== ''
+    );
+  }
+  
+  if (phaseIdx === 8) {
+    const p = data.phase9;
+    if (!p) return false;
+    return !!(
+      p.messaging && p.messaging.trim() !== '' &&
+      p.conversion && p.conversion.trim() !== '' &&
+      p.structure && p.structure.trim() !== '' &&
+      p.movement && p.movement.trim() !== '' &&
+      p.dmFlow && p.dmFlow.trim() !== ''
+    );
+  }
+  
+  if (phaseIdx === 9) {
+    const p = data.phase10;
+    if (!p) return false;
+    return !!(
+      p.role && p.role.trim() !== '' &&
+      p.access && p.access.trim() !== ''
+    );
+  }
+  
+  return false;
+}
+
+export function PhasePendingRequirementsBlock({ phaseIndex, data }: { phaseIndex: number; data: any }) {
+  const getRequirements = () => {
+    if (phaseIndex === 0) {
+      const p = data.phase1 || {};
+      const sec1 = p.identityType && p.identityTypeDefinition;
+      const sec2 = p.neverBe && p.notSay && p.notRepresent && p.refuse;
+      const sec3 = p.emotionalSignature;
+      const sec4 = p.dominantRole && p.roleDefinition;
+      return [
+        { label: "SECTION 1: Identity type selected and defined", passed: !!sec1 },
+        { label: "SECTION 2: Anti-behavior boundaries set (Never Be, Not Say, Not Represent, Refuse)", passed: !!sec2 },
+        { label: "SECTION 3: Emotional Signature specified", passed: !!sec3 },
+        { label: "SECTION 4: Identity Roles defined (Dominant Role and role definition)", passed: !!sec4 },
+      ];
+    }
+    if (phaseIndex === 1) {
+      const p = data.phase2 || {};
+      const sec1 = p.worldDirection && p.worldDirectionDefinition;
+      const sec2 = p.whatExists && p.whatNotBelong && p.whatRepeats && p.whatBreaks && p.ruleCheck;
+      const sec3 = p.spaceTypes && p.spaceTypes.length > 0 && p.emotionalTone;
+      return [
+        { label: "SECTION 1: World direction and definition defined", passed: !!sec1 },
+        { label: "SECTION 2: Absolute and breakable rules set", passed: !!sec2 },
+        { label: "SECTION 3: Environmental settings and emotional tone defined", passed: !!sec3 },
+      ];
+    }
+    if (phaseIndex === 2) {
+      const p = data.phase3 || {};
+      const vp = p.visualProperties || {};
+      const ref = p.referenceCollection || {};
+      const ext = p.patternExtraction || {};
+      const trans = p.transformation || {};
+      const sty = p.styling || {};
+      
+      const hasDirection = p.baseDirection && p.baseDirection.trim().split(/\s+/).length >= 3;
+      const hasProperties = vp.colorBehavior && vp.tone && vp.stylingDirection && vp.energy;
+      const hasReferences = p.pinterestSearch && ref.savedImages && ref.groupedImages && ref.outliersRemoved;
+      const hasExtraction = ext.lightingBehavior && ext.colorBehavior && ext.environmentType && ext.composition && ext.emotionalFeel;
+      const hasOwnership = p.ownershipRule !== undefined && trans.lighting && trans.color && trans.environment && trans.composition && trans.meaning;
+      const hasStyling = sty.wears && sty.notWears && sty.signatureElements;
+
+      return [
+        { label: "SECTION 1: Visual direction defined with at least 3 descriptive words", passed: !!hasDirection },
+        { label: "SECTION 2: Constant properties defined", passed: !!hasProperties },
+        { label: "SECTION 3: Reference collection gathered and outliers removed", passed: !!hasReferences },
+        { label: "SECTION 4: Visual patterns extracted", passed: !!hasExtraction },
+        { label: "SECTION 5: Transformation ownership rules defined", passed: !!hasOwnership },
+        { label: "SECTION 6: Character styling constraints defined", passed: !!hasStyling },
+      ];
+    }
+    if (phaseIndex === 3) {
+      const p = data.phase4 || {};
+      const hasPov = p.pov?.type && p.pov?.definition;
+      const hasFraming = p.framing;
+      const hasLens = p.lens?.primary && p.lens?.secondary && p.lens?.definition;
+      const hasMovement = p.movement?.type && p.movement?.definition;
+      return [
+        { label: "SECTION 1: Point of View (POV) mode selected and defined", passed: !!hasPov },
+        { label: "SECTION 2: Framing rules set", passed: !!hasFraming },
+        { label: "SECTION 3: Lens system defined", passed: !!hasLens },
+        { label: "SECTION 4: Camera & Visual Movement rules defined", passed: !!hasMovement },
+      ];
+    }
+    if (phaseIndex === 4) {
+      const p = data.phase5 || {};
+      const hasRepetition = p.selectedPatterns && p.selectedPatterns.length > 0 && p.mainDefinition;
+      const hasConnection = p.fivePostRule;
+      return [
+        { label: "SECTION 1: Repeatable patterns selected and defined", passed: !!hasRepetition },
+        { label: "SECTION 2: Pattern connection / Five-post rule defined", passed: !!hasConnection },
+      ];
+    }
+    if (phaseIndex === 5) {
+      const p = data.phase6 || {};
+      const hasEvolution = p.evolutionType && p.evolutionDefinition;
+      const hasDiscovery = p.discoveryDefinition;
+      const hasConnection = p.connectionDefinition;
+      return [
+        { label: "SECTION 1: Evolution system selected and defined", passed: !!hasEvolution },
+        { label: "SECTION 2: Discovery framing defined", passed: !!hasDiscovery },
+        { label: "SECTION 3: Connection framing defined", passed: !!hasConnection },
+      ];
+    }
+    if (phaseIndex === 6) {
+      const p = data.phase7 || {};
+      return [
+        { label: "SECTION 1: Mirror line defined", passed: !!(p.mirror && p.mirror.trim() !== '') },
+        { label: "SECTION 2: Reveal shift defined", passed: !!(p.reveal && p.reveal.trim() !== '') },
+        { label: "SECTION 3: System logic defined", passed: !!(p.system && p.system.trim() !== '') },
+      ];
+    }
+    if (phaseIndex === 7) {
+      const p = data.phase8 || {};
+      return [
+        { label: "LOOP 1: Define content element", passed: !!(p.define && p.define.trim() !== '') },
+        { label: "LOOP 2: Create matching content", passed: !!(p.create && p.create.trim() !== '') },
+        { label: "LOOP 3: Test and align with previous systems", passed: !!(p.test && Object.values(p.test).every(v => v)) },
+        { label: "LOOP 4: Refine the rules based on loop", passed: !!(p.refine && p.refine.trim() !== '') },
+      ];
+    }
+    if (phaseIndex === 8) {
+      const p = data.phase9 || {};
+      return [
+        { label: "SECTION 1: Messaging hook set", passed: !!(p.messaging && p.messaging.trim() !== '') },
+        { label: "SECTION 2: Conversion action defined", passed: !!(p.conversion && p.conversion.trim() !== '') },
+        { label: "SECTION 3: Structural container defined", passed: !!(p.structure && p.structure.trim() !== '') },
+        { label: "SECTION 4: Conversion movement pattern defined", passed: !!(p.movement && p.movement.trim() !== '') },
+        { label: "SECTION 5: Direct DM text exchange flow defined", passed: !!(p.dmFlow && p.dmFlow.trim() !== '') },
+      ];
+    }
+    if (phaseIndex === 9) {
+      const p = data.phase10 || {};
+      return [
+        { label: "SECTION 1: Creator role as architect of system defined", passed: !!(p.role && p.role.trim() !== '') },
+        { label: "SECTION 2: Access protocol parameters defined", passed: !!(p.access && p.access.trim() !== '') },
+      ];
+    }
+    return [];
+  };
+
+  const reqs = getRequirements();
+  if (reqs.length === 0) return null;
+
+  return (
+    <div className="p-8 border border-white/5 bg-white/2 max-w-4xl mx-auto space-y-4 rounded-sm">
+      <div className="flex items-center gap-3">
+        <span className="text-amber-500 font-bold">•</span>
+        <h4 className="text-[10px] font-black tracking-[3px] text-white/50 uppercase">
+          Enforcement Protocol // Pending Pass Requirements
+        </h4>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+        {reqs.map((r, i) => (
+          <div key={i} className="flex items-start gap-3 p-2 bg-white/1 rounded-sm border border-transparent hover:border-white/5 transition-all">
+            <span className={r.passed ? "text-ww-cyan font-black" : "text-white/20 font-black"}>
+              {r.passed ? "✔" : "○"}
+            </span>
+            <span className={r.passed ? "text-[10px] font-bold uppercase tracking-wider leading-relaxed text-white/60" : "text-[10px] font-bold uppercase tracking-wider leading-relaxed text-white/30"}>
+              {r.label}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   );

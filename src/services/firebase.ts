@@ -25,7 +25,11 @@ export const loginAnonymously = async () => {
   try {
     const result = await signInAnonymously(auth);
     return result.user;
-  } catch (error) {
+  } catch (error: any) {
+    if (error?.code === 'auth/admin-restricted-operation') {
+      console.warn("Anonymous login is restricted/disabled on this project. Falling back to local storage.");
+      return null;
+    }
     console.error("Error signing in anonymously", error);
     throw error;
   }

@@ -10,13 +10,25 @@ import { Loader2, Menu, X, ChevronDown } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 export default function Engine({ onBackToLanding, user }: { onBackToLanding: () => void, user: User | null }) {
-  const [system, setSystem] = useState<SystemState>(() => ({
-    userId: user?.uid || 'anonymous',
-    currentPhase: 0,
-    completed: false,
-    initialized: true,
-    updatedAt: new Date().toISOString()
-  } as SystemState));
+  const [system, setSystem] = useState<SystemState>(() => {
+    if (!user) {
+      const saved = localStorage.getItem('system_state_anonymous');
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (e) {
+          console.error("Error parsing local system state", e);
+        }
+      }
+    }
+    return {
+      userId: user?.uid || 'anonymous',
+      currentPhase: 0,
+      completed: false,
+      initialized: true,
+      updatedAt: new Date().toISOString()
+    } as SystemState;
+  });
   const [loading, setLoading] = useState(false);
   const [localViewPhase, setLocalViewPhase] = useState(0);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -71,7 +83,7 @@ export default function Engine({ onBackToLanding, user }: { onBackToLanding: () 
   }, [user, isDevMode]);
 
   const updatePhase = async (phaseIndex: number, data: any) => {
-    if (!user || !system) return;
+    if (!system) return;
 
     if (isDevMode) {
       // Session only state update
@@ -88,6 +100,20 @@ export default function Engine({ onBackToLanding, user }: { onBackToLanding: () 
           updatedAt: new Date().toISOString()
         };
       });
+      return;
+    }
+
+    if (!user) {
+      // Local fallback state update
+      const nextPhase = phaseIndex === system.currentPhase ? system.currentPhase + 1 : system.currentPhase;
+      const updatedSystem = {
+        ...system,
+        ...data,
+        currentPhase: nextPhase,
+        updatedAt: new Date().toISOString()
+      };
+      setSystem(updatedSystem);
+      localStorage.setItem('system_state_anonymous', JSON.stringify(updatedSystem));
       return;
     }
 
