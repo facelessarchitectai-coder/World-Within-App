@@ -83,6 +83,8 @@ export default function PhaseContent({ phaseIndex, data, onSave, onNavigate, isL
 // --- SUB-COMPONENTS ---
 
 function SystemStart({ onSave, onNavigate }: { onSave: (data: any) => void; onNavigate?: (idx: number) => void }) {
+  const [toggleAvatar, setToggleAvatar] = useState(false);
+
   return (
     <div className="space-y-16 animate-in fade-in slide-in-from-bottom-6 duration-700 pb-32 max-w-3xl">
       <div className="space-y-6">
@@ -160,6 +162,55 @@ function SystemStart({ onSave, onNavigate }: { onSave: (data: any) => void; onNa
               <p className="text-ww-cyan">Define one thing. Then move forward.</p>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* USER MANUAL SECTION */}
+      <div className="p-8 border border-white/10 bg-white/2 space-y-8 normal-case rounded">
+        <h3 className="text-xs font-black tracking-[4px] text-ww-cyan uppercase italic">📖 USER MANUAL & PROTOCOL</h3>
+        
+        <div className="space-y-4">
+          <h4 className="text-sm font-bold text-white uppercase tracking-wider">⭕️ How To Start</h4>
+          <p className="text-sm text-white/70 leading-relaxed font-semibold">
+            To begin using the World Within program, you must define your AI character or presence. Presence and identity are the equivalents of a character for creators who are not using an avatar.
+          </p>
+        </div>
+
+        <div className="space-y-4">
+          <h4 className="text-sm font-bold text-white uppercase tracking-wider">⭕️ How To Use This Bot</h4>
+          <p className="text-sm text-white/70 leading-relaxed font-semibold">
+            The World Within Bot enforces structural consistency and helps refine your design. If you are not building a character or avatar, go to the ‘If You Don’t Have An Avatar Or Character’ section.
+          </p>
+        </div>
+
+        <div className="border-t border-white/5 pt-6 space-y-4">
+          <button
+            type="button"
+            onClick={() => setToggleAvatar(!toggleAvatar)}
+            className="flex items-center justify-between w-full text-left text-xs font-black tracking-widest text-ww-cyan uppercase hover:text-white transition-colors"
+          >
+            <span>📁 IF YOU DON’T HAVE AN AVATAR OR CHARACTER</span>
+            <span className="text-lg font-mono">{toggleAvatar ? '[-]' : '[+]'}</span>
+          </button>
+          
+          <AnimatePresence initial={false}>
+            {toggleAvatar && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="overflow-hidden"
+              >
+                <div className="p-6 bg-white/2 border border-white/5 rounded space-y-4 text-sm text-white/80 leading-relaxed font-semibold">
+                  <p>This system can be used without an avatar, AI character, or fictional persona.</p>
+                  <p>If you do not have a character, apply the framework to your identity, presence, world, voice, tone, content patterns, and visual language instead.</p>
+                  <p>Whenever the system references a character, you should interpret that as your identity, brand presence, or world.</p>
+                  <p>You are not skipping the framework. You are applying it to the world itself rather than to a person inside the world.</p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
@@ -683,7 +734,7 @@ function FinalSummary({ data, onSave }: { data: any, onSave?: (data: any) => voi
             <h3 className="text-4xl font-black italic tracking-tighter text-white">🔥 Identity</h3>
           </div>
           <div className="space-y-8">
-            <p className="text-xl font-bold leading-relaxed text-white/80 normal-case">Identity is the foundation of everything you create. It defines how your character behaves, what they represent, and what they refuse. This is what makes your work feel like it belongs to someone specific instead of blending in with everyone else.</p>
+            <p className="text-xl font-bold leading-relaxed text-white/80 normal-case">Identity is the foundation of everything you create. It defines how your character/identity behaves, what they represent, and what they refuse. This is what makes your work feel like it belongs to someone specific instead of blending in with everyone else.</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-[11px] uppercase tracking-widest font-black">
                <MethodItem title="What this controls" content="It controls recognition, behavior, and direction." />
                <MethodItem title="How to apply it" content="Define the identity clearly before building the world." />
@@ -716,7 +767,7 @@ function FinalSummary({ data, onSave }: { data: any, onSave?: (data: any) => voi
             <h3 className="text-4xl font-black italic tracking-tighter text-white">❤️‍🔥 World</h3>
           </div>
           <div className="space-y-8">
-            <p className="text-xl font-bold leading-relaxed text-white/80 normal-case">The world is the environment your identity exists inside. It gives your character context, rules, and a consistent space to operate in. This is what turns separate visuals into something that feels connected.</p>
+            <p className="text-xl font-bold leading-relaxed text-white/80 normal-case">The world is the environment your identity exists inside. It gives your character/identity context, rules, and a consistent space to operate in. This is what turns separate visuals into something that feels connected.</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-[11px] uppercase tracking-widest font-black">
                <MethodItem title="What this controls" content="It controls context, consistency, and visual logic." />
                <MethodItem title="How to apply it" content="Build the world as the environment that holds the identity." />
@@ -1188,7 +1239,7 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
     },
     {
       id: 'Fully Original',
-      description: 'A Fully Original character is not based on you. It can be fictional, non-human, or conceptual.',
+      description: 'A Fully Original character is not based on you. It can be fictional, non-human, or conceptual. This is also the correct path if you are not using a character or avatar.',
       controls: 'This controls proximity to the creator and how personally tied the identity feels.',
       apply: 'Choose a type that matches how close or separate the character should be from you.',
       failure: 'If unclear, the identity becomes unstable or generic.',
@@ -1208,7 +1259,7 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
       apply: 'Choose one dominant role and assign supporting roles.',
       failure: 'If all roles compete, identity becomes scattered.',
       todo: 'Define role hierarchy.',
-      todoDef: 'What to do is assigning structure to how the character functions.',
+      todoDef: 'What to do is assigning structure to how the character/identity functions.',
       bot: 'Use the bot to detect conflicting roles.',
       botDef: 'Bot application is identifying role conflict and forcing hierarchy.',
       action: 'Choose 1 dominant + 2 supporting roles.',
@@ -1220,7 +1271,7 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
       apply: 'Choose one dominant role and assign supporting roles.',
       failure: 'If all roles compete, identity becomes scattered.',
       todo: 'Define role hierarchy.',
-      todoDef: 'What to do is assigning structure to how the character functions.',
+      todoDef: 'What to do is assigning structure to how the character/identity functions.',
       bot: 'Use the bot to detect conflicting roles.',
       botDef: 'Bot application is identifying role conflict and forcing hierarchy.',
       action: 'Choose 1 dominant + 2 supporting roles.',
@@ -1232,7 +1283,7 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
       apply: 'Choose one dominant role and assign supporting roles.',
       failure: 'If all roles compete, identity becomes scattered.',
       todo: 'Define role hierarchy.',
-      todoDef: 'What to do is assigning structure to how the character functions.',
+      todoDef: 'What to do is assigning structure to how the character/identity functions.',
       bot: 'Use the bot to detect conflicting roles.',
       botDef: 'Bot application is identifying role conflict and forcing hierarchy.',
       action: 'Choose 1 dominant + 2 supporting roles.',
@@ -1244,7 +1295,7 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
       apply: 'Choose one dominant role and assign supporting roles.',
       failure: 'If all roles compete, identity becomes scattered.',
       todo: 'Define role hierarchy.',
-      todoDef: 'What to do is assigning structure to how the character functions.',
+      todoDef: 'What to do is assigning structure to how the character/identity functions.',
       bot: 'Use the bot to detect conflicting roles.',
       botDef: 'Bot application is identifying role conflict and forcing hierarchy.',
       action: 'Choose 1 dominant + 2 supporting roles.',
@@ -1256,7 +1307,7 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
       apply: 'Choose one dominant role and assign supporting roles.',
       failure: 'If all roles compete, identity becomes scattered.',
       todo: 'Define role hierarchy.',
-      todoDef: 'What to do is assigning structure to how the character functions.',
+      todoDef: 'What to do is assigning structure to how the character/identity functions.',
       bot: 'Use the bot to detect conflicting roles.',
       botDef: 'Bot application is identifying role conflict and forcing hierarchy.',
       action: 'Choose 1 dominant + 2 supporting roles.',
@@ -1271,6 +1322,11 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
         <span className="text-[10px] uppercase font-black tracking-[4px] text-ww-cyan">PHASE 1 PROTOCOL</span>
         <h2 className="text-6xl font-black tracking-tighter leading-none italic uppercase">IDENTITY</h2>
         <p className="text-white/60 font-medium">Define what your system embodies, rejects, and repeats.</p>
+        <div className="p-4 border-l-2 border-ww-cyan bg-white/2 max-w-2xl normal-case">
+          <p className="text-xs font-bold leading-relaxed text-ww-cyan italic">
+            Note: If you have no character, apply these sections to your world and voice instead of a person.
+          </p>
+        </div>
       </div>
 
       {/* SECTION 1 — IDENTITY TYPE */}
@@ -1361,7 +1417,7 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
           <p className="text-white/60 font-medium italic">Before defining what the identity is, define what it is NOT.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <MethodItem title="What this controls" content="Clarity and distinction." />
-            <MethodItem title="How to apply it" content="Define clear exclusions before defining what the character is." />
+            <MethodItem title="How to apply it" content="Define clear exclusions before defining what the character/identity is." />
             <MethodItem title="Failure point" content="If skipped, identity becomes broad and overlaps with others." />
             <MethodItem title="What to do" content="List what does not belong before defining what does." />
             <MethodItem title="Definition — What to do" content="What to do is narrowing identity through exclusion." />
@@ -1374,7 +1430,7 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           <BuildInput
-            label="What your character is NOT"
+            label="What your character/identity is NOT"
             description="Failure point: If unclear or overlapping, identity loses distinction."
             value={form.neverBe}
             mode={navMode}
@@ -1382,21 +1438,21 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
             onBlur={() => validateSection('definition', ['neverBe', 'notSay', 'notRepresent', 'refuse'])}
           />
           <BuildInput
-            label="What your character does NOT say"
+            label="What your character/identity does NOT say"
             description="Failure point: If undefined, tone becomes inconsistent."
             value={form.notSay}
             mode={navMode}
             onChange={(val) => setForm((prev: any) => ({ ...prev, notSay: val }))}
           />
           <BuildInput
-            label="What your character does NOT represent"
+            label="What your character/identity does NOT represent"
             description="Failure point: If not defined, identity becomes too broad."
             value={form.notRepresent}
             mode={navMode}
             onChange={(val) => setForm((prev: any) => ({ ...prev, notRepresent: val }))}
           />
           <BuildInput
-            label="What your character refuses"
+            label="What your character/identity refuses"
             description="Failure point: If missing, identity becomes flexible and weak."
             value={form.refuse}
             mode={navMode}
@@ -2338,6 +2394,9 @@ function Phase3Visual({ data, onSave, onNavigate, isLocked, isDevMode, navMode }
 
             <div className="space-y-8">
               <MethodItem title="Styling Direction" content="Defines clothing, appearance, and overall look. Controls identity of character." />
+              <div className="p-3 border border-dashed border-ww-cyan/25 bg-ww-cyan/5 text-[10px] font-bold text-ww-cyan italic normal-case">
+                Note: If you are not using a character or avatar, skip directly to Fingerprints Visual Symbols.
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 pt-2">
                 <MethodItem title="Failure point" content="If inconsistent, visual identity weakens." />
                 <MethodItem title="What to do" content="Repeat the same logic." />
@@ -2393,7 +2452,7 @@ function Phase3Visual({ data, onSave, onNavigate, isLocked, isDevMode, navMode }
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="p-8 bg-white/2 border border-white/10 space-y-6">
               <h4 className="text-xl font-black italic tracking-tighter italic">🪞 Pinterest Combinations</h4>
-              <p className="text-xs text-white/40 leading-relaxed font-bold normal-case">Use combinations: environment + lighting + style | outfit + tone + era. Controls result quality. Failure: searches are too broad.</p>
+              <p className="text-xs text-white/40 leading-relaxed font-bold normal-case">Use combinations: environment + lighting + style | outfit + tone + era | texture + mood + environment. Controls result quality. Failure: searches are too broad.</p>
               <BuildInput
                 label="Define your search combinations"
                 value={form.pinterestSearch}
@@ -2574,6 +2633,12 @@ function Phase3Visual({ data, onSave, onNavigate, isLocked, isDevMode, navMode }
               {sectionStatus.styling}
             </span>
           )}
+        </div>
+
+        <div className="p-4 border-l-2 border-ww-cyan bg-white/2 max-w-xl normal-case">
+          <p className="text-xs font-bold leading-relaxed text-ww-cyan italic">
+            Note: If you are not using a character or avatar, skip directly to Fingerprints Visual Symbols.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -2844,7 +2909,7 @@ function Phase4VisualBehavior({ data, onSave, onNavigate, isLocked, isDevMode, n
         <div className="space-y-8 max-w-4xl">
            <div className="p-8 bg-white/2 border border-white/10 space-y-6">
              <h4 className="text-xl font-black italic tracking-tighter">⭕️ Framing Logic</h4>
-             <p className="text-sm text-white/50 leading-relaxed font-medium">This defines how visuals behave in the system.</p>
+             <p className="text-sm text-white/50 leading-relaxed font-medium">This defines how visuals behave in the system. The subject can be an object, scene, space, or presence — not only a character.</p>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
                 <MethodItem title="What this controls" content="Focus, power, and perception." />
                 <MethodItem title="How to apply it" content="Keep behavior consistent across content." />
@@ -2904,9 +2969,9 @@ function Phase4VisualBehavior({ data, onSave, onNavigate, isLocked, isDevMode, n
                 <div className="space-y-4 pt-4">
                    <div className="p-4 border border-white/5 space-y-4">
                       <h5 className="text-[8px] font-black tracking-widest text-ww-cyan italic">CLOSE</h5>
-                      <MethodItem title="Definition" content="This defines how visuals behave in the system." />
+                      <MethodItem title="Definition" content="This defines how visuals focus tightly on the detail." />
                       <MethodItem title="What this controls" content="Intimacy and detail." />
-                      <MethodItem title="How to apply it" content="Keep behavior consistent across content." />
+                      <MethodItem title="How to apply it" content="Keep behavior consistent across content and focus tightly on the detail." />
                       <MethodItem title="Failure point" content="If behavior shifts randomly, the world weakens." />
                       <MethodItem title="What to do" content="Define one consistent behavior." />
                       <MethodItem title="Definition — What to do" content="What to do is stabilizing visual behavior." />
@@ -2918,8 +2983,8 @@ function Phase4VisualBehavior({ data, onSave, onNavigate, isLocked, isDevMode, n
                    <div className="p-4 border border-white/5 space-y-4">
                       <h5 className="text-[8px] font-black tracking-widest text-ww-cyan italic">WIDE</h5>
                       <MethodItem title="Definition" content="This defines how visuals behave in the system." />
-                      <MethodItem title="What this controls" content="Scale and setting visibility." />
-                      <MethodItem title="How to apply it" content="Keep behavior consistent across content." />
+                      <MethodItem title="What this controls" content="Scale and setting visibility, showing as much as the presence." />
+                      <MethodItem title="How to apply it" content="Keep behavior consistent across content, showing as much as the presence." />
                       <MethodItem title="Failure point" content="If behavior shifts randomly, the world weakens." />
                       <MethodItem title="What to do" content="Define one consistent behavior." />
                       <MethodItem title="Definition — What to do" content="What to do is stabilizing visual behavior." />
@@ -3071,7 +3136,8 @@ function Phase5PatternSystem({ data, onSave, onNavigate, isLocked, isDevMode, na
         
         // Also validate individual active subsections
         for (const p of form.selectedPatterns) {
-          const pKey = p.toLowerCase().replace(/ /g, '');
+          let pKey = p.toLowerCase().replace(/ /g, '');
+          if (pKey === 'character/presence') pKey = 'character';
           const pVal = form[pKey === 'transformationsignals' ? 'transformation' : pKey]?.trim();
           if (!pVal || blockWords.some(w => pVal.toLowerCase().includes(w))) {
              errorMsg = `${p} must have a consistent definition.`;
@@ -3134,7 +3200,7 @@ function Phase5PatternSystem({ data, onSave, onNavigate, isLocked, isDevMode, na
   const isReadyToLock = isDevMode || (isBuildMode && P5_REQUIRED_SECTIONS.every(s => sectionStatus[s] === 'PASS'));
 
   const patterns = [
-    { id: 'Character', controls: 'Continuity of presence.', failure: 'If identity changes too much, recognition breaks.', field: 'character', label: 'Define what stays consistent about the character', description: 'Must include a trait OR behavior repeatable across posts.' },
+    { id: 'Character/Presence', controls: 'Continuity of presence.', failure: 'If identity changes too much, recognition breaks.', field: 'character', label: 'Define what stays consistent about the character or presence', description: 'Must include a trait OR behavior repeatable across posts. If you do not have a character, define the repeating qualities of your world/identity.' },
     { id: 'Transformation Signals', controls: 'How shifts are understood.', failure: 'If transformations have no logic, they feel decorative.', field: 'transformation', label: 'Define how transformation happens in your world', description: 'Must define a rule (NOT random change) including cause or trigger.' },
     { id: 'Structure', controls: 'Familiarity and rhythm.', failure: 'If every post is different, the audience cannot learn the system.', field: 'structure', label: 'Define your repeatable content structure', description: 'Must describe a format (sequence, flow, or layout) that is reusable.' },
     { id: 'Tone', controls: 'Emotional recognition.', failure: 'If tone changes constantly, the system feels scattered.', field: 'tone', label: 'Define the emotional tone that repeats', description: 'Must define ONE consistent tone that matches Phase 2.' }
@@ -3218,7 +3284,7 @@ function Phase5PatternSystem({ data, onSave, onNavigate, isLocked, isDevMode, na
                  >
                    <div className="flex items-center gap-4">
                       <div className={cn("h-2 w-2 rounded-full", isSelected ? "bg-ww-cyan animate-pulse" : "bg-white/10")} />
-                      <h4 className="text-sm font-black italic tracking-tighter uppercase">{p.id === 'Character' ? '🪞' : p.id === 'Transformation Signals' ? '⭕️' : p.id === 'Structure' ? '❤️‍🔥' : '🩷'} {p.id}</h4>
+                      <h4 className="text-sm font-black italic tracking-tighter uppercase">{p.id === 'Character/Presence' ? '🪞' : p.id === 'Transformation Signals' ? '⭕️' : p.id === 'Structure' ? '❤️‍🔥' : '🩷'} {p.id}</h4>
                    </div>
                    {isExpanded ? <ChevronUp className="w-4 h-4 text-white/40" /> : <ChevronDown className="w-4 h-4 text-white/40" />}
                  </button>
@@ -3408,14 +3474,14 @@ function Phase6NarrativeEngine({ data, onSave, onNavigate, isLocked, isDevMode, 
 
   const evolutionOptions = [
     { 
-      id: 'Character', 
-      desc: 'Changes or develops. Controls character progression.',
-      apply: 'Define what changes in the character over time.',
-      failure: 'If the character never evolves, content feels static.',
-      todo: 'Establish change so the character does not remain fixed.',
+      id: 'Character/Presence', 
+      desc: 'Changes or develops. Controls character/presence progression.',
+      apply: 'Define what changes in the character or presence over time.',
+      failure: 'If the character/presence never evolves, content feels static.',
+      todo: 'Establish change so the character/presence does not remain fixed.',
       field: 'evolutionDefinition', 
-      label: 'Define one way the character changes over time', 
-      description: 'Action Step: One enforced evolution that creates progression.' 
+      label: 'Define one way the character/presence changes over time', 
+      description: 'Action Step: One enforced evolution that creates progression. If you have no character, define how your presence/identity evolves.' 
     },
     { 
       id: 'World', 
@@ -3446,6 +3512,11 @@ function Phase6NarrativeEngine({ data, onSave, onNavigate, isLocked, isDevMode, 
         <span className="text-[10px] uppercase font-black tracking-[4px] text-ww-cyan">PHASE 6 PROTOCOL</span>
         <h2 className="text-6xl font-black tracking-tighter leading-none italic uppercase">NARRATIVE ENGINE</h2>
         <p className="text-white/60 font-medium normal-case">Control what evolves, what connects, and how the world reveals itself over time.</p>
+        <div className="p-4 border-l-2 border-ww-cyan bg-white/2 max-w-2xl normal-case">
+          <p className="text-xs font-bold leading-relaxed text-ww-cyan italic">
+            Note: If you have no character, apply these sections to your world and presence instead of a person.
+          </p>
+        </div>
       </div>
 
       {/* SECTION 1 — WHAT EVOLVES */}
