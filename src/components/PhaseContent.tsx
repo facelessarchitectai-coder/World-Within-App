@@ -5169,10 +5169,10 @@ function Phase10ControlSystem({ data, onSave, onNavigate, isLocked, isDevMode, n
       const result = await analyzeSystemInput(
         `PHASE 10: CONTROL SYSTEM - ${section.toUpperCase()}
          Input: ${input}
-         Context: Enforce strict boundaries on bot usage. The bot is for REFINEMENT, not creation. 
-         Block vague thinking. Block dependency. Block "generate everything".
-         For ROLE: Must acknowledge bot as enforcement, not creator.
-         For ACCESS: Must define bot usage after system is defined, on one section only.`
+         Context: Enforce collaborative co-creation boundaries between the bot and the app. Both are used together.
+         The bot assists with heavy-lifting, execution, and text-generation, while the app acts as the permanent structural memory.
+         For ROLE: Validate that the input acknowledges using both the bot (for help/ideas) and the app (for retaining the rules so the bot doesn't forget them in new chats).
+         For ACCESS: Validate that the user defines a rule to keep their app structure updated as they co-create with the bot.`
       );
 
       if (!result.passed) {
@@ -5228,14 +5228,14 @@ function Phase10ControlSystem({ data, onSave, onNavigate, isLocked, isDevMode, n
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                           <div className="space-y-4">
                             <MethodItem title="What this controls" content="This controls long-term system protection." />
-                            <MethodItem title="How to apply it" content="Use the bot to enforce, not replace thinking." />
-                            <MethodItem title="Failure point" content="If the bot does everything, the user becomes dependent." />
+                            <MethodItem title="How to apply it" content="Use the bot to challenge your design and expand concepts, while using the app to lock in the final rules." />
+                            <MethodItem title="Failure point" content="If you rely completely on the bot without writing your rules in the app, the bot will forget them in new chats." />
                           </div>
                           <div className="space-y-4">
-                            <MethodItem title="What to do" content="Use the bot as enforcement, not creator." />
-                            <MethodItem title="Definition — What to do" content="What to do is maintaining control without dependency." />
-                            <MethodItem title="Bot application" content="Use the bot to challenge and refine." />
-                            <MethodItem title="Action step" content="Use the bot to refine, not decide everything." />
+                            <MethodItem title="What to do" content="Use the bot to help you write and brainstorm, but save the results in the app." />
+                            <MethodItem title="Definition — What to do" content="What to do is creating a shared alliance where the bot provides speed and the app provides permanent memory." />
+                            <MethodItem title="Bot application" content="Use the bot as an active design assistant and enforcement system." />
+                            <MethodItem title="Action step" content="Enlist the bot to expand on your ideas and help you fill out the app sections with high quality." />
                           </div>
                         </div>
                         <div className="space-y-4">
@@ -5285,15 +5285,15 @@ function Phase10ControlSystem({ data, onSave, onNavigate, isLocked, isDevMode, n
                      <div className="p-8 space-y-8">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                           <div className="space-y-4">
-                            <MethodItem title="What this controls" content="This controls how the bot is used without breaking the system." />
-                            <MethodItem title="How to apply it" content="Only use the bot after your system is defined." />
-                            <MethodItem title="Failure point" content="If used too early, the system gets skipped and becomes dependent on the bot." />
+                            <MethodItem title="What this controls" content="This controls how the bot and the app work side-by-side without data loss." />
+                            <MethodItem title="How to apply it" content="Use the bot to design or draft, and use the app to lock in definitions so they are preserved." />
+                            <MethodItem title="Failure point" content="If you only use the bot without the app, the bot will eventually forget or mix up your rules in new chats." />
                           </div>
                           <div className="space-y-4">
-                            <MethodItem title="What to do" content="Use the bot only to refine, not to build from nothing." />
-                            <MethodItem title="Definition — What to do" content="What to do is controlling how the bot is used within the system." />
-                            <MethodItem title="Bot application" content="Use the bot to challenge your structure, not replace it." />
-                            <MethodItem title="Action step" content="Use the bot on one defined section, not the entire system." />
+                            <MethodItem title="What to do" content="Treat the app as the stable brain/memory database for the bot, saving your system here." />
+                            <MethodItem title="Definition — What to do" content="What to do is updating the app whenever you refine rules with the bot so there is a permanent record." />
+                            <MethodItem title="Bot application" content="Use the bot to iterate and assist you, then record findings safely." />
+                            <MethodItem title="Action step" content="Define your rules and keep them synced between bot interactions and app forms." />
                           </div>
                         </div>
                         <div className="space-y-4">
@@ -5332,20 +5332,20 @@ function Phase10ControlSystem({ data, onSave, onNavigate, isLocked, isDevMode, n
           {/* BOT ACCESS SECTION - ALWAYS ACCESSIBLE */}
           <div className="space-y-12 animate-in zoom-in duration-700">
              <div className="p-8 bg-ww-cyan/5 border border-ww-cyan/20 space-y-4">
-                <span className="text-[10px] font-black tracking-[4px] text-ww-cyan uppercase italic">BOT ACCESS PROTOCOL</span>
-                <p className="enforcement-text mt-4">The app is where you BUILD your system. The bot is where you REFINE it.</p>
+                <span className="text-[10px] font-black tracking-[4px] text-ww-cyan uppercase italic">BOT & APP CO-CREATION ALLIANCE</span>
+                <p className="enforcement-text mt-4">The bot and the app are design allies. Use the bot to help you brainstorm and write, and use the app to lock in the final structure so the bot never forgets your rules in new chats.</p>
                 <div className="flex flex-col items-center gap-2 text-[10px] font-bold text-white/40 italic">
-                  <span>• THE BOT IS ALWAYS ACCESSIBLE</span>
-                  <span>• USE THE APP FIRST, THEN THE BOT</span>
-                  <span>• DO NOT RELY ON THE BOT TO BUILD YOUR SYSTEM</span>
-                  <span>• RETURN TO THE APP AFTER USING THE BOT</span>
+                  <span>• THE BOT IS YOUR HIGH-SPEED ASSISTANT</span>
+                  <span>• THE APP IS YOUR PERMANENT STRUCTURAL MEMORY</span>
+                  <span>• SAVING YOUR SYSTEM HERE KEEPS FUTURE BOT CHATS CRISTALLINE</span>
+                  <span>• KEEP BOTH UPDATED TO AVOID LOSS OF SYSTEM PERSISTENCE</span>
                 </div>
              </div>
 
              <div className="space-y-6">
-               <p className="text-[10px] font-black tracking-[3px] text-ww-pink-deep uppercase italic">WARNING: "DO NOT USE THE BOT TO BUILD YOUR SYSTEM. USE IT TO REFINE WHAT YOU ALREADY DEFINED."</p>
-               <div className="p-4 bg-ww-pink-deep/5 border border-ww-pink-deep/10 max-w-xl mx-auto">
-                 <p className="text-[9px] font-black text-ww-yellow italic uppercase">Bot Enforcement: "Define it first in the app. I refine, not replace."</p>
+               <p className="text-[10px] font-black tracking-[3px] text-ww-cyan uppercase italic">CO-CREATION PROTOCOL: "THE BOT DEVELOPS, THE APP PRESERVES INDEFINITELY."</p>
+               <div className="p-4 bg-ww-cyan/5 border border-ww-cyan/10 max-w-xl mx-auto">
+                 <p className="text-[9px] font-black text-ww-yellow italic uppercase">System Safeguard: "Use both together to protect your creative identity against chat history expiration."</p>
                </div>
                <a 
                  href="https://chatgpt.com/g/g-69b7502e1bac81919b56999bbaa43c3b-the-world-architect"

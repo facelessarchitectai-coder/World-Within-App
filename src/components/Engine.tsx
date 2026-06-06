@@ -329,23 +329,23 @@ export default function Engine({ onBackToLanding, user }: { onBackToLanding: () 
                 </div>
               </div>
 
-              <div className="flex flex-col items-center gap-8 text-center max-w-md mx-auto">
+              <div className="flex flex-col items-center gap-8 text-center max-w-sm mx-auto">
                 <h4 className="text-[10px] font-black tracking-[4px] text-white/30 uppercase">How to use it:</h4>
-                <div className="grid grid-cols-1 gap-4 w-full text-[10px] font-black tracking-[2px] uppercase">
-                  <div className="p-4 border border-white/5 bg-white/2 flex items-center justify-center gap-4">
-                    <span className="text-ww-cyan">1. Read</span>
+                <div className="grid grid-cols-1 gap-4 w-full text-[10px] font-black tracking-[2px] uppercase text-left">
+                  <div className="p-4 border border-white/5 bg-white/2 flex items-center gap-4">
+                    <span className="text-ww-cyan min-w-[50px] shrink-0 font-black">1. READ</span>
                     <span className="text-white/20">→</span>
-                    <span className="opacity-40 italic">understand the system</span>
+                    <span className="opacity-40 italic">Understand the system concept</span>
                   </div>
-                  <div className="p-4 border border-white/5 bg-white/2 flex items-center justify-center gap-4">
-                    <span className="text-ww-pink-rose">2. Return</span>
+                  <div className="p-4 border border-white/5 bg-white/2 flex items-center gap-4">
+                    <span className="text-ww-pink-rose min-w-[50px] shrink-0 font-black">2. DEFINE</span>
                     <span className="text-white/20">→</span>
-                    <span className="opacity-40 italic">apply inside the app</span>
+                    <span className="opacity-40 italic">Use the bot & app together to design</span>
                   </div>
-                  <div className="p-4 border border-white/5 bg-white/2 flex items-center justify-center gap-4">
-                    <span className="text-ww-yellow">3. Refine</span>
+                  <div className="p-4 border border-white/5 bg-white/2 flex items-center gap-4">
+                    <span className="text-ww-yellow min-w-[50px] shrink-0 font-black">3. RETAIN</span>
                     <span className="text-white/20">→</span>
-                    <span className="opacity-40 italic">use the bot if needed</span>
+                    <span className="opacity-40 italic">Save rules in the app so the bot doesn't forget them</span>
                   </div>
                 </div>
                 <div className="text-white/20 font-mono tracking-widest leading-none">━━━━━━━━━━━━━━━━━━━</div>
