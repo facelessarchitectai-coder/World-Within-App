@@ -130,7 +130,7 @@ function SystemStart({ onSave, onNavigate }: { onSave: (data: any) => void; onNa
 
         <div className="space-y-10">
           <div className="space-y-6 text-[10px] uppercase font-black tracking-widest">
-            <h3 className="text-xs font-black tracking-[4px] text-ww-cyan uppercase border-b border-white/10 pb-2">TOOLS</h3>
+            <h3 className="text-xs font-black tracking-[4px] text-ww-cyan uppercase border-b border-white/10 pb-2">HOW TO USE THE APPS</h3>
             <div className="space-y-6">
                <div className="space-y-3">
                  <span className="text-ww-pink-rose">🪞 Method Document</span>
@@ -149,8 +149,12 @@ function SystemStart({ onSave, onNavigate }: { onSave: (data: any) => void; onNa
                  <p className="opacity-40 italic">Build your system step-by-step</p>
                </div>
                <div className="space-y-1 text-white">
-                 <span className="flex items-center gap-2">❤️‍🔥 The Bot</span>
+                 <span className="flex items-center gap-2">❤️‍🔥 The World Architect™ Bot</span>
                  <p className="opacity-40 italic">Refine what you already defined</p>
+               </div>
+               <div className="space-y-1 text-ww-yellow">
+                 <span className="flex items-center gap-2">🔍 Recognition Engine™</span>
+                 <p className="opacity-40 italic">Added as a third tool to analyze, validate, and verify system output against defined rules</p>
                </div>
             </div>
           </div>
@@ -207,6 +211,11 @@ function SystemStart({ onSave, onNavigate }: { onSave: (data: any) => void; onNa
                   <p>If you do not have a character, apply the framework to your identity, presence, world, voice, tone, content patterns, and visual language instead.</p>
                   <p>Whenever the system references a character, you should interpret that as your identity, brand presence, or world.</p>
                   <p>You are not skipping the framework. You are applying it to the world itself rather than to a person inside the world.</p>
+                  <div className="pt-2 border-t border-white/5 mt-2 space-y-2 text-xs">
+                    <p>• <strong className="text-ww-cyan">World on Carousels</strong>: Present the rules and visual landscape of your world across Instagram/LinkedIn carousel slides rather than relying on a single character.</p>
+                    <p>• <strong className="text-ww-pink-rose">Stock Video Reels</strong>: Use highly stylized, cinematic stock video reels matched perfectly to your visual tone to establish presence in video formats.</p>
+                    <p>• <strong className="text-ww-yellow">Frequency Rule</strong>: Set a strict content release frequency to reinforce your world's structure consistently and build trust without burnout.</p>
+                  </div>
                 </div>
               </motion.div>
             )}
@@ -303,11 +312,11 @@ function IntentSelection({ data, onSave, onNavigate }: { data: any, onSave: (dat
   const [interacted, setInteracted] = useState(false);
 
   const expressionSections = [
-    { id: 'art', title: 'Artistic Identity', content: 'The specific lens through which you view reality. Not what you see, but the distortion you apply to it.' },
+    { id: 'art', title: 'Artistic Identity', content: 'The specific lens through which you view reality. Not what you see, but the distortion you apply to it. Remember that identity can be a character, or a repeatable visual element like a sticker.' },
     { id: 'story', title: 'Visual Storytelling', content: 'The sequence of frames that communicate a world without words.' },
     { id: 'immersion', title: 'Immersion', content: 'The removal of external reality and the replacement with system rules.' },
     { id: 'atm', title: 'Brand Atmosphere', content: 'The non-verbal feeling that remains after the interaction has closed.' },
-    { id: 'universe', title: 'Personal Universe Building', content: 'The construction of a self-sustaining conceptual space.' }
+    { id: 'universe', title: 'Personal Universe Building', content: 'The construction of a self-sustaining conceptual space. Visuals within this space can differ and evolve as the universe expands.' }
   ];
 
   const offerSections = [
@@ -366,7 +375,7 @@ function IntentSelection({ data, onSave, onNavigate }: { data: any, onSave: (dat
             content="Commit to the definitions below as your system's constitution." 
           />
           <MethodItem 
-            title="Bot application" 
+            title="World Architect™ Bot application" 
             content="This knowledge dictates what the enforcement protocols will prioritize during logic scans." 
           />
           <MethodItem 
@@ -739,14 +748,11 @@ function FinalSummary({ data, onSave }: { data: any, onSave?: (data: any) => voi
                <MethodItem title="What this controls" content="It controls recognition, behavior, and direction." />
                <MethodItem title="How to apply it" content="Define the identity clearly before building the world." />
                <MethodItem title="Failure point" content="Without identity, everything else becomes unstable." />
-               <MethodItem title="What to do" content="Define identity before anything else." />
+               <MethodItem title="What to do" content="Define identity before anything else. What to do is establishing the core foundation that everything is built from." />
             </div>
             <div className="p-8 bg-white/2 border border-white/10 space-y-6">
-              <MethodItem title="Definition — What to do" content="What to do is establishing the core foundation that everything is built from." />
-              <MethodItem title="Bot application" content="Use the bot to detect unclear or undefined identity." />
-              <MethodItem title="Definition — Bot application" content="Bot application is identifying lack of identity and forcing clarity." />
-              <MethodItem title="Action step" content="Write one clear identity definition." />
-              <MethodItem title="Definition — Action step" content="An action step is one enforced definition that anchors the system." />
+<MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect unclear or undefined identity. World Architect™ Bot application is identifying lack of identity and forcing clarity." />
+              <MethodItem title="Action step" content="Write one clear identity definition. An action step is one enforced definition that anchors the system." />
             </div>
           </div>
           <button 
@@ -772,14 +778,11 @@ function FinalSummary({ data, onSave }: { data: any, onSave?: (data: any) => voi
                <MethodItem title="What this controls" content="It controls context, consistency, and visual logic." />
                <MethodItem title="How to apply it" content="Build the world as the environment that holds the identity." />
                <MethodItem title="Failure point" content="Without a world, visuals remain disconnected." />
-               <MethodItem title="What to do" content="Build a defined environment for your identity." />
+               <MethodItem title="What to do" content="Build a defined environment for your identity. What to do is creating the space that holds all content together." />
             </div>
             <div className="p-8 bg-white/2 border border-white/10 space-y-6">
-              <MethodItem title="Definition — What to do" content="What to do is creating the space that holds all content together." />
-              <MethodItem title="Bot application" content="Use the bot to detect disconnected visuals." />
-              <MethodItem title="Definition — Bot application" content="Bot application is identifying lack of environment and forcing structure." />
-              <MethodItem title="Action step" content="Define one consistent world environment." />
-              <MethodItem title="Definition — Action step" content="An action step is one enforced definition that creates connection." />
+<MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect disconnected visuals. World Architect™ Bot application is identifying lack of environment and forcing structure." />
+              <MethodItem title="Action step" content="Define one consistent world environment. An action step is one enforced definition that creates connection." />
             </div>
           </div>
           <button 
@@ -805,14 +808,11 @@ function FinalSummary({ data, onSave }: { data: any, onSave?: (data: any) => voi
                <MethodItem title="What this controls" content="It controls recognizability and visual consistency." />
                <MethodItem title="How to apply it" content="Repeat the same visual logic over time." />
                <MethodItem title="Failure point" content="Without a visual system, recognition never compounds." />
-               <MethodItem title="What to do" content="Define and repeat visual patterns." />
+               <MethodItem title="What to do" content="Define and repeat visual patterns. What to do is establishing consistent visual behavior." />
             </div>
             <div className="p-8 bg-white/2 border border-white/10 space-y-6">
-              <MethodItem title="Definition — What to do" content="What to do is establishing consistent visual behavior." />
-              <MethodItem title="Bot application" content="Use the bot to detect inconsistent visuals." />
-              <MethodItem title="Definition — Bot application" content="Bot application is identifying lack of visual consistency and forcing alignment." />
-              <MethodItem title="Action step" content="Choose one visual pattern to repeat." />
-              <MethodItem title="Definition — Action step" content="An action step is one enforced repetition that builds recognition." />
+<MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect inconsistent visuals. World Architect™ Bot application is identifying lack of visual consistency and forcing alignment." />
+              <MethodItem title="Action step" content="Choose one visual pattern to repeat. An action step is one enforced repetition that builds recognition." />
             </div>
           </div>
           <button 
@@ -838,14 +838,11 @@ function FinalSummary({ data, onSave }: { data: any, onSave?: (data: any) => voi
                <MethodItem title="What this controls" content="It controls progression and retention." />
                <MethodItem title="How to apply it" content="Let something keep evolving instead of resetting every post." />
                <MethodItem title="Failure point" content="Without narrative, the world feels static." />
-               <MethodItem title="What to do" content="Create ongoing progression in your content." />
+               <MethodItem title="What to do" content="Create ongoing progression in your content. What to do is ensuring something continues and evolves." />
             </div>
             <div className="p-8 bg-white/2 border border-white/10 space-y-6">
-              <MethodItem title="Definition — What to do" content="What to do is ensuring something continues and evolves." />
-              <MethodItem title="Bot application" content="Use the bot to detect static or repetitive content." />
-              <MethodItem title="Definition — Bot application" content="Bot application is identifying lack of progression and forcing evolution." />
-              <MethodItem title="Action step" content="Define one thing that continues across posts." />
-              <MethodItem title="Definition — Action step" content="An action step is one enforced continuation that builds narrative." />
+<MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect static or repetitive content. World Architect™ Bot application is identifying lack of progression and forcing evolution." />
+              <MethodItem title="Action step" content="Define one thing that continues across posts. An action step is one enforced continuation that builds narrative." />
             </div>
           </div>
           <button 
@@ -871,14 +868,11 @@ function FinalSummary({ data, onSave }: { data: any, onSave?: (data: any) => voi
                <MethodItem title="What this controls" content="It controls repetition and coherence." />
                <MethodItem title="How to apply it" content="Use repeatable systems and post logic." />
                <MethodItem title="Failure point" content="Without structure, content stays scattered." />
-               <MethodItem title="What to do" content="Organize content into repeatable patterns." />
+               <MethodItem title="What to do" content="Organize content into repeatable patterns. What to do is creating consistent flow and format." />
             </div>
             <div className="p-8 bg-white/2 border border-white/10 space-y-6">
-              <MethodItem title="Definition — What to do" content="What to do is creating consistent flow and format." />
-              <MethodItem title="Bot application" content="Use the bot to detect scattered content." />
-              <MethodItem title="Definition — Bot application" content="Bot application is identifying lack of structure and forcing pattern." />
-              <MethodItem title="Action step" content="Define one repeatable content structure." />
-              <MethodItem title="Definition — Action step" content="An action step is one enforced system that builds coherence." />
+<MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect scattered content. World Architect™ Bot application is identifying lack of structure and forcing pattern." />
+              <MethodItem title="Action step" content="Define one repeatable content structure. An action step is one enforced system that builds coherence." />
             </div>
           </div>
           <button 
@@ -933,14 +927,11 @@ function FinalSummary({ data, onSave }: { data: any, onSave?: (data: any) => voi
               <MethodItem title="What this controls" content="This controls how content is created and perceived." />
               <MethodItem title="How to apply it" content="Build the system first, then create from it instead of searching for ideas first." />
               <MethodItem title="Failure point" content="If content becomes the starting point again, the world collapses back into randomness." />
-              <MethodItem title="What to do" content="Create from the system, not before it." />
+              <MethodItem title="What to do" content="Create from the system, not before it. What to do is reversing the creation order so content is the result." />
             </div>
             <div className="p-8 bg-white/2 border border-white/10 space-y-6">
-              <MethodItem title="Definition — What to do" content="What to do is reversing the creation order so content is the result." />
-              <MethodItem title="Bot application" content="Use the bot to detect content-first behavior." />
-              <MethodItem title="Definition — Bot application" content="Bot application is identifying randomness and forcing system-first creation." />
-              <MethodItem title="Action step" content="Before posting, check if it comes from your system." />
-              <MethodItem title="Definition — Action step" content="An action step is one enforced check that protects the system." />
+              <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect content-first behavior. World Architect™ Bot application is identifying randomness and forcing system-first creation." />
+              <MethodItem title="Action step" content="Before posting, check if it comes from your system. An action step is one enforced check that protects the system." />
             </div>
           </div>
 
@@ -992,7 +983,7 @@ function FinalSummary({ data, onSave }: { data: any, onSave?: (data: any) => voi
                     <h4 className="text-xs font-black tracking-widest text-ww-pink-deep uppercase italic">REFINEMENT LOOP</h4>
                     <div className="space-y-3 text-[10px] font-black tracking-widest opacity-80 uppercase">
                       <p>→ Use the app to adjust</p>
-                      <p>→ Use the bot to refine</p>
+                      <p>→ Use the World Architect™ Bot to refine</p>
                       <p>→ Repeat the loop</p>
                     </div>
                     <p className="text-[9px] font-medium text-white/40">This is how the system strengthens over time.</p>
@@ -1217,12 +1208,9 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
       controls: 'This controls proximity to the creator and how personally tied the identity feels.',
       apply: 'Choose a type that matches how close or separate the character should be from you.',
       failure: 'If unclear, the identity becomes unstable or generic.',
-      todo: 'Select and define one identity type clearly.',
-      todoDef: 'What to do is choosing a defined identity structure instead of blending multiple unclear types.',
-      bot: 'Use the bot to detect unclear or mixed identity types.',
-      botDef: 'Bot application is identifying confusion in identity structure and forcing clarity.',
-      action: 'Choose one identity type and define it in your own words.',
-      actionDef: 'An action step is one enforced identity decision.'
+      todo: 'Select and define one identity type clearly. What to do is choosing a defined identity structure instead of blending multiple unclear types.',
+      bot: 'Use the World Architect™ Bot to detect unclear or mixed identity types. World Architect™ Bot application is identifying confusion in identity structure and forcing clarity.',
+      action: 'Choose one identity type and define it in your own words. An action step is one enforced identity decision.'
     },
     {
       id: 'Alter Character',
@@ -1230,12 +1218,9 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
       controls: 'This controls proximity to the creator and how personally tied the identity feels.',
       apply: 'Choose a type that matches how close or separate the character should be from you.',
       failure: 'If unclear, the identity becomes unstable or generic.',
-      todo: 'Select and define one identity type clearly.',
-      todoDef: 'What to do is choosing a defined identity structure instead of blending multiple unclear types.',
-      bot: 'Use the bot to detect unclear or mixed identity types.',
-      botDef: 'Bot application is identifying confusion in identity structure and forcing clarity.',
-      action: 'Choose one identity type and define it in your own words.',
-      actionDef: 'An action step is one enforced identity decision.'
+      todo: 'Select and define one identity type clearly. What to do is choosing a defined identity structure instead of blending multiple unclear types.',
+      bot: 'Use the World Architect™ Bot to detect unclear or mixed identity types. World Architect™ Bot application is identifying confusion in identity structure and forcing clarity.',
+      action: 'Choose one identity type and define it in your own words. An action step is one enforced identity decision.'
     },
     {
       id: 'Fully Original',
@@ -1243,12 +1228,9 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
       controls: 'This controls proximity to the creator and how personally tied the identity feels.',
       apply: 'Choose a type that matches how close or separate the character should be from you.',
       failure: 'If unclear, the identity becomes unstable or generic.',
-      todo: 'Select and define one identity type clearly.',
-      todoDef: 'What to do is choosing a defined identity structure instead of blending multiple unclear types.',
-      bot: 'Use the bot to detect unclear or mixed identity types.',
-      botDef: 'Bot application is identifying confusion in identity structure and forcing clarity.',
-      action: 'Choose one identity type and define it in your own words.',
-      actionDef: 'An action step is one enforced identity decision.'
+      todo: 'Select and define one identity type clearly. What to do is choosing a defined identity structure instead of blending multiple unclear types.',
+      bot: 'Use the World Architect™ Bot to detect unclear or mixed identity types. World Architect™ Bot application is identifying confusion in identity structure and forcing clarity.',
+      action: 'Choose one identity type and define it in your own words. An action step is one enforced identity decision.'
     }
   ];
 
@@ -1258,60 +1240,45 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
       description: 'Builds systems, structure, and direction.',
       apply: 'Choose one dominant role and assign supporting roles.',
       failure: 'If all roles compete, identity becomes scattered.',
-      todo: 'Define role hierarchy.',
-      todoDef: 'What to do is assigning structure to how the character/identity functions.',
-      bot: 'Use the bot to detect conflicting roles.',
-      botDef: 'Bot application is identifying role conflict and forcing hierarchy.',
-      action: 'Choose 1 dominant + 2 supporting roles.',
-      actionDef: 'An action step is one enforced role hierarchy.'
+      todo: 'Define role hierarchy. What to do is assigning structure to how the character/identity functions.',
+      bot: 'Use the World Architect™ Bot to detect conflicting roles. World Architect™ Bot application is identifying role conflict and forcing hierarchy.',
+      action: 'Choose 1 dominant + 2 supporting roles. An action step is one enforced role hierarchy.'
     },
     { 
       title: 'Observer', 
       description: 'Recognizes patterns and shifts.',
       apply: 'Choose one dominant role and assign supporting roles.',
       failure: 'If all roles compete, identity becomes scattered.',
-      todo: 'Define role hierarchy.',
-      todoDef: 'What to do is assigning structure to how the character/identity functions.',
-      bot: 'Use the bot to detect conflicting roles.',
-      botDef: 'Bot application is identifying role conflict and forcing hierarchy.',
-      action: 'Choose 1 dominant + 2 supporting roles.',
-      actionDef: 'An action step is one enforced role hierarchy.'
+      todo: 'Define role hierarchy. What to do is assigning structure to how the character/identity functions.',
+      bot: 'Use the World Architect™ Bot to detect conflicting roles. World Architect™ Bot application is identifying role conflict and forcing hierarchy.',
+      action: 'Choose 1 dominant + 2 supporting roles. An action step is one enforced role hierarchy.'
     },
     { 
       title: 'Operator', 
       description: 'Executes consistently and creates output.',
       apply: 'Choose one dominant role and assign supporting roles.',
       failure: 'If all roles compete, identity becomes scattered.',
-      todo: 'Define role hierarchy.',
-      todoDef: 'What to do is assigning structure to how the character/identity functions.',
-      bot: 'Use the bot to detect conflicting roles.',
-      botDef: 'Bot application is identifying role conflict and forcing hierarchy.',
-      action: 'Choose 1 dominant + 2 supporting roles.',
-      actionDef: 'An action step is one enforced role hierarchy.'
+      todo: 'Define role hierarchy. What to do is assigning structure to how the character/identity functions.',
+      bot: 'Use the World Architect™ Bot to detect conflicting roles. World Architect™ Bot application is identifying role conflict and forcing hierarchy.',
+      action: 'Choose 1 dominant + 2 supporting roles. An action step is one enforced role hierarchy.'
     },
     { 
       title: 'Distorter', 
       description: 'Breaks expectations to prevent predictability.',
       apply: 'Choose one dominant role and assign supporting roles.',
       failure: 'If all roles compete, identity becomes scattered.',
-      todo: 'Define role hierarchy.',
-      todoDef: 'What to do is assigning structure to how the character/identity functions.',
-      bot: 'Use the bot to detect conflicting roles.',
-      botDef: 'Bot application is identifying role conflict and forcing hierarchy.',
-      action: 'Choose 1 dominant + 2 supporting roles.',
-      actionDef: 'An action step is one enforced role hierarchy.'
+      todo: 'Define role hierarchy. What to do is assigning structure to how the character/identity functions.',
+      bot: 'Use the World Architect™ Bot to detect conflicting roles. World Architect™ Bot application is identifying role conflict and forcing hierarchy.',
+      action: 'Choose 1 dominant + 2 supporting roles. An action step is one enforced role hierarchy.'
     },
     { 
       title: 'Curator', 
       description: 'Removes what does not belong and refines the system.',
       apply: 'Choose one dominant role and assign supporting roles.',
       failure: 'If all roles compete, identity becomes scattered.',
-      todo: 'Define role hierarchy.',
-      todoDef: 'What to do is assigning structure to how the character/identity functions.',
-      bot: 'Use the bot to detect conflicting roles.',
-      botDef: 'Bot application is identifying role conflict and forcing hierarchy.',
-      action: 'Choose 1 dominant + 2 supporting roles.',
-      actionDef: 'An action step is one enforced role hierarchy.'
+      todo: 'Define role hierarchy. What to do is assigning structure to how the character/identity functions.',
+      bot: 'Use the World Architect™ Bot to detect conflicting roles. World Architect™ Bot application is identifying role conflict and forcing hierarchy.',
+      action: 'Choose 1 dominant + 2 supporting roles. An action step is one enforced role hierarchy.'
     }
   ];
 
@@ -1324,7 +1291,7 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
         <p className="text-white/60 font-medium">Define what your system embodies, rejects, and repeats.</p>
         <div className="p-4 border-l-2 border-ww-cyan bg-white/2 max-w-2xl normal-case">
           <p className="text-xs font-bold leading-relaxed text-ww-cyan italic">
-            Note: If you have no character, apply these sections to your world and voice instead of a person.
+            Note: If you have no character, apply these sections to your identity and presence instead of a person.
           </p>
         </div>
       </div>
@@ -1366,12 +1333,9 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
                 <MethodItem title="How to apply it" content={type.apply} />
                 <MethodItem title="Failure point" content={type.failure} />
                 <MethodItem title="What to do" content={type.todo} />
-                <MethodItem title="Definition — What to do" content={type.todoDef} />
-                <MethodItem title="Bot application" content={type.bot} />
-                <MethodItem title="Definition — Bot application" content={type.botDef} />
+                <MethodItem title="World Architect™ Bot application" content={type.bot} />
                 <MethodItem title="Action step" content={type.action} />
-                <MethodItem title="Definition — Action step" content={type.actionDef} />
-              </div>
+                </div>
 
               {form.identityType === type.id && (
                 <div className="absolute top-4 right-4 h-2 w-2 rounded-full bg-ww-cyan animate-pulse" />
@@ -1419,12 +1383,9 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
             <MethodItem title="What this controls" content="Clarity and distinction." />
             <MethodItem title="How to apply it" content="Define clear exclusions before defining what the character/identity is." />
             <MethodItem title="Failure point" content="If skipped, identity becomes broad and overlaps with others." />
-            <MethodItem title="What to do" content="List what does not belong before defining what does." />
-            <MethodItem title="Definition — What to do" content="What to do is narrowing identity through exclusion." />
-            <MethodItem title="Bot application" content="Use the bot to detect overlap or generic identity." />
-            <MethodItem title="Definition — Bot application" content="Bot application is identifying lack of distinction and forcing separation." />
-            <MethodItem title="Action step" content="Write clear exclusions for each category." />
-            <MethodItem title="Definition — Action step" content="An action step is one enforced elimination." />
+            <MethodItem title="What to do" content="List what does not belong before defining what does. What to do is narrowing identity through exclusion." />
+            <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect overlap or generic identity. World Architect™ Bot application is identifying lack of distinction and forcing separation." />
+            <MethodItem title="Action step" content="Write clear exclusions for each category. An action step is one enforced elimination." />
           </div>
         </div>
 
@@ -1484,12 +1445,9 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
             <MethodItem title="What this controls" content="This controls internal consistency." />
             <MethodItem title="How to apply it" content="Observe patterns instead of inventing new directions." />
             <MethodItem title="Failure point" content="If everything changes, identity becomes unstable." />
-            <MethodItem title="What to do" content="Identify repeated emotional patterns." />
-            <MethodItem title="Definition — What to do" content="What to do is refining what already exists instead of replacing it." />
-            <MethodItem title="Bot application" content="Use the bot to detect recurring emotional patterns." />
-            <MethodItem title="Definition — Bot application" content="Bot application is identifying repetition and reinforcing it." />
-            <MethodItem title="Action step" content="Review past content and identify repeated emotional tone." />
-            <MethodItem title="Definition — Action step" content="An action step is isolating recurring emotional patterns." />
+            <MethodItem title="What to do" content="Identify repeated emotional patterns. What to do is refining what already exists instead of replacing it." />
+            <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect recurring emotional patterns. World Architect™ Bot application is identifying repetition and reinforcing it." />
+            <MethodItem title="Action step" content="Review past content and identify repeated emotional tone. An action step is isolating recurring emotional patterns." />
           </div>
           <BuildInput
             label="Identify recurring emotional pattern"
@@ -1529,12 +1487,9 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
                 <MethodItem title="How to apply it" content={role.apply} />
                 <MethodItem title="Failure point" content={role.failure} />
                 <MethodItem title="What to do" content={role.todo} />
-                <MethodItem title="Definition — What to do" content={role.todoDef} />
-                <MethodItem title="Bot application" content={role.bot} />
-                <MethodItem title="Definition — Bot application" content={role.botDef} />
+                <MethodItem title="World Architect™ Bot application" content={role.bot} />
                 <MethodItem title="Action step" content={role.action} />
-                <MethodItem title="Definition — Action step" content={role.actionDef} />
-              </div>
+                </div>
 
               <div className="h-[1px] w-4 bg-ww-cyan/20 group-hover:w-full transition-all" />
               
@@ -1738,12 +1693,9 @@ function Phase2World({ data, onSave, onNavigate, isLocked, isDevMode, navMode }:
       controls: 'Precision, order, and visual restraint.',
       apply: 'Apply this direction consistently across all visuals.',
       failure: 'If mixed randomly, the world loses clarity.',
-      todo: 'Commit to one direction.',
-      todoDef: 'What to do is enforcing one consistent world logic.',
-      bot: 'Use the bot to detect conflicting directions.',
-      botDef: 'Bot application is identifying inconsistency and forcing alignment.',
-      action: 'Choose one direction and apply it across posts.',
-      actionDef: 'An action step is one enforced direction choice.'
+      todo: 'Commit to one direction. What to do is enforcing one consistent world logic.',
+      bot: 'Use the World Architect™ Bot to detect conflicting directions. World Architect™ Bot application is identifying inconsistency and forcing alignment.',
+      action: 'Choose one direction and apply it across posts. An action step is one enforced direction choice.'
     },
     {
       id: 'Surreal',
@@ -1751,12 +1703,9 @@ function Phase2World({ data, onSave, onNavigate, isLocked, isDevMode, navMode }:
       controls: 'Distortion, imagination, and unreal visual behavior.',
       apply: 'Apply this direction consistently across all visuals.',
       failure: 'If mixed randomly, the world loses clarity.',
-      todo: 'Commit to one direction.',
-      todoDef: 'What to do is enforcing one consistent world logic.',
-      bot: 'Use the bot to detect conflicting directions.',
-      botDef: 'Bot application is identifying inconsistency and forcing alignment.',
-      action: 'Choose one direction and apply it across posts.',
-      actionDef: 'An action step is one enforced direction choice.'
+      todo: 'Commit to one direction. What to do is enforcing one consistent world logic.',
+      bot: 'Use the World Architect™ Bot to detect conflicting directions. World Architect™ Bot application is identifying inconsistency and forcing alignment.',
+      action: 'Choose one direction and apply it across posts. An action step is one enforced direction choice.'
     },
     {
       id: 'Grounded',
@@ -1764,12 +1713,9 @@ function Phase2World({ data, onSave, onNavigate, isLocked, isDevMode, navMode }:
       controls: 'Realism and relatability.',
       apply: 'Apply this direction consistently across all visuals.',
       failure: 'If mixed randomly, the world loses clarity.',
-      todo: 'Commit to one direction.',
-      todoDef: 'What to do is enforcing one consistent world logic.',
-      bot: 'Use the bot to detect conflicting directions.',
-      botDef: 'Bot application is identifying inconsistency and forcing alignment.',
-      action: 'Choose one direction and apply it across posts.',
-      actionDef: 'An action step is one enforced direction choice.'
+      todo: 'Commit to one direction. What to do is enforcing one consistent world logic.',
+      bot: 'Use the World Architect™ Bot to detect conflicting directions. World Architect™ Bot application is identifying inconsistency and forcing alignment.',
+      action: 'Choose one direction and apply it across posts. An action step is one enforced direction choice.'
     },
     {
       id: 'Nostalgic',
@@ -1777,12 +1723,9 @@ function Phase2World({ data, onSave, onNavigate, isLocked, isDevMode, navMode }:
       controls: 'Emotional memory and softness.',
       apply: 'Apply this direction consistently across all visuals.',
       failure: 'If mixed randomly, the world loses clarity.',
-      todo: 'Commit to one direction.',
-      todoDef: 'What to do is enforcing one consistent world logic.',
-      bot: 'Use the bot to detect conflicting directions.',
-      botDef: 'Bot application is identifying inconsistency and forcing alignment.',
-      action: 'Choose one direction and apply it across posts.',
-      actionDef: 'An action step is one enforced direction choice.'
+      todo: 'Commit to one direction. What to do is enforcing one consistent world logic.',
+      bot: 'Use the World Architect™ Bot to detect conflicting directions. World Architect™ Bot application is identifying inconsistency and forcing alignment.',
+      action: 'Choose one direction and apply it across posts. An action step is one enforced direction choice.'
     },
     {
       id: 'Minimal',
@@ -1790,12 +1733,9 @@ function Phase2World({ data, onSave, onNavigate, isLocked, isDevMode, navMode }:
       controls: 'Restraint and clarity.',
       apply: 'Apply this direction consistently across all visuals.',
       failure: 'If mixed randomly, the world loses clarity.',
-      todo: 'Commit to one direction.',
-      todoDef: 'What to do is enforcing one consistent world logic.',
-      bot: 'Use the bot to detect conflicting directions.',
-      botDef: 'Bot application is identifying inconsistency and forcing alignment.',
-      action: 'Choose one direction and apply it across posts.',
-      actionDef: 'An action step is one enforced direction choice.'
+      todo: 'Commit to one direction. What to do is enforcing one consistent world logic.',
+      bot: 'Use the World Architect™ Bot to detect conflicting directions. World Architect™ Bot application is identifying inconsistency and forcing alignment.',
+      action: 'Choose one direction and apply it across posts. An action step is one enforced direction choice.'
     }
   ];
 
@@ -1808,12 +1748,9 @@ function Phase2World({ data, onSave, onNavigate, isLocked, isDevMode, navMode }:
       controls: 'Stillness, softness, peace.',
       apply: 'Use gentle movement, softness, and minimal visual noise.',
       failure: 'If chaotic elements dominate, calm breaks.',
-      todo: 'Maintain softness and remove chaotic elements.',
-      todoDef: 'What to do is reinforcing stillness through controlled visuals.',
-      bot: 'Use the bot to detect chaotic disruptions.',
-      botDef: 'Bot application is identifying disruptions and forcing calm alignment.',
-      action: 'Remove one chaotic element from your visual.',
-      actionDef: 'An action step is one enforced removal that restores tone.'
+      todo: 'Maintain softness and remove chaotic elements. What to do is reinforcing stillness through controlled visuals.',
+      bot: 'Use the World Architect™ Bot to detect chaotic disruptions. World Architect™ Bot application is identifying disruptions and forcing calm alignment.',
+      action: 'Remove one chaotic element from your visual. An action step is one enforced removal that restores tone.'
     },
     {
       id: 'Controlled',
@@ -1821,12 +1758,9 @@ function Phase2World({ data, onSave, onNavigate, isLocked, isDevMode, navMode }:
       controls: 'Order and precision.',
       apply: 'Use deliberate composition and restraint.',
       failure: 'If randomness enters, control weakens.',
-      todo: 'Maintain deliberate and intentional composition.',
-      todoDef: 'What to do is reinforcing precision and structure.',
-      bot: 'Use the bot to detect randomness.',
-      botDef: 'Bot application is identifying lack of control and forcing precision.',
-      action: 'Adjust one visual element to be more intentional.',
-      actionDef: 'An action step is one enforced adjustment that strengthens control.'
+      todo: 'Maintain deliberate and intentional composition. What to do is reinforcing precision and structure.',
+      bot: 'Use the World Architect™ Bot to detect randomness. World Architect™ Bot application is identifying lack of control and forcing precision.',
+      action: 'Adjust one visual element to be more intentional. An action step is one enforced adjustment that strengthens control.'
     },
     {
       id: 'Chaotic',
@@ -1834,12 +1768,9 @@ function Phase2World({ data, onSave, onNavigate, isLocked, isDevMode, navMode }:
       controls: 'Tension, motion, unpredictability.',
       apply: 'Use movement, distortion, or instability with intention.',
       failure: 'If used without structure, it becomes noise.',
-      todo: 'Introduce chaos with controlled intention.',
-      todoDef: 'What to do is balancing unpredictability with structure.',
-      bot: 'Use the bot to detect when chaos becomes noise.',
-      botDef: 'Bot application is identifying lack of structure and forcing control.',
-      action: 'Define one rule that chaos must follow.',
-      actionDef: 'An action step is one enforced constraint that stabilizes chaos.'
+      todo: 'Introduce chaos with controlled intention. What to do is balancing unpredictability with structure.',
+      bot: 'Use the World Architect™ Bot to detect when chaos becomes noise. World Architect™ Bot application is identifying lack of structure and forcing control.',
+      action: 'Define one rule that chaos must follow. An action step is one enforced constraint that stabilizes chaos.'
     },
     {
       id: 'Nostalgic',
@@ -1847,12 +1778,9 @@ function Phase2World({ data, onSave, onNavigate, isLocked, isDevMode, navMode }:
       controls: 'Warmth, emotion, memory.',
       apply: 'Use memory-like visual cues consistently.',
       failure: 'If used occasionally without pattern, it feels disconnected.',
-      todo: 'Apply nostalgic elements consistently.',
-      todoDef: 'What to do is reinforcing memory-based visuals through repetition.',
-      bot: 'Use the bot to detect inconsistency.',
-      botDef: 'Bot application is identifying breaks in nostalgic tone.',
-      action: 'Use one recurring nostalgic element across multiple visuals.',
-      actionDef: 'An action step is one enforced repetition that builds continuity.'
+      todo: 'Apply nostalgic elements consistently. What to do is reinforcing memory-based visuals through repetition.',
+      bot: 'Use the World Architect™ Bot to detect inconsistency. World Architect™ Bot application is identifying breaks in nostalgic tone.',
+      action: 'Use one recurring nostalgic element across multiple visuals. An action step is one enforced repetition that builds continuity.'
     }
   ];
 
@@ -1885,12 +1813,9 @@ function Phase2World({ data, onSave, onNavigate, isLocked, isDevMode, navMode }:
                 <MethodItem title="What this controls" content="The main logic of the world and how everything inside it should feel." />
                 <MethodItem title="How to apply it" content="Choose one main world direction and use it as a filter for all future decisions." />
                 <MethodItem title="Failure point" content="If multiple directions compete, the world loses clarity." />
-                <MethodItem title="What to do" content="Choose one main world direction and commit to it." />
-                <MethodItem title="Definition — What to do" content="What to do is the act of selecting a single guiding direction to maintain clarity." />
-                <MethodItem title="Bot application" content="Use the bot to detect conflicting directions." />
-                <MethodItem title="Definition — Bot application" content="Bot application is identifying competing directions and forcing alignment." />
-                <MethodItem title="Action step" content="Choose one: controlled, surreal, grounded, nostalgic, or minimal." />
-                <MethodItem title="Definition — Action step" content="An action step is one enforced choice that removes competing directions." />
+                <MethodItem title="What to do" content="Choose one main world direction and commit to it. What to do is the act of selecting a single guiding direction to maintain clarity." />
+                <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect conflicting directions. World Architect™ Bot application is identifying competing directions and forcing alignment." />
+                <MethodItem title="Action step" content="Choose one: controlled, surreal, grounded, nostalgic, or minimal. An action step is one enforced choice that removes competing directions." />
              </div>
            </div>
         </div>
@@ -1920,12 +1845,9 @@ function Phase2World({ data, onSave, onNavigate, isLocked, isDevMode, navMode }:
                 <MethodItem title="How to apply it" content={dir.apply} />
                 <MethodItem title="Failure point" content={dir.failure} />
                 <MethodItem title="What to do" content={dir.todo} />
-                <MethodItem title="Definition — What to do" content={dir.todoDef} />
-                <MethodItem title="Bot application" content={dir.bot} />
-                <MethodItem title="Definition — Bot application" content={dir.botDef} />
+                <MethodItem title="World Architect™ Bot application" content={dir.bot} />
                 <MethodItem title="Action step" content={dir.action} />
-                <MethodItem title="Definition — Action step" content={dir.actionDef} />
-              </div>
+                </div>
 
               {form.worldDirection === dir.id && (
                 <div className="absolute top-4 right-4 h-2 w-2 rounded-full bg-ww-cyan animate-pulse" />
@@ -1943,12 +1865,9 @@ function Phase2World({ data, onSave, onNavigate, isLocked, isDevMode, navMode }:
                     <MethodItem title="What this controls" content="System unity." />
                     <MethodItem title="How to apply it" content="Use one primary direction as the base." />
                     <MethodItem title="Failure point" content="If you refuse to choose, the world stays undefined." />
-                    <MethodItem title="What to do" content="Commit to one direction." />
-                    <MethodItem title="Definition — What to do" content="What to do is enforcing alignment through commitment." />
-                    <MethodItem title="Bot application" content="Use the bot to detect indecision." />
-                    <MethodItem title="Definition — Bot application" content="Bot application is identifying lack of commitment." />
-                    <MethodItem title="Action step" content="State your world direction clearly in one sentence." />
-                    <MethodItem title="Definition — Action step" content="An action step is one enforced definition that locks direction." />
+                    <MethodItem title="What to do" content="Commit to one direction. What to do is enforcing alignment through commitment." />
+                    <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect indecision. World Architect™ Bot application is identifying lack of commitment." />
+                    <MethodItem title="Action step" content="State your world direction clearly in one sentence. An action step is one enforced definition that locks direction." />
                  </div>
               </div>
             )}
@@ -2056,12 +1975,9 @@ function Phase2World({ data, onSave, onNavigate, isLocked, isDevMode, navMode }:
                 <MethodItem title="What this controls" content="Long-term stability and boundaries." />
                 <MethodItem title="How to apply it" content="Define clear inclusion and exclusion." />
                 <MethodItem title="Failure point" content="Without rules, the world becomes random." />
-                <MethodItem title="What to do" content="Set boundaries." />
-                <MethodItem title="Definition — What to do" content="What to do is establishing controlled structure." />
-                <MethodItem title="Bot application" content="Use the bot to detect inconsistency." />
-                <MethodItem title="Definition — Bot application" content="Bot application is identifying broken logic." />
-                <MethodItem title="Action step" content="Define 3 rules." />
-                <MethodItem title="Definition — Action step" content="An action step is one enforced rule." />
+                <MethodItem title="What to do" content="Set boundaries. What to do is establishing controlled structure." />
+                <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect inconsistency. World Architect™ Bot application is identifying broken logic." />
+                <MethodItem title="Action step" content="Define 3 rules. An action step is one enforced rule." />
              </div>
            </div>
            
@@ -2321,12 +2237,9 @@ function Phase3Visual({ data, onSave, onNavigate, isLocked, isDevMode, navMode }
                 <MethodItem title="What this controls" content="Search direction and prevents random inspiration gathering." />
                 <MethodItem title="How to apply it" content="Define before searching." />
                 <MethodItem title="Failure point" content="Pinterest decides direction instead of you." />
-                <MethodItem title="What to do" content="Set direction first." />
-                <MethodItem title="Definition — What to do" content="What to do is controlling input before gathering." />
-                <MethodItem title="Bot application" content="Use the bot to detect undefined direction." />
-                <MethodItem title="Definition — Bot application" content="Bot application is identifying lack of intent." />
-                <MethodItem title="Action step" content="Write 3 defining words." />
-                <MethodItem title="Definition — Action step" content="An action step is one enforced visual direction." />
+                <MethodItem title="What to do" content="Set direction first. What to do is controlling input before gathering." />
+                <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect undefined direction. World Architect™ Bot application is identifying lack of intent." />
+                <MethodItem title="Action step" content="Write 3 defining words. An action step is one enforced visual direction." />
              </div>
            </div>
 
@@ -2358,12 +2271,9 @@ function Phase3Visual({ data, onSave, onNavigate, isLocked, isDevMode, navMode }
               <MethodItem title="Color Behavior" content="Color behavior is how colors appear and repeat. Controls palette consistency and emotional function." />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 pt-2">
                 <MethodItem title="Failure point" content="If inconsistent, visual identity weakens." />
-                <MethodItem title="What to do" content="Repeat the same logic." />
-                <MethodItem title="Definition — What to do" content="What to do is reinforcing visual consistency." />
-                <MethodItem title="Bot application" content="Use the bot to detect inconsistency." />
-                <MethodItem title="Definition — Bot application" content="Bot application is identifying visual drift." />
-                <MethodItem title="Action step" content="Choose one rule and repeat it." />
-                <MethodItem title="Definition — Action step" content="An action step is one enforced repetition." />
+                <MethodItem title="What to do" content="Repeat the same logic. What to do is reinforcing visual consistency." />
+                <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect inconsistency. World Architect™ Bot application is identifying visual drift." />
+                <MethodItem title="Action step" content="Choose one rule and repeat it. An action step is one enforced repetition." />
               </div>
               <BuildInput
                 label="Define color behavior"
@@ -2377,12 +2287,9 @@ function Phase3Visual({ data, onSave, onNavigate, isLocked, isDevMode, navMode }
               <MethodItem title="Tone" content="Tone is the overall emotional feeling of your visuals. Controls visual feeling and emotional continuity." />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 pt-2">
                 <MethodItem title="Failure point" content="If inconsistent, visual identity weakens." />
-                <MethodItem title="What to do" content="Repeat the same logic." />
-                <MethodItem title="Definition — What to do" content="What to do is reinforcing visual consistency." />
-                <MethodItem title="Bot application" content="Use the bot to detect inconsistency." />
-                <MethodItem title="Definition — Bot application" content="Bot application is identifying visual drift." />
-                <MethodItem title="Action step" content="Choose one rule and repeat it." />
-                <MethodItem title="Definition — Action step" content="An action step is one enforced repetition." />
+                <MethodItem title="What to do" content="Repeat the same logic. What to do is reinforcing visual consistency." />
+                <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect inconsistency. World Architect™ Bot application is identifying visual drift." />
+                <MethodItem title="Action step" content="Choose one rule and repeat it. An action step is one enforced repetition." />
               </div>
               <BuildInput
                 label="Define emotional tone"
@@ -2399,12 +2306,9 @@ function Phase3Visual({ data, onSave, onNavigate, isLocked, isDevMode, navMode }
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 pt-2">
                 <MethodItem title="Failure point" content="If inconsistent, visual identity weakens." />
-                <MethodItem title="What to do" content="Repeat the same logic." />
-                <MethodItem title="Definition — What to do" content="What to do is reinforcing visual consistency." />
-                <MethodItem title="Bot application" content="Use the bot to detect inconsistency." />
-                <MethodItem title="Definition — Bot application" content="Bot application is identifying visual drift." />
-                <MethodItem title="Action step" content="Choose one rule and repeat it." />
-                <MethodItem title="Definition — Action step" content="An action step is one enforced repetition." />
+                <MethodItem title="What to do" content="Repeat the same logic. What to do is reinforcing visual consistency." />
+                <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect inconsistency. World Architect™ Bot application is identifying visual drift." />
+                <MethodItem title="Action step" content="Choose one rule and repeat it. An action step is one enforced repetition." />
               </div>
               <BuildInput
                 label="Define styling direction"
@@ -2418,12 +2322,9 @@ function Phase3Visual({ data, onSave, onNavigate, isLocked, isDevMode, navMode }
               <MethodItem title="Energy" content="Energy is how active or calm visuals feel. Controls movement, pace, intensity." />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 pt-2">
                 <MethodItem title="Failure point" content="If inconsistent, visual identity weakens." />
-                <MethodItem title="What to do" content="Repeat the same logic." />
-                <MethodItem title="Definition — What to do" content="What to do is reinforcing visual consistency." />
-                <MethodItem title="Bot application" content="Use the bot to detect inconsistency." />
-                <MethodItem title="Definition — Bot application" content="Bot application is identifying visual drift." />
-                <MethodItem title="Action step" content="Choose one rule and repeat it." />
-                <MethodItem title="Definition — Action step" content="An action step is one enforced repetition." />
+                <MethodItem title="What to do" content="Repeat the same logic. What to do is reinforcing visual consistency." />
+                <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect inconsistency. World Architect™ Bot application is identifying visual drift." />
+                <MethodItem title="Action step" content="Choose one rule and repeat it. An action step is one enforced repetition." />
               </div>
               <BuildInput
                 label="Define visual energy"
@@ -2452,7 +2353,7 @@ function Phase3Visual({ data, onSave, onNavigate, isLocked, isDevMode, navMode }
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="p-8 bg-white/2 border border-white/10 space-y-6">
               <h4 className="text-xl font-black italic tracking-tighter italic">🪞 Pinterest Combinations</h4>
-              <p className="text-xs text-white/40 leading-relaxed font-bold normal-case">Use combinations: environment + lighting + style | outfit + tone + era | texture + mood + environment. Controls result quality. Failure: searches are too broad.</p>
+              <p className="text-xs text-white/40 leading-relaxed font-bold normal-case">Use combinations: environment + lighting + style | outfit + tone + era | texture + mood + environment. Controls result quality. Failure: searches are too broad. Personal note: You can use multiple different Pinterest accounts or boards to isolate distinct visual concepts and prevent algorithm blending.</p>
               <BuildInput
                 label="Define your search combinations"
                 value={form.pinterestSearch}
@@ -2578,7 +2479,7 @@ function Phase3Visual({ data, onSave, onNavigate, isLocked, isDevMode, navMode }
         <div className="space-y-12">
             <div className="p-8 bg-ww-cyan/5 border border-ww-cyan/20 space-y-6">
                <h4 className="text-2xl font-black italic tracking-tighter">Ownership Rule</h4>
-               <p className="text-sm text-white/70 leading-relaxed font-bold normal-case italic">"If the image still looks like its original source, it is not yours yet."</p>
+               <p className="text-sm text-white/70 leading-relaxed font-bold normal-case italic">"Transformation is about complete creative ownership of your visuals, not merely a superficial disguise."</p>
                <div className="flex items-center gap-4 pt-4">
                   <button
                     type="button"
@@ -2646,12 +2547,9 @@ function Phase3Visual({ data, onSave, onNavigate, isLocked, isDevMode, navMode }
                <MethodItem title="What The Character Wears" content="Defines clothing patterns. Controls consistency." />
                <div className="grid grid-cols-1 gap-y-4 pt-2">
                   <MethodItem title="Failure point" content="If inconsistent, visual identity weakens." />
-                  <MethodItem title="What to do" content="Repeat the same logic." />
-                  <MethodItem title="Definition — What to do" content="What to do is reinforcing visual consistency." />
-                  <MethodItem title="Bot application" content="Use the bot to detect inconsistency." />
-                  <MethodItem title="Definition — Bot application" content="Bot application is identifying visual drift." />
-                  <MethodItem title="Action step" content="Choose one rule and repeat it." />
-                  <MethodItem title="Definition — Action step" content="An action step is one enforced repetition." />
+                  <MethodItem title="What to do" content="Repeat the same logic. What to do is reinforcing visual consistency." />
+                  <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect inconsistency. World Architect™ Bot application is identifying visual drift." />
+                  <MethodItem title="Action step" content="Choose one rule and repeat it. An action step is one enforced repetition." />
                </div>
                <BuildInput
                 label="Define what character wears"
@@ -2665,12 +2563,9 @@ function Phase3Visual({ data, onSave, onNavigate, isLocked, isDevMode, navMode }
                <MethodItem title="What They Do NOT Wear" content="Removes inconsistency. Controls exclusion." />
                <div className="grid grid-cols-1 gap-y-4 pt-2">
                   <MethodItem title="Failure point" content="If inconsistent, visual identity weakens." />
-                  <MethodItem title="What to do" content="Repeat the same logic." />
-                  <MethodItem title="Definition — What to do" content="What to do is reinforcing visual consistency." />
-                  <MethodItem title="Bot application" content="Use the bot to detect inconsistency." />
-                  <MethodItem title="Definition — Bot application" content="Bot application is identifying visual drift." />
-                  <MethodItem title="Action step" content="Choose one rule and repeat it." />
-                  <MethodItem title="Definition — Action step" content="An action step is one enforced repetition." />
+                  <MethodItem title="What to do" content="Repeat the same logic. What to do is reinforcing visual consistency." />
+                  <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect inconsistency. World Architect™ Bot application is identifying visual drift." />
+                  <MethodItem title="Action step" content="Choose one rule and repeat it. An action step is one enforced repetition." />
                </div>
                <BuildInput
                 label="Define what character NOT wears"
@@ -2684,12 +2579,9 @@ function Phase3Visual({ data, onSave, onNavigate, isLocked, isDevMode, navMode }
                <MethodItem title="Signature Elements" content="Details that repeat and become recognizable. Controls memorability." />
                <div className="grid grid-cols-1 gap-y-4 pt-2">
                   <MethodItem title="Failure point" content="If inconsistent, visual identity weakens." />
-                  <MethodItem title="What to do" content="Repeat the same logic." />
-                  <MethodItem title="Definition — What to do" content="What to do is reinforcing visual consistency." />
-                  <MethodItem title="Bot application" content="Use the bot to detect inconsistency." />
-                  <MethodItem title="Definition — Bot application" content="Bot application is identifying visual drift." />
-                  <MethodItem title="Action step" content="Choose one rule and repeat it." />
-                  <MethodItem title="Definition — Action step" content="An action step is one enforced repetition." />
+                  <MethodItem title="What to do" content="Repeat the same logic. What to do is reinforcing visual consistency." />
+                  <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect inconsistency. World Architect™ Bot application is identifying visual drift." />
+                  <MethodItem title="Action step" content="Choose one rule and repeat it. An action step is one enforced repetition." />
                </div>
                <BuildInput
                 label="Define signature elements"
@@ -2872,12 +2764,9 @@ function Phase4VisualBehavior({ data, onSave, onNavigate, isLocked, isDevMode, n
                   <MethodItem title="What this controls" content={type === 'Inside' ? "Immersion and viewer experience." : "Distance and perspective."} />
                   <MethodItem title="How to apply it" content="Keep behavior consistent across content." />
                   <MethodItem title="Failure point" content={type === 'Inside' ? "If inconsistent, the world loses immersion." : "If mixed randomly with inside POV, viewer position becomes unstable."} />
-                  <MethodItem title="What to do" content="Define one consistent behavior." />
-                  <MethodItem title="Definition — What to do" content="What to do is stabilizing visual behavior." />
-                  <MethodItem title="Bot application" content="Use the bot to detect inconsistency." />
-                  <MethodItem title="Definition — Bot application" content="Bot application is identifying unstable behavior." />
-                  <MethodItem title="Action step" content="Choose one behavior and repeat it." />
-                  <MethodItem title="Definition — Action step" content="An action step is one enforced behavior pattern." />
+                  <MethodItem title="What to do" content="Define one consistent behavior. What to do is stabilizing visual behavior." />
+                  <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect inconsistency. World Architect™ Bot application is identifying unstable behavior." />
+                  <MethodItem title="Action step" content="Choose one behavior and repeat it. An action step is one enforced behavior pattern." />
                 </div>
                 {form.pov.type === type && <div className="absolute top-4 right-4 h-2 w-2 rounded-full bg-ww-cyan animate-pulse" />}
              </button>
@@ -2914,12 +2803,9 @@ function Phase4VisualBehavior({ data, onSave, onNavigate, isLocked, isDevMode, n
                 <MethodItem title="What this controls" content="Focus, power, and perception." />
                 <MethodItem title="How to apply it" content="Keep behavior consistent across content." />
                 <MethodItem title="Failure point" content="If behavior shifts randomly, the world weakens." />
-                <MethodItem title="What to do" content="Define one consistent behavior." />
-                <MethodItem title="Definition — What to do" content="What to do is stabilizing visual behavior." />
-                <MethodItem title="Bot application" content="Use the bot to detect inconsistency." />
-                <MethodItem title="Definition — Bot application" content="Bot application is identifying unstable behavior." />
-                <MethodItem title="Action step" content="Choose one behavior and repeat it." />
-                <MethodItem title="Definition — Action step" content="An action step is one enforced behavior pattern." />
+                <MethodItem title="What to do" content="Define one consistent behavior. What to do is stabilizing visual behavior." />
+                <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect inconsistency. World Architect™ Bot application is identifying unstable behavior." />
+                <MethodItem title="Action step" content="Choose one behavior and repeat it. An action step is one enforced behavior pattern." />
              </div>
            </div>
            <BuildInput
@@ -2973,12 +2859,9 @@ function Phase4VisualBehavior({ data, onSave, onNavigate, isLocked, isDevMode, n
                       <MethodItem title="What this controls" content="Intimacy and detail." />
                       <MethodItem title="How to apply it" content="Keep behavior consistent across content and focus tightly on the detail." />
                       <MethodItem title="Failure point" content="If behavior shifts randomly, the world weakens." />
-                      <MethodItem title="What to do" content="Define one consistent behavior." />
-                      <MethodItem title="Definition — What to do" content="What to do is stabilizing visual behavior." />
-                      <MethodItem title="Bot application" content="Use the bot to detect inconsistency." />
-                      <MethodItem title="Definition — Bot application" content="Bot application is identifying unstable behavior." />
-                      <MethodItem title="Action step" content="Choose one behavior and repeat it." />
-                      <MethodItem title="Definition — Action step" content="An action step is one enforced behavior pattern." />
+                      <MethodItem title="What to do" content="Define one consistent behavior. What to do is stabilizing visual behavior." />
+                      <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect inconsistency. World Architect™ Bot application is identifying unstable behavior." />
+                      <MethodItem title="Action step" content="Choose one behavior and repeat it. An action step is one enforced behavior pattern." />
                    </div>
                    <div className="p-4 border border-white/5 space-y-4">
                       <h5 className="text-[8px] font-black tracking-widest text-ww-cyan italic">WIDE</h5>
@@ -2986,12 +2869,9 @@ function Phase4VisualBehavior({ data, onSave, onNavigate, isLocked, isDevMode, n
                       <MethodItem title="What this controls" content="Scale and setting visibility, showing as much as the presence." />
                       <MethodItem title="How to apply it" content="Keep behavior consistent across content, showing as much as the presence." />
                       <MethodItem title="Failure point" content="If behavior shifts randomly, the world weakens." />
-                      <MethodItem title="What to do" content="Define one consistent behavior." />
-                      <MethodItem title="Definition — What to do" content="What to do is stabilizing visual behavior." />
-                      <MethodItem title="Bot application" content="Use the bot to detect inconsistency." />
-                      <MethodItem title="Definition — Bot application" content="Bot application is identifying unstable behavior." />
-                      <MethodItem title="Action step" content="Choose one behavior and repeat it." />
-                      <MethodItem title="Definition — Action step" content="An action step is one enforced behavior pattern." />
+                      <MethodItem title="What to do" content="Define one consistent behavior. What to do is stabilizing visual behavior." />
+                      <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect inconsistency. World Architect™ Bot application is identifying unstable behavior." />
+                      <MethodItem title="Action step" content="Choose one behavior and repeat it. An action step is one enforced behavior pattern." />
                    </div>
                 </div>
             </div>
@@ -3049,12 +2929,9 @@ function Phase4VisualBehavior({ data, onSave, onNavigate, isLocked, isDevMode, n
                 <MethodItem title="What this controls" content="Pace and energy." />
                 <MethodItem title="How to apply it" content="Keep behavior consistent across content." />
                 <MethodItem title="Failure point" content="If behavior shifts randomly, the world weakens." />
-                <MethodItem title="What to do" content="Define one consistent behavior." />
-                <MethodItem title="Definition — What to do" content="What to do is stabilizing visual behavior." />
-                <MethodItem title="Bot application" content="Use the bot to detect inconsistency." />
-                <MethodItem title="Definition — Bot application" content="Bot application is identifying unstable behavior." />
-                <MethodItem title="Action step" content="Choose one behavior and repeat it." />
-                <MethodItem title="Definition — Action step" content="An action step is one enforced behavior pattern." />
+                <MethodItem title="What to do" content="Define one consistent behavior. What to do is stabilizing visual behavior." />
+                <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect inconsistency. World Architect™ Bot application is identifying unstable behavior." />
+                <MethodItem title="Action step" content="Choose one behavior and repeat it. An action step is one enforced behavior pattern." />
               </div>
             </div>
 
@@ -3232,12 +3109,9 @@ function Phase5PatternSystem({ data, onSave, onNavigate, isLocked, isDevMode, na
            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
               <MethodItem title="What this controls" content="Recognition. Repetition teaches the audience how to read the world." />
               <MethodItem title="Failure point" content="If repetition is avoided, nothing becomes memorable." />
-              <MethodItem title="What to do" content="Repeat exactly." />
-              <MethodItem title="Definition — What to do" content="What to do is reinforcing pattern recognition." />
-              <MethodItem title="Bot application" content="Use the bot to detect broken patterns." />
-              <MethodItem title="Definition — Bot application" content="Bot application is identifying inconsistency and forcing repetition." />
-              <MethodItem title="Action step" content="Repeat one pattern 3 times." />
-              <MethodItem title="Definition — Action step" content="An action step is one enforced repetition." />
+              <MethodItem title="What to do" content="Repeat exactly. What to do is reinforcing pattern recognition." />
+              <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect broken patterns. World Architect™ Bot application is identifying inconsistency and forcing repetition." />
+              <MethodItem title="Action step" content="Repeat one pattern 3 times. An action step is one enforced repetition." />
            </div>
         </div>
 
@@ -3536,12 +3410,9 @@ function Phase6NarrativeEngine({ data, onSave, onNavigate, isLocked, isDevMode, 
            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
               <MethodItem title="What this controls" content="This controls how your system stays relevant and avoids stale repetition." />
               <MethodItem title="Failure point" content="If nothing evolves, the world feels dead or static." />
-              <MethodItem title="What to do" content="Layer new progression." />
-              <MethodItem title="Definition — What to do" content="What to do is adding new logic on top of old patterns." />
-              <MethodItem title="Bot application" content="Use the bot to detect stagnation." />
-              <MethodItem title="Definition — Bot application" content="Bot application is identifying zero-growth states." />
-              <MethodItem title="Action step" content="Define one evolution." />
-              <MethodItem title="Definition — Action step" content="An action step is one enforced evolution choice." />
+              <MethodItem title="What to do" content="Layer new progression. What to do is adding new logic on top of old patterns." />
+              <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect stagnation. World Architect™ Bot application is identifying zero-growth states." />
+              <MethodItem title="Action step" content="Define one evolution. An action step is one enforced evolution choice." />
            </div>
         </div>
 
@@ -3598,7 +3469,7 @@ function Phase6NarrativeEngine({ data, onSave, onNavigate, isLocked, isDevMode, 
                             <MethodItem title="How to apply it" content={opt.apply} />
                             <MethodItem title="Failure point" content={opt.failure} />
                             <MethodItem title="What to do" content={opt.todo} />
-                             <MethodItem title="Bot application" content="Identifies stagnation and forces evolution/progression." />
+                             <MethodItem title="World Architect™ Bot application" content="Identifies stagnation and forces evolution/progression." />
                           </div>
                           
                           <BuildInput
@@ -3636,12 +3507,9 @@ function Phase6NarrativeEngine({ data, onSave, onNavigate, isLocked, isDevMode, 
            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
               <MethodItem title="What this controls" content="This controls audience immersion and prevents flat explanation." />
               <MethodItem title="Failure point" content="If explained instead of revealed, the world loses mystery." />
-              <MethodItem title="What to do" content="Reveal, don't intro." />
-              <MethodItem title="Definition — What to do" content="What to do is presenting the world as already existing." />
-              <MethodItem title="Bot application" content="Use the bot to detect 'Intro-speak.'" />
-              <MethodItem title="Definition — Bot application" content="Bot application is identifying forced explanation." />
-              <MethodItem title="Action step" content="Write one reveal-focused caption." />
-              <MethodItem title="Definition — Action step" content="An action step is one enforced reveal choice." />
+              <MethodItem title="What to do" content="Reveal, don't intro. What to do is presenting the world as already existing." />
+              <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect 'Intro-speak.'. World Architect™ Bot application is identifying forced explanation." />
+              <MethodItem title="Action step" content="Write one reveal-focused caption. An action step is one enforced reveal choice." />
            </div>
         </div>
 
@@ -3672,12 +3540,9 @@ function Phase6NarrativeEngine({ data, onSave, onNavigate, isLocked, isDevMode, 
            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
               <MethodItem title="What this controls" content="This controls system continuity." />
               <MethodItem title="Failure point" content="If posts reset every time, there is no system." />
-              <MethodItem title="What to do" content="Link every post." />
-              <MethodItem title="Definition — What to do" content="What to do is enforcing logical continuation." />
-              <MethodItem title="Bot application" content="Use the bot to detect 'Resetting' logic." />
-              <MethodItem title="Definition — Bot application" content="Bot application is identifying lack of connection." />
-              <MethodItem title="Action step" content="Define three connection points." />
-              <MethodItem title="Definition — Action step" content="An action step is one enforced connection choice." />
+              <MethodItem title="What to do" content="Link every post. What to do is enforcing logical continuation." />
+              <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect 'Resetting' logic. World Architect™ Bot application is identifying lack of connection." />
+              <MethodItem title="Action step" content="Define three connection points. An action step is one enforced connection choice." />
            </div>
         </div>
 
@@ -3905,12 +3770,9 @@ function Phase7SystemStructure({ data, onSave, onNavigate, isLocked, isDevMode, 
                       <MethodItem title="Failure point" content="Without mirror, people don’t see themselves in the content." />
                     </div>
                     <div className="space-y-4">
-                      <MethodItem title="What to do" content="Start with something familiar to the audience." />
-                      <MethodItem title="Definition — What to do" content="What to do is anchoring content in recognizable experience." />
-                      <MethodItem title="Bot application" content="Use the bot to detect lack of relatability." />
-                      <MethodItem title="Definition — Bot application" content="Bot application is identifying missing connection and forcing relatability." />
-                      <MethodItem title="Action step" content="Write one line your audience instantly recognizes." />
-                      <MethodItem title="Definition — Action step" content="An action step is one enforced connection point." />
+                      <MethodItem title="What to do" content="Start with something familiar to the audience. What to do is anchoring content in recognizable experience." />
+                      <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect lack of relatability. World Architect™ Bot application is identifying missing connection and forcing relatability." />
+                      <MethodItem title="Action step" content="Write one line your audience instantly recognizes. An action step is one enforced connection point." />
                     </div>
                   </div>
 
@@ -3990,12 +3852,9 @@ function Phase7SystemStructure({ data, onSave, onNavigate, isLocked, isDevMode, 
                       <MethodItem title="Failure point" content="Without reveal, the content feels flat." />
                     </div>
                     <div className="space-y-4">
-                      <MethodItem title="What to do" content="Introduce a new perspective or shift." />
-                      <MethodItem title="Definition — What to do" content="What to do is creating movement through insight." />
-                      <MethodItem title="Bot application" content="Use the bot to detect flat or predictable content." />
-                      <MethodItem title="Definition — Bot application" content="Bot application is identifying lack of depth and forcing change." />
-                      <MethodItem title="Action step" content="Add one unexpected insight." />
-                      <MethodItem title="Definition — Action step" content="An action step is one enforced shift that creates intrigue." />
+                      <MethodItem title="What to do" content="Introduce a new perspective or shift. What to do is creating movement through insight." />
+                      <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect flat or predictable content. World Architect™ Bot application is identifying lack of depth and forcing change." />
+                      <MethodItem title="Action step" content="Add one unexpected insight. An action step is one enforced shift that creates intrigue." />
                     </div>
                   </div>
 
@@ -4075,12 +3934,9 @@ function Phase7SystemStructure({ data, onSave, onNavigate, isLocked, isDevMode, 
                       <MethodItem title="Failure point" content="Without system, the content feels interesting but empty." />
                     </div>
                     <div className="space-y-4">
-                      <MethodItem title="What to do" content="Explain the pattern behind the insight." />
-                      <MethodItem title="Definition — What to do" content="What to do is turning insight into structure." />
-                      <MethodItem title="Bot application" content="Use the bot to detect missing explanation." />
-                      <MethodItem title="Definition — Bot application" content="Bot application is identifying lack of structure and forcing clarity." />
-                      <MethodItem title="Action step" content="State one pattern or rule behind your content." />
-                      <MethodItem title="Definition — Action step" content="An action step is one enforced explanation that builds authority." />
+                      <MethodItem title="What to do" content="Explain the pattern behind the insight. What to do is turning insight into structure." />
+                      <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect missing explanation. World Architect™ Bot application is identifying lack of structure and forcing clarity." />
+                      <MethodItem title="Action step" content="State one pattern or rule behind your content. An action step is one enforced explanation that builds authority." />
                     </div>
                   </div>
 
@@ -4408,10 +4264,8 @@ function Phase8CreationLoop({ data, onSave, onNavigate, isLocked, isDevMode, nav
                               <MethodItem title="Failure point" content="Without definition, output becomes random." />
                            </div>
                            <div className="space-y-4">
-                              <MethodItem title="What to do" content="Define direction before creating." />
-                              <MethodItem title="Definition — What to do" content="Establishing clarity before execution." />
-                              <MethodItem title="Bot application" content="Use the bot to detect when this step is weak, skipped, or misaligned." />
-                              <MethodItem title="Definition — Bot application" content="Bot application is identifying breakdown in the creation loop and forcing correction before moving forward." />
+                              <MethodItem title="What to do" content="Define direction before creating. Establishing clarity before execution." />
+                              <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect when this step is weak, skipped, or misaligned. World Architect™ Bot application is identifying breakdown in the creation loop and forcing correction before moving forward." />
                               <MethodItem title="Action step" content="Write one clear intention before creating." />
                            </div>
                         </div>
@@ -4469,10 +4323,8 @@ function Phase8CreationLoop({ data, onSave, onNavigate, isLocked, isDevMode, nav
                               <MethodItem title="Failure point" content="Consistency breaks if creation ignores system." />
                            </div>
                            <div className="space-y-4">
-                              <MethodItem title="What to do" content="Create based on system rules." />
-                              <MethodItem title="Definition — What to do" content="Executing within structure." />
-                              <MethodItem title="Bot application" content="Use the bot to detect when this step is weak, skipped, or misaligned." />
-                              <MethodItem title="Definition — Bot application" content="Bot application is identifying breakdown in the creation loop and forcing correction before moving forward." />
+                              <MethodItem title="What to do" content="Create based on system rules. Executing within structure." />
+                              <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect when this step is weak, skipped, or misaligned. World Architect™ Bot application is identifying breakdown in the creation loop and forcing correction before moving forward." />
                               <MethodItem title="Action step" content="Create one piece using your rules." />
                            </div>
                         </div>
@@ -4529,10 +4381,8 @@ function Phase8CreationLoop({ data, onSave, onNavigate, isLocked, isDevMode, nav
                               <MethodItem title="Failure point" content="Without testing, weak content survives." />
                            </div>
                            <div className="space-y-4">
-                              <MethodItem title="What to do" content="Check alignment before posting." />
-                              <MethodItem title="Definition — What to do" content="Validating before publishing." />
-                              <MethodItem title="Bot application" content="Use the bot to detect when this step is weak, skipped, or misaligned." />
-                              <MethodItem title="Definition — Bot application" content="Bot application is identifying breakdown in the creation loop and forcing correction before moving forward." />
+                              <MethodItem title="What to do" content="Check alignment before posting. Validating before publishing." />
+                              <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect when this step is weak, skipped, or misaligned. World Architect™ Bot application is identifying breakdown in the creation loop and forcing correction before moving forward." />
                               <MethodItem title="Action step" content="Run content through system checklist." />
                            </div>
                         </div>
@@ -4605,10 +4455,8 @@ function Phase8CreationLoop({ data, onSave, onNavigate, isLocked, isDevMode, nav
                               <MethodItem title="Failure point" content="If refinement is skipped, the system never sharpens." />
                            </div>
                            <div className="space-y-4">
-                              <MethodItem title="What to do" content="Edit and remove weak elements." />
-                              <MethodItem title="Definition — What to do" content="Improving through removal and adjustment." />
-                              <MethodItem title="Bot application" content="Use the bot to detect when this step is weak, skipped, or misaligned." />
-                              <MethodItem title="Definition — Bot application" content="Bot application is identifying breakdown in the creation loop and forcing correction before moving forward." />
+                              <MethodItem title="What to do" content="Edit and remove weak elements. Improving through removal and adjustment." />
+                              <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect when this step is weak, skipped, or misaligned. World Architect™ Bot application is identifying breakdown in the creation loop and forcing correction before moving forward." />
                               <MethodItem title="Action step" content="Remove one weak part before posting." />
                            </div>
                         </div>
@@ -4828,9 +4676,8 @@ function Phase9ConversionSystem({ data, onSave, onNavigate, isLocked, isDevMode,
                             <MethodItem title="Failure point" content="If messaging is weak, attention does not convert." />
                           </div>
                           <div className="space-y-4">
-                            <MethodItem title="What to do" content="Clarify the message behind the content." />
-                            <MethodItem title="Definition — What to do" content="What to do is ensuring clear communication." />
-                            <MethodItem title="Bot application" content="Use the bot to detect unclear messaging." />
+                            <MethodItem title="What to do" content="Clarify the message behind the content. What to do is ensuring clear communication." />
+                            <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect unclear messaging." />
                             <MethodItem title="Action step" content="Write one clear message behind your post." />
                           </div>
                         </div>
@@ -4879,9 +4726,8 @@ function Phase9ConversionSystem({ data, onSave, onNavigate, isLocked, isDevMode,
                              <MethodItem title="Failure point" content="Without conversion, attention stays passive." />
                            </div>
                            <div className="space-y-4">
-                             <MethodItem title="What to do" content="Direct attention into action." />
-                             <MethodItem title="Definition — What to do" content="What to do is guiding movement." />
-                             <MethodItem title="Bot application" content="Use the bot to detect passive content." />
+                             <MethodItem title="What to do" content="Direct attention into action. What to do is guiding movement." />
+                             <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect passive content." />
                              <MethodItem title="Action step" content="Add one clear next step." />
                            </div>
                         </div>
@@ -4929,9 +4775,8 @@ function Phase9ConversionSystem({ data, onSave, onNavigate, isLocked, isDevMode,
                              <MethodItem title="Failure point" content="If structure changes, people get confused." />
                            </div>
                            <div className="space-y-4">
-                             <MethodItem title="What to do" content="Keep conversion flow consistent." />
-                             <MethodItem title="Definition — What to do" content="What to do is repeating the same path to action." />
-                             <MethodItem title="Bot application" content="Use the bot to detect inconsistency." />
+                             <MethodItem title="What to do" content="Keep conversion flow consistent. What to do is repeating the same path to action." />
+                             <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect inconsistency." />
                              <MethodItem title="Action step" content="Define one repeatable conversion flow." />
                            </div>
                         </div>
@@ -4979,9 +4824,8 @@ function Phase9ConversionSystem({ data, onSave, onNavigate, isLocked, isDevMode,
                              <MethodItem title="Failure point" content="If movement is unclear, people don’t progress." />
                            </div>
                            <div className="space-y-4">
-                             <MethodItem title="What to do" content="Guide audience step-by-step." />
-                             <MethodItem title="Definition — What to do" content="What to do is structuring progression." />
-                             <MethodItem title="Bot application" content="Use the bot to detect stagnation." />
+                             <MethodItem title="What to do" content="Guide audience step-by-step. What to do is structuring progression." />
+                             <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect stagnation." />
                              <MethodItem title="Action step" content="Define what step your content moves them into." />
                            </div>
                         </div>
@@ -5169,10 +5013,10 @@ function Phase10ControlSystem({ data, onSave, onNavigate, isLocked, isDevMode, n
       const result = await analyzeSystemInput(
         `PHASE 10: CONTROL SYSTEM - ${section.toUpperCase()}
          Input: ${input}
-         Context: Enforce collaborative co-creation boundaries between the bot and the app. Both are used together.
-         The bot assists with heavy-lifting, execution, and text-generation, while the app acts as the permanent structural memory.
-         For ROLE: Validate that the input acknowledges using both the bot (for help/ideas) and the app (for retaining the rules so the bot doesn't forget them in new chats).
-         For ACCESS: Validate that the user defines a rule to keep their app structure updated as they co-create with the bot.`
+         Context: Enforce collaborative co-creation boundaries between the World Architect™ Bot and the app. Both are used together.
+         The World Architect™ Bot assists with heavy-lifting, execution, and text-generation, while the app acts as the permanent structural memory.
+         For ROLE: Validate that the input acknowledges using both the World Architect™ Bot (for help/ideas) and the app (for retaining the rules so the World Architect™ Bot doesn't forget them in new chats).
+         For ACCESS: Validate that the user defines a rule to keep their app structure updated as they co-create with the World Architect™ Bot.`
       );
 
       if (!result.passed) {
@@ -5228,14 +5072,13 @@ function Phase10ControlSystem({ data, onSave, onNavigate, isLocked, isDevMode, n
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                           <div className="space-y-4">
                             <MethodItem title="What this controls" content="This controls long-term system protection." />
-                            <MethodItem title="How to apply it" content="Use the bot to challenge your design and expand concepts, while using the app to lock in the final rules." />
-                            <MethodItem title="Failure point" content="If you rely completely on the bot without writing your rules in the app, the bot will forget them in new chats." />
+                            <MethodItem title="How to apply it" content="Use the World Architect™ Bot to challenge your design and expand concepts, while using the app to lock in the final rules." />
+                            <MethodItem title="Failure point" content="If you rely completely on the World Architect™ Bot without writing your rules in the app, the World Architect™ Bot will forget them in new chats." />
                           </div>
                           <div className="space-y-4">
-                            <MethodItem title="What to do" content="Use the bot to help you write and brainstorm, but save the results in the app." />
-                            <MethodItem title="Definition — What to do" content="What to do is creating a shared alliance where the bot provides speed and the app provides permanent memory." />
-                            <MethodItem title="Bot application" content="Use the bot as an active design assistant and enforcement system." />
-                            <MethodItem title="Action step" content="Enlist the bot to expand on your ideas and help you fill out the app sections with high quality." />
+                            <MethodItem title="What to do" content="Use the World Architect™ Bot to help you write and brainstorm, but save the results in the app. What to do is creating a shared alliance where the World Architect™ Bot provides speed and the app provides permanent memory." />
+                            <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot as an active design assistant and enforcement system." />
+                            <MethodItem title="Action step" content="Enlist the World Architect™ Bot to expand on your ideas and help you fill out the app sections with high quality." />
                           </div>
                         </div>
                         <div className="space-y-4">
@@ -5249,7 +5092,7 @@ function Phase10ControlSystem({ data, onSave, onNavigate, isLocked, isDevMode, n
                            </div>
                            <BuildInput
                              label="Define Bot Role Enforcement"
-                             description="How will you ensure the bot enforces boundaries instead of replacing your thinking?"
+                             description="How will you ensure the World Architect™ Bot enforces boundaries instead of replacing your thinking?"
                              value={form.botRole}
                              mode={navMode}
                              onChange={(val) => {
@@ -5285,21 +5128,20 @@ function Phase10ControlSystem({ data, onSave, onNavigate, isLocked, isDevMode, n
                      <div className="p-8 space-y-8">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                           <div className="space-y-4">
-                            <MethodItem title="What this controls" content="This controls how the bot and the app work side-by-side without data loss." />
-                            <MethodItem title="How to apply it" content="Use the bot to design or draft, and use the app to lock in definitions so they are preserved." />
-                            <MethodItem title="Failure point" content="If you only use the bot without the app, the bot will eventually forget or mix up your rules in new chats." />
+                            <MethodItem title="What this controls" content="This controls how the World Architect™ Bot and the app work side-by-side without data loss." />
+                            <MethodItem title="How to apply it" content="Use the World Architect™ Bot to design or draft, and use the app to lock in definitions so they are preserved." />
+                            <MethodItem title="Failure point" content="If you only use the World Architect™ Bot without the app, the World Architect™ Bot will eventually forget or mix up your rules in new chats." />
                           </div>
                           <div className="space-y-4">
-                            <MethodItem title="What to do" content="Treat the app as the stable brain/memory database for the bot, saving your system here." />
-                            <MethodItem title="Definition — What to do" content="What to do is updating the app whenever you refine rules with the bot so there is a permanent record." />
-                            <MethodItem title="Bot application" content="Use the bot to iterate and assist you, then record findings safely." />
+                            <MethodItem title="What to do" content="Treat the app as the stable brain/memory database for the World Architect™ Bot, saving your system here. What to do is updating the app whenever you refine rules with the World Architect™ Bot so there is a permanent record." />
+                            <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to iterate and assist you, then record findings safely." />
                             <MethodItem title="Action step" content="Define your rules and keep them synced between bot interactions and app forms." />
                           </div>
                         </div>
                         <div className="space-y-4">
                            <BuildInput
                              label="Define Access Boundary"
-                             description="Define when and how you will grant yourself access to the bot."
+                             description="Define when and how you will grant yourself access to the World Architect™ Bot."
                              value={form.botAccess}
                              mode={navMode}
                              onChange={(val) => {
@@ -5333,9 +5175,9 @@ function Phase10ControlSystem({ data, onSave, onNavigate, isLocked, isDevMode, n
           <div className="space-y-12 animate-in zoom-in duration-700">
              <div className="p-8 bg-ww-cyan/5 border border-ww-cyan/20 space-y-4">
                 <span className="text-[10px] font-black tracking-[4px] text-ww-cyan uppercase italic">BOT & APP CO-CREATION ALLIANCE</span>
-                <p className="enforcement-text mt-4">The bot and the app are design allies. Use the bot to help you brainstorm and write, and use the app to lock in the final structure so the bot never forgets your rules in new chats.</p>
+                <p className="enforcement-text mt-4">The World Architect™ Bot and the app are design allies. Use the World Architect™ Bot to help you brainstorm and write, and use the app to lock in the final structure so the World Architect™ Bot never forgets your rules in new chats.</p>
                 <div className="flex flex-col items-center gap-2 text-[10px] font-bold text-white/40 italic">
-                  <span>• THE BOT IS YOUR HIGH-SPEED ASSISTANT</span>
+                  <span>• THE WORLD ARCHITECT™ BOT IS YOUR HIGH-SPEED ASSISTANT</span>
                   <span>• THE APP IS YOUR PERMANENT STRUCTURAL MEMORY</span>
                   <span>• SAVING YOUR SYSTEM HERE KEEPS FUTURE BOT CHATS CRISTALLINE</span>
                   <span>• KEEP BOTH UPDATED TO AVOID LOSS OF SYSTEM PERSISTENCE</span>
@@ -5343,7 +5185,7 @@ function Phase10ControlSystem({ data, onSave, onNavigate, isLocked, isDevMode, n
              </div>
 
              <div className="space-y-6">
-               <p className="text-[10px] font-black tracking-[3px] text-ww-cyan uppercase italic">CO-CREATION PROTOCOL: "THE BOT DEVELOPS, THE APP PRESERVES INDEFINITELY."</p>
+               <p className="text-[10px] font-black tracking-[3px] text-ww-cyan uppercase italic">CO-CREATION PROTOCOL: "THE WORLD ARCHITECT™ BOT DEVELOPS, THE APP PRESERVES INDEFINITELY."</p>
                <div className="p-4 bg-ww-cyan/5 border border-ww-cyan/10 max-w-xl mx-auto">
                  <p className="text-[9px] font-black text-ww-yellow italic uppercase">System Safeguard: "Use both together to protect your creative identity against chat history expiration."</p>
                </div>
@@ -5779,15 +5621,12 @@ function RefineLoopBlock() {
         <MethodItem title="What this controls" content="This controls long-term system evolution." />
         <MethodItem title="How to apply it" content="Return to earlier phases and refine what you already built." />
         <MethodItem title="Failure point" content="If you never revisit your system, it becomes static." />
-        <MethodItem title="What to do" content="Re-enter the system and refine weak areas." />
+        <MethodItem title="What to do" content="Re-enter the system and refine weak areas. What to do is repeating the system to strengthen it over time." />
       </div>
 
       <div className="p-8 bg-white/2 border border-white/10 space-y-6">
-        <MethodItem title="Definition — What to do" content="What to do is repeating the system to strengthen it over time." />
-        <MethodItem title="Bot application" content="Use the bot to detect what needs refinement." />
-        <MethodItem title="Definition — Bot application" content="Bot application is identifying weaknesses and forcing iteration." />
-        <MethodItem title="Action step" content="Return to one previous phase and improve it." />
-        <MethodItem title="Definition — Action step" content="An action step is one enforced iteration that strengthens the system." />
+        <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect what needs refinement. World Architect™ Bot application is identifying weaknesses and forcing iteration." />
+        <MethodItem title="Action step" content="Return to one previous phase and improve it. An action step is one enforced iteration that strengthens the system." />
       </div>
 
       <div className="text-center space-y-8 pt-8 border-t border-white/5">

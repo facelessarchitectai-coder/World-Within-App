@@ -340,12 +340,12 @@ export default function Engine({ onBackToLanding, user }: { onBackToLanding: () 
                   <div className="p-4 border border-white/5 bg-white/2 flex items-center gap-4">
                     <span className="text-ww-pink-rose min-w-[50px] shrink-0 font-black">2. DEFINE</span>
                     <span className="text-white/20">→</span>
-                    <span className="opacity-40 italic">Use the bot & app together to design</span>
+                    <span className="opacity-40 italic">Use the World Architect™ Bot & app together to design</span>
                   </div>
                   <div className="p-4 border border-white/5 bg-white/2 flex items-center gap-4">
                     <span className="text-ww-yellow min-w-[50px] shrink-0 font-black">3. RETAIN</span>
                     <span className="text-white/20">→</span>
-                    <span className="opacity-40 italic">Save rules in the app so the bot doesn't forget them</span>
+                    <span className="opacity-40 italic">Save rules in the app so the World Architect™ Bot doesn't forget them</span>
                   </div>
                 </div>
                 <div className="text-white/20 font-mono tracking-widest leading-none">━━━━━━━━━━━━━━━━━━━</div>
