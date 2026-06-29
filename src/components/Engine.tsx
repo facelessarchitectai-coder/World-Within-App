@@ -160,7 +160,7 @@ export default function Engine({ onBackToLanding, user }: { onBackToLanding: () 
   }
 
   return (
-    <div className="h-screen w-screen flex flex-col md:flex-row overflow-hidden relative bg-ww-gray-bg">
+    <div className="h-screen w-screen flex flex-col md:flex-row overflow-hidden relative bg-transparent">
       {isDevMode && (
         <div className="absolute top-0 left-0 right-0 z-[100] bg-ww-cyan text-ww-charcoal text-[10px] font-black tracking-[4px] py-2 text-center uppercase pointer-events-none">
           BUILDER MODE ACTIVE — TESTING ONLY — NO DATA SAVED
@@ -269,7 +269,7 @@ export default function Engine({ onBackToLanding, user }: { onBackToLanding: () 
       {/* Desktop Sidebar (Optional, maybe we just use the overlay for both now for consistent UI) */}
       {/* Hidden for now to favor the new Phase Menu dropdown pattern */}
       
-      <main className="flex-1 overflow-y-auto relative scroll-smooth flex flex-col bg-ww-gray-bg mt-14">
+      <main className="flex-1 overflow-y-auto relative scroll-smooth flex flex-col bg-transparent mt-14">
         <div className="w-full max-w-4xl mx-auto px-5 py-8 md:p-20 relative z-10 flex-1">
           {localViewPhase <= 3 && (
             <div className="mb-20 space-y-16 animate-in fade-in slide-in-from-top-6 duration-1000">

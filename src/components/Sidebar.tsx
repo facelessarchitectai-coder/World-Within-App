@@ -15,7 +15,7 @@ interface SidebarProps {
 export default function Sidebar({ currentPhase, activePhase, onSelect, isMobile, isDevMode, navMode, onClose }: SidebarProps) {
   return (
     <aside className={cn(
-      "bg-ww-sidebar-bg flex flex-col shrink-0 h-full border-r border-white/5 py-10 w-full",
+      "bg-ww-sidebar-bg/95 backdrop-blur-md flex flex-col shrink-0 h-full border-r border-white/5 py-10 w-full",
     )}>
       <div className="px-8 mb-8 flex items-center justify-between">
         <div>

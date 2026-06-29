@@ -50,9 +50,9 @@ export default function Landing({ onInitialize, initialUser }: { onInitialize: (
   };
 
   return (
-    <div className="h-screen w-screen flex bg-ww-charcoal min-h-[600px]">
+    <div className="h-screen w-screen flex bg-transparent min-h-[600px]">
       {/* Sidebar Mockup for Landing Page consistent with requested Design HTML */}
-      <div className="w-[280px] bg-ww-sidebar-bg border-r border-[#444] hidden md:flex flex-col py-[30px] shrink-0">
+      <div className="w-[280px] bg-ww-sidebar-bg/85 backdrop-blur-md border-r border-white/10 hidden md:flex flex-col py-[30px] shrink-0">
         <div className="px-[30px] mb-[40px] font-extrabold tracking-[2px] text-white text-[1.2rem]">WW_ENGINE</div>
         <div className="flex flex-col gap-1">
           <div className="flex items-center px-[30px] py-[12px] text-[0.85rem] font-medium text-ww-pink-extra-light bg-ww-active-bg border-r-[3px] border-ww-pink-rose uppercase">
@@ -68,7 +68,7 @@ export default function Landing({ onInitialize, initialUser }: { onInitialize: (
         </div>
       </div>
 
-      <main className="flex-1 bg-ww-gray-bg relative p-10 md:px-20 flex flex-col justify-center overflow-hidden">
+      <main className="flex-1 bg-transparent relative p-10 md:px-20 flex flex-col justify-center overflow-hidden">
         
         <motion.div
           initial={{ opacity: 0, x: -20 }}
