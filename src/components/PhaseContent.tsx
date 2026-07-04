@@ -2363,7 +2363,18 @@ function Phase3Visual({ data, onSave, onNavigate, isLocked, isDevMode, navMode }
             </div>
 
             <div className="space-y-8">
-               <MethodItem title="Save Images" content="Gather visuals that match direction. Failure: if everything gets saved, pattern extraction becomes impossible." />
+               <h4 className="text-xl font-black italic tracking-tighter">Save Images</h4>
+               <p className="text-xs text-white/50 leading-relaxed font-medium normal-case">
+                 When you find a pin you like — even one you’re not sure you’ll use — save it. Then scroll below that pin to see related images Pinterest surfaces. Save what else fits, even loosely. Don’t be too selective at this stage. You can edit, change, or remove images later once you’re grouping and refining.
+               </p>
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 pt-2">
+                 <MethodItem title="What this controls" content="This controls source material." />
+                 <MethodItem title="How to apply it" content="Save images that align with your direction, and follow each one down to related pins instead of stopping at a single save. Cast a slightly wider net here — refinement happens later." />
+                 <MethodItem title="Failure point" content="If you’re too selective too early, you lose potential references before you’ve even seen what’s available. If everything gets saved with no filter at all, pattern extraction becomes impossible." />
+                 <MethodItem title="What to do" content="Save generously within your direction, then narrow later during grouping and outlier removal." />
+                 <MethodItem title="World Architect™ Bot application" content="Use the World Architect™ Bot to detect when collection is too narrow (nothing to work with) or too wide (no direction at all) and force it back toward alignment." />
+                 <MethodItem title="Action step" content="Take one pin you saved and scroll below it — save 2–3 related images you wouldn’t have found otherwise." />
+               </div>
                <BuildInput
                 label="Confirm saved images match direction"
                 value={form.referenceCollection.savedImages}
