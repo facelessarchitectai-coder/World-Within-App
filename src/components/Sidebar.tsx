@@ -1,6 +1,7 @@
 import { PHASES } from '../types';
 import { cn } from '../lib/utils';
 import { Lock, X, CheckCircle2, ChevronRight } from 'lucide-react';
+import ApiKeyPanel from './ApiKeyPanel';
 
 interface SidebarProps {
   currentPhase: number;
@@ -85,6 +86,8 @@ export default function Sidebar({ currentPhase, activePhase, onSelect, isMobile,
           );
         })}
       </nav>
+
+      <ApiKeyPanel />
 
       <div className="px-8 pt-8 border-t border-white/5">
         <div className="flex items-center gap-2">
