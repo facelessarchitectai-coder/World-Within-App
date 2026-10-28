@@ -1,6 +1,17 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+const KEY_STORAGE = 'ww_gemini_api_key';
+
+export function getUserApiKey(): string {
+  try { return localStorage.getItem(KEY_STORAGE) || ''; } catch { return ''; }
+}
+
+export function setUserApiKey(key: string) {
+  try {
+    if (key.trim()) localStorage.setItem(KEY_STORAGE, key.trim());
+    else localStorage.removeItem(KEY_STORAGE);
+  } catch { /* storage unavailable */ }
+}
 
 export interface SystemAnalysisResult {
   passed: boolean;
@@ -20,7 +31,17 @@ export async function analyzeSystemInput(input: string): Promise<SystemAnalysisR
     };
   }
 
+  const apiKey = getUserApiKey();
+  if (!apiKey) {
+    return {
+      passed: false,
+      reasons: ["Add your free Gemini API key in the menu (Your Gemini Key) to run the AI check."],
+      vagueWordsFound: []
+    };
+  }
+
   try {
+    const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: `Analyze the following system construction input for vagueness, inconsistency, or dependency behavior.
