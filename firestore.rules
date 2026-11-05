@@ -1,7 +1,7 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Global Safety Net
+    // Global Safety Net (Default Deny)
     match /{document=**} {
       allow read, write: if false;
     }
@@ -11,18 +11,22 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    function isVerifiedUser() {
+      return isSignedIn() && (request.auth.token.email_verified == true || request.auth.token.firebase.sign_in_provider == 'google.com');
+    }
+
     function isOwner(userId) {
-      return request.auth != null && request.auth.uid == userId;
+      return isVerifiedUser() && request.auth.uid == userId;
     }
 
     function isValidId(id) {
-      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
     }
 
     function incoming() { return request.resource.data; }
     function existing() { return resource.data; }
 
-    function isValidUserSystem(data) {
+    function isValidSystemDoc(data) {
       return data.userId is string 
         && data.userId.size() <= 128
         && data.userId == request.auth.uid
@@ -30,17 +34,44 @@ service cloud.firestore {
         && data.currentPhase >= 0
         && data.currentPhase <= 13
         && (data.completed == null || data.completed is bool)
+        && (data.initialized == null || data.initialized is bool)
+        && (data.intentReviewed == null || data.intentReviewed is bool)
         && (data.introStart == null || data.introStart is bool)
         && (data.introBelief == null || data.introBelief is bool)
         && (data.intentLocked == null || data.intentLocked is bool)
-        && (data.intentType == null || data.intentType in ['expression', 'offer'])
-        // updatedAt must be a timestamp and specifically request.time
-        && data.updatedAt is timestamp;
+        && (data.intentType == null || data.intentType is string)
+        && (!('updatedAt' in data) || data.updatedAt is timestamp);
     }
 
-    // --- Collections ---
+    // Connection testing endpoint
+    match /test/{docId} {
+      allow get: if true;
+    }
+
+    // User System private workspaces
     match /systems/{systemId} {
-      allow read, write: if isOwner(systemId);
+      // Disallow list queries across systems collection to prevent cross-account scraping
+      allow list: if false;
+
+      // Allow get only if the authenticated user owns this specific system
+      allow get: if isValidId(systemId) && isOwner(systemId);
+
+      // Create only by verified owner for their own UID
+      allow create: if isValidId(systemId) 
+        && isOwner(systemId) 
+        && isValidSystemDoc(incoming())
+        && incoming().userId == systemId;
+
+      // Update only by verified owner with invariant userId and valid schema
+      allow update: if isValidId(systemId) 
+        && isOwner(systemId) 
+        && isValidSystemDoc(incoming())
+        && incoming().userId == existing().userId
+        && incoming().userId == request.auth.uid;
+
+      // Delete only by verified owner
+      allow delete: if isValidId(systemId) && isOwner(systemId);
     }
   }
 }
+

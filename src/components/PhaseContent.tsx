@@ -1,5 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { analyzeSystemInput } from '../services/gemini';
+import { reviewAnswer, AnswerReviewFeedback } from '../services/answerReview';
+import AnswerReviewCard from './AnswerReviewCard';
 import { cn } from '../lib/utils';
 import { Phase1Data, Phase2Data, Phase3Data, Phase4Data, Phase5Data, Phase6Data, Phase7Data, Phase8Data, Phase9Data, Phase10Data } from '../types';
 import { Loader2, AlertCircle, CheckCircle2, ChevronDown, ChevronUp, ChevronRight, Circle, XCircle, Lock } from 'lucide-react';
@@ -487,8 +489,9 @@ function PhaseInputs({ phaseIndex, data, onSave, isLocked, navMode }: { phaseInd
   const [form, setForm] = useState<any>(data[`phase${phaseIndex + 1}`] || {});
   const [analyzing, setAnalyzing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [reviewFeedback, setReviewFeedback] = useState<AnswerReviewFeedback | null>(null);
 
-  const isDisabled = isLocked || navMode === 'REVIEW';
+  const isDisabled = isLocked;
 
   const handleInputChange = (field: string, value: string) => {
     if (isDisabled) return;
@@ -501,21 +504,36 @@ function PhaseInputs({ phaseIndex, data, onSave, isLocked, navMode }: { phaseInd
     e.stopPropagation();
     setAnalyzing(true);
     setError(null);
+    setReviewFeedback(null);
 
     const values = Object.values(form);
     if (values.length < getPhaseFields(phaseIndex).length || values.some(v => !(v as string).trim())) {
-      setError("SYSTEM_REJECTION: All parameters must be defined.");
+      setReviewFeedback({
+        meetsRequirements: false,
+        issueCategory: 'missing_required',
+        whatNeedsAttention: "All parameters must be defined before advancing this protocol layer.",
+        directionToExplore: "Review each input field above and provide your specific definition.",
+        questionToHelpRevise: "Which parameter needs to be established first?"
+      });
       setAnalyzing(false);
       return;
     }
 
-    // AI Check for vibe/aesthetic/vague language
+    // World Within Method Answer Review
     const fullInput = values.join(" ");
-    const analysis = await analyzeSystemInput(fullInput);
+    const analysis = await analyzeSystemInput(fullInput, `Phase ${phaseIndex + 1}: ${getPhaseTitle(phaseIndex)}`);
     if (!analysis.passed) {
-      setError(`ENFORCEMENT_FAILURE: ${analysis.reasons[0]}`);
+      if (analysis.reviewFeedback) {
+        setReviewFeedback(analysis.reviewFeedback);
+      } else {
+        setError(`REVISION_REQUIRED: ${analysis.reasons[0]}`);
+      }
       setAnalyzing(false);
       return;
+    }
+
+    if (analysis.reviewFeedback) {
+      setReviewFeedback(analysis.reviewFeedback);
     }
 
     await onSave({ [`phase${phaseIndex + 1}`]: form });
@@ -562,7 +580,17 @@ function PhaseInputs({ phaseIndex, data, onSave, isLocked, navMode }: { phaseInd
         ))}
       </div>
 
-      {error && (
+      {reviewFeedback && (
+        <div className="max-w-2xl">
+          <AnswerReviewCard
+            feedback={reviewFeedback}
+            isLoading={analyzing}
+            onClose={() => setReviewFeedback(null)}
+          />
+        </div>
+      )}
+
+      {error && !reviewFeedback && (
         <div className="bg-ww-pink-deep/10 border border-ww-pink-deep/30 p-6 text-ww-pink-deep text-xs flex items-start gap-4 animate-in shake-1">
           <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
           <p className="font-black tracking-widest leading-relaxed uppercase">{error}</p>
@@ -1162,29 +1190,8 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
       return;
     }
 
-    // Custom validation for Section 1/Section 2
-    if (sectionId === 'identity' || sectionId === 'definition' || sectionId === 'emotional') {
-      const blockWords = ['vibe', 'aesthetic', 'unique', 'different', 'creative'];
-      const text = form[fields.find(f => typeof form[f] === 'string' && f !== 'identityType') || ''];
-      
-      const sentences = text.split(/[.!?]+/).filter((s: string) => s.trim().length > 0);
-      const hasBlockWords = blockWords.some(w => text.toLowerCase().includes(w));
-      
-      if (sentences.length < 2 && sectionId !== 'emotional') {
-        setSectionStatus(prev => ({ ...prev, [sectionId]: 'FAIL' }));
-        setValidating(false);
-        return;
-      }
-
-      if (hasBlockWords) {
-        setSectionStatus(prev => ({ ...prev, [sectionId]: 'FAIL' }));
-        setValidating(false);
-        return;
-      }
-    }
-
-    // AI Check
-    const result = await analyzeSystemInput(sectionData);
+    // World Within Method AI Review
+    const result = await analyzeSystemInput(sectionData, `Phase 1 ${sectionId} protocol`);
     setSectionStatus(prev => ({ ...prev, [sectionId]: result.passed ? 'PASS' : 'FAIL' }));
     setValidating(false);
   };
@@ -1346,20 +1353,14 @@ function Phase1Identity({ data, onSave, onNavigate, isLocked, isDevMode, navMode
 
         {form.identityType && (
           <div className="space-y-6 pt-6 animate-in fade-in slide-in-from-top-4">
-            <div className="space-y-4">
-              <label className="text-[10px] uppercase font-black tracking-widest text-ww-cyan/60">Define your identity based on this type</label>
-              <textarea
-                value={form.identityTypeDefinition}
-                onChange={(e) => setForm((prev: any) => ({ ...prev, identityTypeDefinition: e.target.value }))}
-                onBlur={() => validateSection('identity', ['identityType', 'identityTypeDefinition'])}
-                disabled={isLocked || !isBuildMode}
-                className={cn(
-                  "w-full bg-white/5 border border-white/10 p-6 text-white/90 font-medium focus:outline-none focus:border-ww-pink-rose transition-colors min-h-[120px]",
-                  (isLocked || !isBuildMode) && "opacity-50 border-white/5 cursor-default bg-white/1"
-                )}
-                placeholder={(isLocked || !isBuildMode) ? "" : "Write at least 2 sentences. Focus on behavior or structure. Avoid: vibe, aesthetic, unique..."}
-              />
-            </div>
+            <BuildInput
+              label="Define your identity based on this type"
+              description="Define how your character or presence embodies, rejects, and repeats behavior or structure."
+              value={form.identityTypeDefinition}
+              mode={navMode}
+              onChange={(val) => setForm((prev: any) => ({ ...prev, identityTypeDefinition: val }))}
+              onBlur={() => validateSection('identity', ['identityType', 'identityTypeDefinition'])}
+            />
           </div>
         )}
       </section>
@@ -1615,61 +1616,8 @@ function Phase2World({ data, onSave, onNavigate, isLocked, isDevMode, navMode }:
       return;
     }
 
-    // Custom validation
-    if (sectionId === 'direction' || sectionId === 'rules' || sectionId === 'environment') {
-       const blockWords = ['vibe', 'aesthetic', 'unique', 'different', 'creative', 'energy'];
-       
-       if (sectionId === 'environment') {
-         if (form.spaceTypes.length < 2 || form.spaceTypes.length > 3) {
-            setSectionStatus(prev => ({ ...prev, [sectionId]: 'FAIL' }));
-            setValidating(false);
-            return;
-         }
-         const tone = form.emotionalTone.trim();
-         // Check for one word (no spaces in middle)
-         if (tone === '' || tone.includes(' ') || tone.includes('\n') || blockWords.some(w => tone.toLowerCase().includes(w))) {
-            setSectionStatus(prev => ({ ...prev, [sectionId]: 'FAIL' }));
-            setValidating(false);
-            return;
-         }
-       }
-
-       if (sectionId === 'direction') {
-         const def = form.worldDirectionDefinition.trim();
-         const hasBlockWords = blockWords.some(w => def.toLowerCase().includes(w));
-         const sentences = def.split(/[.!?]+/).filter((s: string) => s.trim().length > 0);
-         if (sentences.length < 1 || hasBlockWords) {
-            setSectionStatus(prev => ({ ...prev, [sectionId]: 'FAIL' }));
-            setValidating(false);
-            return;
-         }
-       }
-
-       if (sectionId === 'rules') {
-         const fieldsToCheck = ['whatExists', 'whatNotBelong', 'whatRepeats', 'whatBreaks'];
-         for (const f of fieldsToCheck) {
-           const val = form[f].trim();
-           if (val === '' || blockWords.some(w => val.toLowerCase().includes(w))) {
-             setSectionStatus(prev => ({ ...prev, [sectionId]: 'FAIL' }));
-             setValidating(false);
-             return;
-           }
-
-           // Check for minimum items (3 for first two, 1 for others)
-           if (f === 'whatExists' || f === 'whatNotBelong') {
-             // Split by newlines, commas, or semicolons
-             const items = val.split(/[\n,;]+/).filter((i: string) => i.trim().length > 0);
-             if (items.length < 3) {
-                setSectionStatus(prev => ({ ...prev, [sectionId]: 'FAIL' }));
-                setValidating(false);
-                return;
-             }
-           }
-         }
-       }
-    }
-
-    const result = await analyzeSystemInput(sectionData);
+    // World Within Method AI Review
+    const result = await analyzeSystemInput(sectionData, `Phase 2 ${sectionId} protocol`);
     setSectionStatus(prev => ({ ...prev, [sectionId]: result.passed ? 'PASS' : 'FAIL' }));
     setValidating(false);
   };
@@ -2181,17 +2129,7 @@ function Phase3Visual({ data, onSave, onNavigate, isLocked, isDevMode, navMode }
       return;
     }
 
-    // Specialized check for direction (3 words)
-    if (sectionId === 'direction') {
-      const words = form.baseDirection.trim().split(/\s+/);
-      if (words.length < 3) {
-        setSectionStatus(prev => ({ ...prev, [sectionId]: 'FAIL' }));
-        setValidating(false);
-        return;
-      }
-    }
-
-    const result = await analyzeSystemInput(sectionData);
+    const result = await analyzeSystemInput(sectionData, `Phase 3 ${sectionId} protocol`);
     setSectionStatus(prev => ({ ...prev, [sectionId]: result.passed ? 'PASS' : 'FAIL' }));
     setValidating(false);
   };
@@ -3644,54 +3582,38 @@ function Phase7SystemStructure({ data, onSave, onNavigate, isLocked, isDevMode, 
 
     setSectionValidating(sectionId);
     setErrorMessage(null);
-    let sectionData = "";
-    let error = "";
 
-    const blockWords = ['vibe', 'energy', 'something', 'things'];
-
-    if (sectionId === 'mirror') {
-      const val = form.mirror.trim();
-      const sentences = val.split(/[.!?]+/).filter(s => s.trim().length > 0);
-      const hasBlockWords = blockWords.some(w => val.toLowerCase().includes(w));
-      
-      if (sentences.length < 1 || hasBlockWords || val.length < 10) {
-        error = "No audience connection. Anchor this in a real experience.";
-      }
-      sectionData = val;
-    }
-
-    if (sectionId === 'reveal') {
-      const val = form.reveal.trim();
-      if (!val || val.toLowerCase() === form.mirror.toLowerCase() || val.length < 10) {
-        error = "No shift detected. Add a new layer or insight.";
-      }
-      sectionData = val;
-    }
-
-    if (sectionId === 'system') {
-      const val = form.system.trim();
-      if (!val || blockWords.some(w => val.toLowerCase().includes(w)) || val.length < 10) {
-        error = "No structure detected. Define the rule behind your insight.";
-      }
-      sectionData = val;
-    }
-
-    if (error) {
+    const sectionData = form[sectionId]?.trim() || "";
+    if (!sectionData) {
       setSectionStatus(prev => ({ ...prev, [sectionId]: 'FAIL' }));
-      setErrorMessage(error);
+      setErrorMessage(`Please provide a definition for ${sectionId}.`);
       setSectionValidating(null);
       return;
     }
 
-    const prompt = `Phase 7 ${sectionId.toUpperCase()} Validation. Input: "${sectionData}". Rules: ${
-      sectionId === 'mirror' ? 'Must reference a real experience/feeling. Block generic/abstract phrasing.' :
-      sectionId === 'reveal' ? 'Must introduce NEW information or perspective. Must shift from the mirror.' :
-      'Must explain the pattern/rule behind the insight. Build authority.'
-    } Reject "vibe", "energy", "something", "things".`;
+    const questionLabels: Record<string, string> = {
+      mirror: 'Mirror (Audience Connection)',
+      reveal: 'Reveal (Perspective Shift)',
+      system: 'System (Pattern / Structural Rule)',
+    };
+    const questionPurposes: Record<string, string> = {
+      mirror: 'Ground the world in a real, recognizable audience experience or feeling without generic platitudes.',
+      reveal: 'Introduce a new perspective or unexpected insight that shifts understanding from the initial mirror.',
+      system: 'Explain the underlying rule, pattern, or mechanism behind the insight to establish authority.',
+    };
 
-    const result = await analyzeSystemInput(prompt);
-    setSectionStatus(prev => ({ ...prev, [sectionId]: result.passed ? 'PASS' : 'FAIL' }));
-    if (!result.passed) setErrorMessage(result.reasons.join(' ') || "Validation failed.");
+    const reviewRes = await reviewAnswer({
+      question: questionLabels[sectionId] || `Phase 7 ${sectionId}`,
+      purposeAndRequirements: questionPurposes[sectionId],
+      currentAnswer: sectionData,
+      earlierAnswersContext: `Mirror: "${form.mirror}"\nReveal: "${form.reveal}"\nSystem: "${form.system}"`,
+      phaseTitle: 'Phase 7: System Structure',
+    });
+
+    setSectionStatus(prev => ({ ...prev, [sectionId]: reviewRes.meetsRequirements ? 'PASS' : 'FAIL' }));
+    if (!reviewRes.meetsRequirements) {
+      setErrorMessage(`${reviewRes.whatNeedsAttention} ${reviewRes.directionToExplore}`);
+    }
     setSectionValidating(null);
   };
 
@@ -4578,26 +4500,24 @@ function Phase9ConversionSystem({ data, onSave, onNavigate, isLocked, isDevMode,
     try {
       if (sectionId === 'messaging') {
         const val = form.messaging.trim();
-        const blockWords = ['value', 'things', 'stuff'];
-        if (!val || blockWords.some(w => val.toLowerCase().includes(w))) {
-           result = { passed: false, reasons: ["Message unclear. Avoid vague words like 'value' or 'stuff'."] };
+        if (!val) {
+          result = { passed: false, reasons: ["Please enter your messaging definition."] };
         } else {
-           result = await analyzeSystemInput(`Phase 9 Messaging Validation. Input: "${val}". Rules: Must be clear and understandable without context. Detected vague words were partially blocked already but ensure deep clarity.`);
+          result = await analyzeSystemInput(val, "Phase 9 Messaging: clear and understandable communication without external context");
         }
       } else if (sectionId === 'conversion') {
         const val = form.conversion.trim();
-        const actions = ['reply', 'click', 'dm', 'buy', 'sign', 'comment', 'message'];
-        if (!val || !actions.some(a => val.toLowerCase().includes(a))) {
-          result = { passed: false, reasons: ["No clear action. Must include a clear direction (reply, click, DM, etc)."] };
+        if (!val) {
+          result = { passed: false, reasons: ["Please enter your conversion action definition."] };
         } else {
-          result = { passed: true, reasons: [] };
+          result = await analyzeSystemInput(val, "Phase 9 Conversion: clear direction or call to action for the audience");
         }
       } else if (sectionId === 'structure') {
         const val = form.structure.trim();
-        if (!val || val.length < 10) {
-          result = { passed: false, reasons: ["No clear flow. Steps must be repeatable."] };
+        if (!val) {
+          result = { passed: false, reasons: ["Please define your repeatable content flow."] };
         } else {
-          result = { passed: true, reasons: [] };
+          result = await analyzeSystemInput(val, "Phase 9 Content Structure: repeatable steps that deliver the offer naturally");
         }
       } else if (sectionId === 'movement') {
         if (!form.movement) {
@@ -4608,15 +4528,15 @@ function Phase9ConversionSystem({ data, onSave, onNavigate, isLocked, isDevMode,
       } else if (sectionId === 'dmFlow') {
         const { diagnose, segment, reframe, offer, close } = form.dmFlow;
         if (!diagnose || !segment || !reframe || !offer || !close) {
-          result = { passed: false, reasons: ["DM flow incomplete."] };
+          result = { passed: false, reasons: ["DM flow incomplete. All 5 steps (Diagnose, Segment, Reframe, Offer, Close) must be defined."] };
         } else {
-          const prompt = `Phase 9 DM Flow Validation. 
-          Step 1 Diagnose: ${diagnose} (Must go deeper than surface).
-          Step 2 Segment: ${segment} (Must classify person e.g. Artist, Entrepreneur, etc).
-          Step 3 Reframe: ${reframe} (Must introduce new perspective/shift).
-          Step 4 Offer: ${offer} (Must connect directly to the diagnosed problem).
-          Step 5 Close: ${close} (Must be direct and require a response).`;
-          result = await analyzeSystemInput(prompt);
+          const prompt = `Phase 9 DM Flow.
+          Step 1 Diagnose: ${diagnose}
+          Step 2 Segment: ${segment}
+          Step 3 Reframe: ${reframe}
+          Step 4 Offer: ${offer}
+          Step 5 Close: ${close}`;
+          result = await analyzeSystemInput(prompt, "Phase 9 DM Flow: 5-step conversational conversion journey");
         }
       }
 
@@ -5259,22 +5179,125 @@ function Phase10ControlSystem({ data, onSave, onNavigate, isLocked, isDevMode, n
 function BuildInput({ label, description, value, mode, onChange, onBlur }: { 
   label: string, description?: string, value: string, mode: 'REVIEW' | 'BUILD', onChange: (val: string) => void, onBlur?: () => void 
 }) {
-  const showDesc = mode === 'BUILD' && description;
+  const [feedback, setFeedback] = useState<AnswerReviewFeedback | null>(null);
+  const [isReviewing, setIsReviewing] = useState(false);
+  const lastReviewedValueRef = useRef<string | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const trimmedVal = (value || '').trim();
+  const hasReviewed = lastReviewedValueRef.current !== null;
+  const hasEditedSinceReview = hasReviewed && lastReviewedValueRef.current !== trimmedVal;
+
+  const handleReview = async () => {
+    if (!trimmedVal) {
+      setFeedback({
+        meetsRequirements: false,
+        issueCategory: 'missing_required',
+        whatNeedsAttention: `An answer is required for "${label}". This parameter anchors this step of your system.`,
+        directionToExplore: description || `Consider what specific boundary, behavior, or definition you want to establish here.`,
+        questionToHelpRevise: `What concrete decision best defines "${label}" in your world?`,
+      });
+      return;
+    }
+
+    setIsReviewing(true);
+    try {
+      const res = await reviewAnswer({
+        question: label,
+        purposeAndRequirements: description,
+        currentAnswer: trimmedVal,
+        previousAnswer: lastReviewedValueRef.current || undefined,
+      });
+      setFeedback(res);
+      lastReviewedValueRef.current = trimmedVal;
+    } catch (e) {
+      console.error("Answer review error:", e);
+    } finally {
+      setIsReviewing(false);
+    }
+  };
+
+  const showDesc = Boolean(description);
+
   return (
-    <div className="space-y-4 group">
-      <label className="text-[10px] uppercase font-black tracking-widest text-ww-cyan group-hover:text-ww-pink-rose transition-colors">{label}</label>
-      {showDesc && <p className="text-[9px] text-white/40 italic font-medium">{description}</p>}
+    <div className="space-y-3 group text-left">
+      <div className="flex items-center justify-between gap-2">
+        <label className="text-[10px] uppercase font-black tracking-widest text-ww-cyan group-hover:text-ww-pink-rose transition-colors">
+          {label}
+        </label>
+        {feedback && (
+          <span className={cn(
+            "text-[9px] font-mono tracking-widest px-2 py-0.5 uppercase",
+            feedback.meetsRequirements ? "text-ww-cyan bg-ww-cyan/10" : "text-amber-300 bg-amber-400/10"
+          )}>
+            {feedback.meetsRequirements ? '✔ Ready' : 'Revision needed'}
+          </span>
+        )}
+      </div>
+
+      {showDesc && <p className="text-[9px] text-white/50 italic font-medium leading-relaxed">{description}</p>}
+
       <textarea
-        value={value}
+        ref={textareaRef}
+        value={value || ''}
         onChange={(e) => onChange(e.target.value)}
         onBlur={onBlur}
-        disabled={mode === 'REVIEW'}
         className={cn(
-          "w-full bg-white/2 border border-white/10 p-6 text-white/80 font-medium focus:outline-none focus:border-ww-pink-rose transition-all resize-none min-h-[100px]",
-          mode === 'REVIEW' && "opacity-50 border-white/5 cursor-default bg-white/1"
+          "w-full bg-white/2 border border-white/10 p-5 md:p-6 text-white/90 font-medium focus:outline-none focus:border-ww-pink-rose transition-all resize-none min-h-[105px]",
         )}
-        placeholder={mode === 'REVIEW' ? "" : "Provide specific definition..."}
+        placeholder="Provide specific definition..."
       />
+
+      <div className="flex items-center justify-between gap-3 pt-1">
+        <button
+          type="button"
+          onClick={handleReview}
+          disabled={isReviewing || !trimmedVal}
+          className={cn(
+            "px-3 py-1.5 border text-[9px] font-black tracking-widest uppercase transition-all flex items-center gap-2 cursor-pointer",
+            isReviewing
+              ? "opacity-50 border-ww-cyan text-ww-cyan"
+              : hasEditedSinceReview
+              ? "bg-amber-400/15 border-amber-400/40 text-amber-300 hover:bg-amber-400/25"
+              : feedback?.meetsRequirements
+              ? "border-ww-cyan/30 text-ww-cyan hover:bg-ww-cyan/10"
+              : "border-white/20 text-white/70 hover:border-ww-cyan hover:text-ww-cyan hover:bg-ww-cyan/5"
+          )}
+        >
+          {isReviewing ? (
+            <>
+              <Loader2 className="w-3 h-3 animate-spin text-ww-cyan" />
+              <span>Reviewing Answer...</span>
+            </>
+          ) : hasEditedSinceReview ? (
+            <span>[ Review Revision ]</span>
+          ) : feedback ? (
+            <span>[ Re-Review Answer ]</span>
+          ) : (
+            <span>[ Review Answer ]</span>
+          )}
+        </button>
+
+        {feedback && !isReviewing && (
+          <button
+            type="button"
+            onClick={() => setFeedback(null)}
+            className="text-[9px] font-mono text-white/40 hover:text-white transition-colors cursor-pointer"
+          >
+            Hide Review
+          </button>
+        )}
+      </div>
+
+      {/* Answer Review Feedback Card */}
+      {feedback && (
+        <AnswerReviewCard
+          feedback={feedback}
+          isLoading={isReviewing}
+          onClose={() => setFeedback(null)}
+          onFocusInput={() => textareaRef.current?.focus()}
+        />
+      )}
     </div>
   );
 }

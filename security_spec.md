@@ -1,24 +1,23 @@
 # Security Specification: World Within Engine
 
 ## Data Invariants
-- A `system` document MUST have a `userId` that matches the document ID and the authenticated user's UID.
-- `currentPhase` must be between 0 and 10.
-- Phases can only be updated sequentially or stayed at current.
-- Once a system is `completed`, certain fields might become immutable (though we allow re-auditing in this app).
+1. A `system` document MUST have a `userId` that strictly matches the document ID (`systemId`) and `request.auth.uid`.
+2. The authenticated user must be a verified Google user (`request.auth.token.email_verified == true || provider == 'google.com'`).
+3. Cross-user reading is prohibited: User A cannot read, list, update, or delete User B's document.
+4. List queries across `/systems` are disabled (`allow list: if false;`), eliminating enumeration and data leakage.
+5. Invariant fields: During updates, `incoming().userId == existing().userId` ensures the owner UID cannot be modified or hijacked.
+6. Server timestamps: `updatedAt` is validated as a timestamp.
 
 ## The "Dirty Dozen" Payloads (Target: /systems/{uid})
-1. **Identity Spoofing**: Create a system with `userId` of another user.
-2. **Phase Skipping**: Create a system with `currentPhase: 5`.
-3. **Unauthorized Read**: Get another user's system document.
-4. **ID Poisoning**: Use a 1MB string as a document ID.
-5. **Ghost Fields**: Update a system with a `isAdmin: true` field.
-6. **Malicious Update**: Change the `userId` in an existing document.
-7. **Negative Phase**: Set `currentPhase` to -1.
-8. **Invalid Phase Data**: Set `phase1` to a string instead of an object.
-9. **Creation Timing Attack**: Set `createdAt` to a future timestamp.
-10. **State Corruption**: Set `completed` to true without finishing all phases (complex to enforce in rules without checking all phases, but we can check if it's the last phase).
-11. **Shadow Write**: Batch write a system document and another sensitive document.
-12. **Mass Query Scrape**: List all systems without filtering by `userId`.
-
-## Test Runner
-Wait, I don't have a test runner environment setup to run `firestore.rules.test.ts` easily here, but I will write the rules following the patterns that pass these tests.
+1. **Identity Spoofing**: Create a system with `userId: "attacker"` under `/systems/victim`. Blocked by `incoming().userId == request.auth.uid` and `incoming().userId == systemId`.
+2. **Phase Injection**: Create a system with negative phase `currentPhase: -5` or invalid type. Blocked by `data.currentPhase >= 0 && data.currentPhase <= 13`.
+3. **Cross-Tenant Read**: User A executes `getDoc(doc(db, 'systems', userB_uid))`. Blocked by `isOwner(systemId)`.
+4. **ID Poisoning Attack**: Passing a 1MB junk document ID. Blocked by `isValidId(systemId)` with `.size() <= 128` and regex check.
+5. **Collection Scraping**: User runs `getDocs(collection(db, 'systems'))`. Blocked by `allow list: if false;`.
+6. **Owner Hijacking**: User updates an existing record trying to change `userId` to another user. Blocked by `incoming().userId == existing().userId`.
+7. **Unverified Account Write**: Attempting write without email verification. Blocked by `isVerifiedUser()`.
+8. **Malicious Delete**: User A attempts `deleteDoc(doc(db, 'systems', userB_uid))`. Blocked by `isOwner(systemId)`.
+9. **Unauthenticated Access**: Guest client calls Firestore before login. Blocked by default deny and `isSignedIn()` check.
+10. **Global Safety Net Bypass**: Accessing undefined collections like `/admin`, `/secrets`. Blocked by catch-all `match /{document=**} { allow read, write: if false; }`.
+11. **Type Tampering**: Sending boolean or array for integer `currentPhase`. Blocked by `data.currentPhase is int`.
+12. **Zombie Write After Sign-Out**: In-flight update sent after auth token invalidation. Rejected by rules as `request.auth` is null.

@@ -1,56 +1,77 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { loginAnonymously } from '../services/firebase';
-import { cn } from '../lib/utils';
 import { User } from 'firebase/auth';
 import { Loader2 } from 'lucide-react';
+import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { db, handleFirestoreError, OperationType } from '../services/firebase';
+import AccountMenu from './AccountMenu';
 
-export default function Landing({ onInitialize, initialUser }: { onInitialize: () => void, initialUser: User | null }) {
-  const [isAuthenticating, setIsAuthenticating] = useState(false);
+interface LandingProps {
+  onInitialize: () => void;
+  user: User;
+  onSignOut: () => Promise<void>;
+  onUpdateKey?: () => void;
+}
 
-  const handleInitialize = () => {
-    // Immediate transition as requested (flip state first)
-    onInitialize();
+export default function Landing({ onInitialize, user, onSignOut, onUpdateKey }: LandingProps) {
+  const [isInitializing, setIsInitializing] = useState(false);
+  const [initError, setInitError] = useState<string | null>(null);
 
-    // Trigger background synchronization without blocking the UI transition
-    (async () => {
+  const handleInitialize = async () => {
+    try {
+      setIsInitializing(true);
+      setInitError(null);
+
+      const docRef = doc(db, 'systems', user.uid);
+      let docSnap;
       try {
-        let user = initialUser;
-        if (!user) {
-          user = await loginAnonymously();
-        }
-        
-        if (user) {
-          // Sync state in background
-          const { doc, getDoc, setDoc, updateDoc, serverTimestamp } = await import('firebase/firestore');
-          const { db } = await import('../services/firebase');
-          const docRef = doc(db, 'systems', user.uid);
-          
-          const docSnap = await getDoc(docRef);
-
-          if (!docSnap.exists()) {
-            await setDoc(docRef, {
-              userId: user.uid,
-              currentPhase: 0,
-              completed: false,
-              initialized: true,
-              updatedAt: serverTimestamp()
-            });
-          } else if (!docSnap.data().initialized) {
-            await updateDoc(docRef, {
-              initialized: true,
-              updatedAt: serverTimestamp()
-            });
-          }
-        }
-      } catch (error: any) {
-        console.error("Background initialization failed", error);
+        docSnap = await getDoc(docRef);
+      } catch (err) {
+        handleFirestoreError(err, OperationType.GET, `systems/${user.uid}`);
+        return;
       }
-    })();
+
+      if (!docSnap.exists()) {
+        try {
+          await setDoc(docRef, {
+            userId: user.uid,
+            currentPhase: 0,
+            completed: false,
+            initialized: true,
+            updatedAt: serverTimestamp()
+          });
+        } catch (err) {
+          handleFirestoreError(err, OperationType.CREATE, `systems/${user.uid}`);
+          return;
+        }
+      } else if (!docSnap.data().initialized) {
+        try {
+          await updateDoc(docRef, {
+            initialized: true,
+            updatedAt: serverTimestamp()
+          });
+        } catch (err) {
+          handleFirestoreError(err, OperationType.UPDATE, `systems/${user.uid}`);
+          return;
+        }
+      }
+
+      onInitialize();
+    } catch (error: any) {
+      console.error("System initialization failed:", error);
+      setInitError(error?.message || "Failed to initialize system workspace");
+    } finally {
+      setIsInitializing(false);
+    }
   };
 
   return (
-    <div className="h-screen w-screen flex bg-transparent min-h-[600px]">
+    <div className="h-screen w-screen flex bg-transparent min-h-[600px] relative">
+      {/* Top Header Corner: In-App Account Menu (Signed in as, Google email, Sign out) */}
+      <div className="absolute top-4 right-4 md:right-8 z-[100] pointer-events-auto">
+        <AccountMenu user={user} onSignOut={onSignOut} onUpdateKey={onUpdateKey} />
+      </div>
+
       {/* Sidebar Mockup for Landing Page consistent with requested Design HTML */}
       <div className="w-[280px] bg-ww-sidebar-bg/85 backdrop-blur-md border-r border-white/10 hidden md:flex flex-col py-[30px] shrink-0">
         <div className="px-[30px] mb-[40px] font-extrabold tracking-[2px] text-white text-[1.2rem]">WW_ENGINE</div>
@@ -93,19 +114,33 @@ export default function Landing({ onInitialize, initialUser }: { onInitialize: (
             </p>
           </div>
 
+          {initError && (
+            <div className="mb-6 p-4 bg-red-950/60 border border-red-500/40 text-red-200 text-xs font-mono max-w-md">
+              ERROR: {initError}
+            </div>
+          )}
+
           <div className="relative inline-block group">
             <motion.button
               type="button"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              disabled={isInitializing}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 handleInitialize();
               }}
-              className="initialize-btn flex items-center justify-center gap-3 min-w-[240px]"
+              className="initialize-btn flex items-center justify-center gap-3 min-w-[240px] cursor-pointer disabled:opacity-50"
             >
-              INITIALIZE SYSTEM
+              {isInitializing ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin text-white" />
+                  <span>INITIALIZING...</span>
+                </>
+              ) : (
+                <span>INITIALIZE SYSTEM</span>
+              )}
             </motion.button>
             <span className="enforcement-text transition-opacity group-hover:opacity-80">
               ENFORCEMENT_PROTOCOL_ACTIVE // READ_READY
@@ -114,7 +149,7 @@ export default function Landing({ onInitialize, initialUser }: { onInitialize: (
         </motion.div>
 
         {/* Technical Data Overlay */}
-        <div className="absolute top-10 right-10 text-[8px] font-mono text-ww-cyan/20 space-y-1 text-right">
+        <div className="absolute top-16 right-10 text-[8px] font-mono text-ww-cyan/20 space-y-1 text-right hidden md:block">
           <p>SYSTEM.ADDR :: 0x35F0E8</p>
           <p>LATENCY :: 12MS</p>
           <p>STATUS :: ARMED</p>
